@@ -15,19 +15,19 @@ public class GameSession : MonoBehaviour {
 	public GUIStyle guiStyle;
 	public GameObject pregamePanel;
 	public GameObject roundupPanel;
-	public Text clickToContinueText;
+	public GameObject goPanel;
 	
 	GameplayManager gameplayManager;
-	GameplayState gameplayState;
-	float gamestateCounter;
+	GameplayState state;
+	float stateCounter;
 
 	void Start() {
 		StartNewGame();
 	}
 
 	void Update() {
-		gamestateCounter += (Time.deltaTime * 60);
-		switch(gameplayState) {
+		stateCounter += (Time.deltaTime * 60);
+		switch(state) {
 		case GameplayState.LoadGameplayScene:
 			Update_LoadGameplayScene();
 			break;
@@ -44,7 +44,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		switch(gameplayState) {
+		switch(state) {
 		case GameplayState.Pregame:
 			DrawPregameUi();
 			break;
@@ -100,10 +100,10 @@ public class GameSession : MonoBehaviour {
 		return textFieldValue;
 	}
 	
-	public void SetState(GameplayState state) {
+	public void SetState(GameplayState newState) {
 
 		// Handle closure of previous state.
-		switch(gameplayState) {
+		switch(state) {
 		case GameplayState.LoadGameplayScene:
 			break;
 		case GameplayState.Pregame:
@@ -117,10 +117,11 @@ public class GameSession : MonoBehaviour {
 			break;
 		}
 
+		stateCounter = 0;
 		//Debug.Log("Setting gameplay state to: " + state);
-		gameplayState = state;
+		state = newState;
 
-		switch(state) {
+		switch(newState) {
 		case GameplayState.LoadGameplayScene:
 			Setup_LoadGameplayScene();
 			break;
@@ -145,7 +146,7 @@ public class GameSession : MonoBehaviour {
 
 		pregamePanel.SetActive(false);
 		roundupPanel.SetActive(false);
-		clickToContinueText.enabled = false;
+		goPanel.SetActive(false);
 
 		SetState(GameplayState.LoadGameplayScene);
 	}
@@ -161,7 +162,7 @@ public class GameSession : MonoBehaviour {
 
 	void Update_Pregame() {
 		int displayTime = GameConstants.PREGAME_DISPLAY_TIME;
-		if(gamestateCounter > displayTime) {
+		if(stateCounter > displayTime) {
 			SetState(GameplayState.InProgress);
 		}
 	}
@@ -185,15 +186,24 @@ public class GameSession : MonoBehaviour {
 	// IN PROGRESS //////////////////////////////
 
 	void Setup_InProgress() {
+		goPanel.SetActive(true);
+		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
+		canvas.SetAlpha(1.0f);
 		//Debug.Log("Setting up InProgress state.");
 	}
 
 	void Update_InProgress() {
-		// Wait for the CoreGameSession to tell us of a win
+		if(stateCounter > 40) {
+			CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer> ();
+			canvas.SetAlpha (canvas.GetAlpha () - 0.1f);
+			if (canvas.GetAlpha () <= 0.0f) {
+					goPanel.SetActive (false);
+			}
+		}
 	}
 
 	void Stop_InProgress() {
-		
+		goPanel.SetActive(false);
 	}
 
 	// ROUNDUP //////////////////////////////
@@ -203,7 +213,6 @@ public class GameSession : MonoBehaviour {
 		// FIXME: Get the winner ID to this method somehow.
 		roundupPanel.SetActive (true);
 		//winnerText.text = "Winner: " + "Not specified";
-		clickToContinueText.enabled = true;
 	}
 
 	void Update_Roundup() {
@@ -214,7 +223,6 @@ public class GameSession : MonoBehaviour {
 
 	void Stop_Roundup() {
 		roundupPanel.SetActive(false);
-		clickToContinueText.enabled = false;
 	}
 
 
