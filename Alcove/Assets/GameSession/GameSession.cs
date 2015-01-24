@@ -13,13 +13,14 @@ public class GameSession : MonoBehaviour {
 
 	GameplayState gameplayState;
 
-	// On 'IPlayer' etc.
-	// These interface types are just put in place until we have more vision of each other's code and are ready to integrate more.
-	Object player1;
-	Object player2;
+	ShaunTempPlayer player1;
+	ShaunTempPlayer player2;
 
 	void Start() {
-		//player1.GetTower().AddComponent("")
+
+		player1 = new ShaunTempPlayer();
+		player2 = new ShaunTempPlayer();
+
 		StartNewGame();
 	}
 
@@ -28,8 +29,16 @@ public class GameSession : MonoBehaviour {
 
 	void OnGUI() {
 		if(SHOW_DEBUG_TEXT) {
-			GUI.Label(new Rect(10, 10, 200, 30), "Gameplay state: " + gameplayState);
+			int yPosition = 0;
+			DebugLabel("Gameplay state: " + gameplayState, ref yPosition);
+			DebugLabel("Player 1 Tower: " + player1, ref yPosition);
+			DebugLabel("Player 2 Tower: " + player2, ref yPosition);
 		}
+	}
+
+	void DebugLabel(string text, ref int yPosition) {
+		GUI.Label(new Rect(10, yPosition, 200, 30), text);
+		yPosition += 20;
 	}
 
 	void SetGameplayState(GameplayState state) {
@@ -53,13 +62,22 @@ public class GameSession : MonoBehaviour {
 	void StartNewGame() {
 		Debug.Log("Starting new game.");
 
-		//player1.Reset();
-		//player2.Reset();
+		// This method's for initialisation of a game round,
+		// and SetupPregameState can be used to introduce the game
+		// (panning of camera or whatever).
+
+		player1.Reset();
+		player2.Reset();
+
+		player1.tower.AddStartingSegments();
+		player2.tower.AddStartingSegments();
 
 		SetGameplayState(GameplayState.Pregame);
 	}
 
 	void SetupPregameState() {
+		// This state's not for initialisation,
+		// it's for any sort of intro we have.
 		Debug.Log("Setting up Pregame state.");
 	}
 
