@@ -7,12 +7,13 @@ public class GameplayManager : MonoBehaviour {
 	public GameObject playerPrefab;
 
 	private GameSession gameSession;
+	private GameObject minimap;
 	private Player[] players;
 
 	public void Start() {
 
 		// Obtain a reference to the main game session script.
-		GameObject gameSessionGameObject = GameObject.Find ("GameSession") as GameObject;
+		GameObject gameSessionGameObject = GameObject.Find("GameSession") as GameObject;
 		if(gameSessionGameObject) {
 			gameSession = gameSessionGameObject.GetComponent<GameSession> ();
 		}
@@ -31,6 +32,22 @@ public class GameplayManager : MonoBehaviour {
 			player.camera.rect = new Rect(i * viewportXSpace, 0, viewportXSpace, 1);
 			players[i] = player;
 		}
+
+		float xPosition = (players[0].transform.position.x + players[1].transform.position.x) / 2;
+		CreateMinimapObject(xPosition);
+	}
+
+	void CreateMinimapObject(float xFocalPosition) {
+		minimap = new GameObject();
+		Camera minimapCamera = minimap.AddComponent<Camera>();
+
+		float widthFraction = 0.1f;
+		float heightFraction = 0.3f;
+		minimapCamera.isOrthoGraphic = true;
+		minimapCamera.rect = new Rect(0.5f - widthFraction/2, 0.5f - heightFraction/2, widthFraction, heightFraction);
+		minimapCamera.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.6f);
+		minimapCamera.orthographicSize = 16.0f;
+		minimap.camera.transform.position = new Vector3(xFocalPosition, 0.0f, -5.0f);
 	}
 
 	public void LateUpdate() {
