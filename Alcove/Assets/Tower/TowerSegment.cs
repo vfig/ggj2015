@@ -133,8 +133,4 @@ public abstract class TowerSegment : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	public float GetCompletion() {
-		return completion;
-	}
-
 }

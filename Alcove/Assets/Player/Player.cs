@@ -23,12 +23,13 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Update() {
+		GameInput.Update();
+
 		// Move the cursor
-		float cursorSpeed = GameInput.GetScrollAxis(playerNumber);
-		if (cursorSpeed < 0) {
-			tower.MoveUp(cursorSpeed * Time.deltaTime);
-		} else if (cursorSpeed > 0) {
-			tower.MoveDown(cursorSpeed * Time.deltaTime);
+		if (GameInput.GetScrollUpButtonDown(playerNumber)) {
+			tower.MoveUp();
+		} else if (GameInput.GetScrollDownButtonDown(playerNumber)) {
+			tower.MoveDown();
 		}
 
 		// Check for actions

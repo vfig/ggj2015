@@ -117,7 +117,7 @@ public class GameSession : MonoBehaviour {
 			break;
 		}
 
-		Debug.Log("Setting gameplay state to: " + state);
+		//Debug.Log("Setting gameplay state to: " + state);
 		gameplayState = state;
 
 		switch(state) {
@@ -137,7 +137,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void StartNewGame() {
-		Debug.Log("Starting new game.");
+		//Debug.Log("Starting new game.");
 
 		// This method's for initialisation of a game round,
 		// and SetupPregameState can be used to introduce the game
@@ -155,7 +155,7 @@ public class GameSession : MonoBehaviour {
 	void Setup_Pregame() {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
-		Debug.Log("Setting up Pregame state.");
+		//Debug.Log("Setting up Pregame state.");
 		getReadyText.enabled = true;
 	}
 
@@ -187,7 +187,7 @@ public class GameSession : MonoBehaviour {
 	// IN PROGRESS //////////////////////////////
 
 	void Setup_InProgress() {
-		Debug.Log("Setting up InProgress state.");
+		//Debug.Log("Setting up InProgress state.");
 	}
 
 	void Update_InProgress() {
@@ -201,7 +201,7 @@ public class GameSession : MonoBehaviour {
 	// ROUNDUP //////////////////////////////
 
 	void Setup_Roundup() {
-		Debug.Log("Setting up Roundup state.");
+		//Debug.Log("Setting up Roundup state.");
 		// FIXME: Get the winner ID to this method somehow.
 		winnerText.text = "Winner: " + "Not specified";
 		winnerText.enabled = true;
@@ -226,7 +226,6 @@ public class GameSession : MonoBehaviour {
 
 	bool GrabGameplayManagerReference() {
 		GameObject gameplayManagerObject = GameObject.Find("GameplayManager") as GameObject;
-		Debug.Log ("gameplayManagerObject: " + gameplayManagerObject);
 		if(gameplayManagerObject) {
 			gameplayManager = gameplayManagerObject.GetComponent<GameplayManager>();
 			return true;
