@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartScene : MonoBehaviour {
+public class EndScene : MonoBehaviour {
 
 	void Start() {
 	
