@@ -77,7 +77,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			}
 		}
 		else {
-			SwapSegment(segmentIndex, m_emptyTowerSegmentPrefab, false);
+			SwapSegment(segment, m_emptyTowerSegmentPrefab);
 		}
 	}
 
