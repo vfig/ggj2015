@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tower : MonoBehaviour, ITowerActionEvents {
+public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	private List<TowerSegment> segments;
 	public int m_cursorPosition;
 
@@ -57,20 +57,17 @@ public class Tower : MonoBehaviour, ITowerActionEvents {
 		// Add a new empty segment so we can begin building immediately
 		AddSegment(m_emptySegmentPrefab);
 
-		// Start the construction
-		constructionSegment.Notify(tribe);
-		constructionSegment.Notify(this);
 		Debug.Log("Allocate tribe " + tribe + " to segment " + constructionSegment + ".");
 		constructionSegment.StartAction(tribe.count);
 	}
 
-	public void TowerActionStarted(TowerSegment segment) {
+	public void TowerSegmentActionStarted(TowerSegment segment) {
 	}
 
-	public void TowerActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
+	public void TowerSegmentActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
 	}
 
-	public void TowerActionCompleted(TowerSegment segment) {
+	public void TowerSegmentActionCompleted(TowerSegment segment) {
 		int index = segments.IndexOf(segment);
 		if (index >= 0 && segment.constructingTowerSegmentPrefab != null) {
 			// Swap the segment with a new one

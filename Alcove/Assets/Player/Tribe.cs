@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tribe : MonoBehaviour, ITowerActionEvents {
+public class Tribe : MonoBehaviour, ITowerSegmentCallback {
 	public int count;
 	private bool busy;
 	private float busyFraction;
@@ -36,16 +36,16 @@ public class Tribe : MonoBehaviour, ITowerActionEvents {
 		}
 	}
 
-	public void TowerActionStarted(TowerSegment segment) {
+	public void TowerSegmentActionStarted(TowerSegment segment) {
 		busy = true;
 	}
 
-	public void TowerActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
+	public void TowerSegmentActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
 		busyFraction = progress;
 		busyRemaining = secondsRemaining;
 	}
 
-	public void TowerActionCompleted(TowerSegment segment) {
+	public void TowerSegmentActionCompleted(TowerSegment segment) {
 		busy = false;
 	}
 }
