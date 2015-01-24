@@ -118,7 +118,6 @@ public class GameSession : MonoBehaviour {
 		}
 
 		stateCounter = 0;
-		//Debug.Log("Setting gameplay state to: " + state);
 		state = newState;
 
 		switch(newState) {
@@ -138,12 +137,12 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void StartNewGame() {
-		//Debug.Log("Starting new game.");
 
 		// This method's for initialisation of a game round,
 		// and SetupPregameState can be used to introduce the game
 		// (panning of camera or whatever).
 
+		Player.canUpdate = false;
 		pregamePanel.SetActive(false);
 		roundupPanel.SetActive(false);
 		goPanel.SetActive(false);
@@ -156,7 +155,6 @@ public class GameSession : MonoBehaviour {
 	void Setup_Pregame() {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
-		//Debug.Log("Setting up Pregame state.");
 		pregamePanel.SetActive(true);
 	}
 
@@ -186,10 +184,10 @@ public class GameSession : MonoBehaviour {
 	// IN PROGRESS //////////////////////////////
 
 	void Setup_InProgress() {
+		Player.canUpdate = true;
 		goPanel.SetActive(true);
 		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
 		canvas.SetAlpha(1.0f);
-		//Debug.Log("Setting up InProgress state.");
 	}
 
 	void Update_InProgress() {
@@ -209,9 +207,9 @@ public class GameSession : MonoBehaviour {
 	// ROUNDUP //////////////////////////////
 
 	void Setup_Roundup() {
-		//Debug.Log("Setting up Roundup state.");
 		// FIXME: Get the winner ID to this method somehow.
-		roundupPanel.SetActive (true);
+		Player.canUpdate = false;
+		roundupPanel.SetActive(true);
 		//winnerText.text = "Winner: " + "Not specified";
 	}
 
