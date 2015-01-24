@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameSession : MonoBehaviour {
-	
-	const bool SHOW_DEBUG_TEXT = true;
 
 	public enum GameplayState {
 		Pregame,
 		InProgress,
 		Roundup
 	}
-	
+
 	public GameRulesManager gameRulesManager;
-	
+	public Text getReadyText;
+	public Text winnerText;
+	public Text clickToContinueText;
+
 	GameplayState gameplayState;
+	float gamestateCounter;
 	ShaunTempPlayer player1;
 	ShaunTempPlayer player2;
 
@@ -28,24 +31,60 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Update() {
+		gamestateCounter++;
+		switch(gameplayState) {
+		case GameplayState.Pregame:
+			UpdatePregameState();
+			break;
+		case GameplayState.InProgress:
+			UpdateInProgressState();
+			break;
+		case GameplayState.Roundup:
+			UpdateRoundupState();
+			break;
+		}
 	}
 
 	void OnGUI() {
-		if(SHOW_DEBUG_TEXT) {
-			int yPosition = 0;
-			DebugLabel("Gameplay state: " + gameplayState, ref yPosition);
-			DebugLabel("Player 1 Tower: " + player1.tower.GetCompletedSegmentCount(), ref yPosition);
-			DebugLabel("Player 2 Tower: " + player2.tower.GetCompletedSegmentCount(), ref yPosition);
+		switch(gameplayState) {
+		case GameplayState.Pregame:
+			DrawPregameUi();
+			break;
+		case GameplayState.InProgress:
+			DrawInGameTestingUi();
+			break;
+		case GameplayState.Roundup:
+			DrawRoundupUi();
+			break;
 		}
-		DrawTestingUI();
 	}
 
-	void DebugLabel(string text, ref int yPosition) {
+	void DrawPregameUi() {
+	}
+
+	void DrawRoundupUi() {
+
+	}
+
+	void AddDebugLabel(string text, ref int yPosition) {
 		GUI.Label(new Rect(10, yPosition, 200, 30), text);
 		yPosition += 20;
 	}
 
 	public void SetGameplayState(GameplayState state) {
+
+		// Handle closure of previous state.
+		switch (gameplayState) {
+		case GameplayState.Pregame:
+			StopPregameState();
+			break;
+		case GameplayState.InProgress:
+			StopInProgressState();
+			break;
+		case GameplayState.Roundup:
+			StopRoundupState();
+			break;
+		}
 
 		Debug.Log("Setting gameplay state to: " + state);
 		gameplayState = state;
@@ -70,6 +109,10 @@ public class GameSession : MonoBehaviour {
 		// and SetupPregameState can be used to introduce the game
 		// (panning of camera or whatever).
 
+		getReadyText.enabled = false;
+		winnerText.enabled = false;
+		clickToContinueText.enabled = false;
+
 		player1.Reset();
 		player2.Reset();
 
@@ -78,19 +121,58 @@ public class GameSession : MonoBehaviour {
 
 		SetGameplayState(GameplayState.Pregame);
 	}
+	
+	// PREGAME //////////////////////////////
 
 	void SetupPregameState() {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
 		Debug.Log("Setting up Pregame state.");
+		getReadyText.enabled = true;
 	}
+
+	void UpdatePregameState() {
+		if(gamestateCounter > 70) {
+			SetGameplayState(GameplayState.InProgress);
+		}
+	}
+
+	void StopPregameState() {
+		getReadyText.enabled = false;
+	}
+
+	// IN PROGRESS //////////////////////////////
 
 	void SetupInProgressState() {
 		Debug.Log("Setting up InProgress state.");
 	}
+	
+	void UpdateInProgressState() {
+		
+	}
+
+	void StopInProgressState() {
+
+	}
+
+	// ROUNDUP //////////////////////////////
 
 	void SetupRoundupState() {
 		Debug.Log("Setting up Roundup state.");
+		winnerText.text = "Winner: " + (gameRulesManager.latestWinnerIsPlayer1 ? "P1" : "P2");
+		winnerText.enabled = true;
+		clickToContinueText.enabled = true;
+	}
+
+	void UpdateRoundupState() {
+		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
+			Application.LoadLevel("StartScene");
+		}
+	}
+
+	void StopRoundupState() {
+		winnerText.enabled = false;
+		clickToContinueText.enabled = false;
 	}
 
 
@@ -104,7 +186,12 @@ public class GameSession : MonoBehaviour {
 	string destroyP1SegmentValue = "0";
 	string destroyP2SegmentValue = "0";
 
-	void DrawTestingUI() {
+	void DrawInGameTestingUi() {
+
+		int yPosition = 0;
+		AddDebugLabel("Gameplay state: " + gameplayState, ref yPosition);
+		AddDebugLabel("Player 1 Tower: " + player1.tower.GetCompletedSegmentCount(), ref yPosition);
+		AddDebugLabel("Player 2 Tower: " + player2.tower.GetCompletedSegmentCount(), ref yPosition);
 
 		int buttonWidth = 200;
 		int buttonHeight = 40;
