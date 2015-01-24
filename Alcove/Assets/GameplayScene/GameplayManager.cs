@@ -32,6 +32,7 @@ public class GameplayManager : MonoBehaviour {
 			Player player = playerObject.GetComponent<Player>();
 			player.playerNumber = i;
 			player.camera.rect = new Rect(i * viewportXSpace, 0, viewportXSpace, 1);
+			player.SetOwningGameplayManager(this);
 			players[i] = player;
 		}
 
@@ -92,5 +93,13 @@ public class GameplayManager : MonoBehaviour {
 
 	public Player GetPlayer(int index) {
 		return players[index];
+	}
+	
+	public void DestroyOpponentsSegment(int playerIndex, int segmentIndex) {
+		if (playerIndex == 0) {
+			players[1].DestroyPlayersSegment(segmentIndex);
+		} else if (playerIndex == 1) {
+			players[0].DestroyPlayersSegment(segmentIndex);
+		}
 	}
 }

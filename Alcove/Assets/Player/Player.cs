@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
+	private GameplayManager m_owningGameplayManager;
+
 	public static bool canUpdate = true;
 
 	new public Camera camera;
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour {
 		camera = GetComponentInChildren<Camera>();
 		tribes = GetComponentsInChildren<Tribe>();
 		tower = GetComponentInChildren<Tower>();
+		tower.SetOwningPlayer(this);
 	}
 
 	public void Start() {
@@ -46,5 +49,17 @@ public class Player : MonoBehaviour {
 				tower.PerformAction(tribes[i]);
 			}
 		}
+	}
+	
+	public void SetOwningGameplayManager(GameplayManager owningGameplayManager) {
+		m_owningGameplayManager = owningGameplayManager;
+	}
+	
+	public void DestroyOpponentsSegment(int segmentIndex) {
+		m_owningGameplayManager.DestroyOpponentsSegment(playerNumber, segmentIndex);
+	}
+	
+	public void DestroyPlayersSegment(int segmentIndex) {
+		tower.DestroyPlayersSegment(segmentIndex);
 	}
 }

@@ -12,6 +12,7 @@ public class CannonTowerSegment : TowerSegment {
 	}
 	
 	public override void OnBeginAction () {
+		m_owningTower.DestroyOpponentsSegment(this);
 	}
 	
 	public override void OnProgressAction () {

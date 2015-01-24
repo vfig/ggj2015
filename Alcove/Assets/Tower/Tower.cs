@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	private List<TowerSegment> segments;
 	public int m_cursorPosition;
+	private Player m_owningPlayer;
 
 	public GameObject m_selector;
 
@@ -45,6 +46,26 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			newSegment.PerformAction(oldSegment.GetOwningTower(), oldSegment.GetOwningTribe());
 		}
 		return newSegment;
+	}
+	
+	public void DestroyOpponentsSegment(TowerSegment segment) {
+		int index = segments.IndexOf(segment);
+		m_owningPlayer.DestroyOpponentsSegment(index);
+	}
+	
+	public void DestroyPlayersSegment(int segmentIndex) {
+		TowerSegment segment = segments[segmentIndex];
+		if (segment.OnIsComplete()) {
+			Destroy(segment.gameObject);
+			segments.RemoveAt(segmentIndex);
+			for (int i = segmentIndex; i < (segments.Count); i++) {
+				segments[i].transform.position += new Vector3(0.0f, -2.0f, 0.0f);
+				MoveDown();
+			}
+		}
+		else {
+			SwapSegment(segmentIndex, m_emptyTowerSegmentPrefab, false);
+		}
 	}
 
 	public void PerformAction(Tribe tribe)
@@ -105,5 +126,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			}
 		}
 		return completedSegmentCount;
+	}
+	
+	public void SetOwningPlayer(Player owningPlayer) {
+		m_owningPlayer = owningPlayer;
 	}
 }
