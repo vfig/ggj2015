@@ -37,5 +37,9 @@ public class Player : MonoBehaviour {
 				tower.PerformAction(tribes[i]);
 			}
 		}
+		
+		// update camera
+		Vector3 selectorPosition = tower.GetSelectorPosition();
+		camera.transform.position = new Vector3(selectorPosition.x, selectorPosition.y, -10.0f);
 	}
 }

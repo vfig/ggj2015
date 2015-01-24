@@ -95,4 +95,9 @@ public class Tower : MonoBehaviour, ITowerActionEvents {
 		}
 		m_selector.transform.position = transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
 	}
+	
+	public Vector3 GetSelectorPosition()
+	{
+		return m_selector.transform.position;
+	}
 }
