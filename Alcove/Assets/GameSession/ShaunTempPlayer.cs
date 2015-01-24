@@ -19,7 +19,7 @@ public class ShaunTempPlayer : MonoBehaviour {
 		int count = tribes.Length;
 		for(int i=0; i<count; i++) {
 			Tribe tribe = new Tribe();
-			tribe.count = Random.Range(5, 10);
+			tribe.count = GameRulesManager.TRIBE_STARTING_UNIT_COUNT;
 			Debug.Log("Creating random tribe count: " + tribe.count + " units.");
 			tribes[i] = tribe;
 		}
@@ -77,7 +77,7 @@ public class ShaunTempPlayer : MonoBehaviour {
 
 	string GetSingleTribeSummary(Tribe tribe) {
 		float busyFraction = (int)(tribe.BusyFraction * 100.0f) / 100.0f;
-		string workingDescription = tribe.IsBusy ? ("work:" + busyFraction) : "idle";
+		string workingDescription = tribe.IsBusy ? busyFraction.ToString() : "idle";
 		return "{" + tribe.count + "u, " + workingDescription + "}";
 	}
 

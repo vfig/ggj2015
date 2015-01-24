@@ -73,8 +73,8 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void QuickText(string text, int xPosition, ref int yPosition) {
-		GUI.Label(new Rect(xPosition, yPosition, 200, 40), text);
-		yPosition += 45;
+		GUI.Label(new Rect(xPosition, yPosition, 300, 40), text);
+		yPosition += 25;
 	}
 
 	bool QuickButton(string text, int xPosition, ref int yPosition, int width=200, bool show=true) {
@@ -216,21 +216,18 @@ public class GameSession : MonoBehaviour {
 	void DrawInGameTestingUi() {
 
 		int yPosition = 0;
+		QuickTopLeftText("", ref yPosition);
 		QuickTopLeftText("Gameplay state: " + gameplayState, ref yPosition);
-		QuickTopLeftText("", ref yPosition);
-		QuickTopLeftText("Player 1 Tower: " + player1.tower.GetTowerAscii(), ref yPosition);
-		QuickTopLeftText("Player 2 Tower: " + player2.tower.GetTowerAscii(), ref yPosition);
-		QuickTopLeftText("", ref yPosition);
-		QuickTopLeftText("Player 1 Tribes: " + player1.GetTribesSummary(), ref yPosition);
-		QuickTopLeftText("Player 2 Tribes: " + player2.GetTribesSummary(), ref yPosition);
 
 		//
 		// Player 1 UI
 		//
-		int p1XPosition = 250;
+		int p1XPosition = 200;
 		yPosition = 220;
 
 		QuickText("Player 1", p1XPosition, ref yPosition);
+		QuickText(player1.GetTribesSummary(), p1XPosition, ref yPosition);
+		QuickText("Tower: " + player1.tower.GetTowerAscii(), p1XPosition, ref yPosition);
 		if(QuickButton("Destroy segment (at index)", p1XPosition, ref yPosition)) {
 			Test_DestroyP1Segment();
 		}
@@ -265,9 +262,11 @@ public class GameSession : MonoBehaviour {
 		// Player 2 UI
 		//
 		yPosition = 220;
-		int p2XPosition = 480;
+		int p2XPosition = 540;
 
 		QuickText("Player 2", p2XPosition, ref yPosition);
+		QuickText(player2.GetTribesSummary(), p2XPosition, ref yPosition);
+		QuickText("Tower: " + player2.tower.GetTowerAscii(), p2XPosition, ref yPosition);
 		if(QuickButton("Destroy segment (at index)", p2XPosition, ref yPosition)) {
 			Test_DestroyP2Segment();
 		}
