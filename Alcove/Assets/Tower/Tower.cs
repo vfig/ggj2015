@@ -75,7 +75,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		}
 	}
 
-	public void MoveUp(float delta)
+	public void MoveUp()
 	{
 		if (m_cursorPosition < (segments.Count - 1))
 		{
@@ -84,7 +84,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
 	
-	public void MoveDown(float delta)
+	public void MoveDown()
 	{
 		if (m_cursorPosition > 0)
 		{
