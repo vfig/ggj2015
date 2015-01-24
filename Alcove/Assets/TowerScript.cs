@@ -4,14 +4,17 @@ using System.Collections.Generic;
 
 public class TowerScript : MonoBehaviour {
 	
-	private List<GameObject> m_segmentList;
-	
-	public GameObject m_gameObjectPrefab;
+	private List<GameObject> m_towerSegmentList;
+	private int m_numTowerSegments;
+
+	public GameObject m_towerBase;
+
+	public GameObject m_towerSegmentPrefab;
 	
 	// Use this for initialization
 	void Start () {
-		m_segmentList = new List<GameObject> ();
-		AddTowerSegment ();
+		m_towerSegmentList = new List<GameObject> ();
+		m_numTowerSegments = 0;
 	}
 	
 	// Update is called once per frame
@@ -21,9 +24,10 @@ public class TowerScript : MonoBehaviour {
 	
 	public void AddTowerSegment() {
 
-		GameObject newSegment = Instantiate (m_gameObjectPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+		GameObject newSegment = Instantiate (m_towerSegmentPrefab, gameObject.transform.position), Quaternion.identity) as GameObject;
+		m_numTowerSegments++;
 
-		m_segmentList.Add (newSegment);
+		m_towerSegmentList.Add (newSegment);
 	}
 
 	public void RemoveTowerSegment() {

@@ -20,5 +20,8 @@ public class GameScript : MonoBehaviour {
 		if (Input.GetMouseButtonDown (0)) {
 			m_playerOneScript.Click();
 		}
+		if (Input.GetMouseButtonDown (1)) {
+			m_playerTwoScript.Click();
+		}
 	}
 }
