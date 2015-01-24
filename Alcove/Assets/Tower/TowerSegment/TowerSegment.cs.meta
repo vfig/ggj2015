@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 97bfd87cf0c33074495a0bc1db5240f4
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - m_emptyTowerSegmentPrefab: {fileID: 11472900, guid: b3f50f3c4222844df9b14f1ad380d531,
+      type: 2}
+  - m_constructionTowerSegmentPrefab: {fileID: 11400996, guid: e60c6ca851da8466580da98a1634e067,
+      type: 2}
+  - m_staticTowerSegmentPrefab: {fileID: 11472900, guid: b3f50f3c4222844df9b14f1ad380d531,
+      type: 2}
+  - m_newTowerSegmentPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

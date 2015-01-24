@@ -2,7 +2,7 @@
 using System.Collections;
 
 public interface ITowerSegmentCallback {
-	void TowerSegmentActionStarted(TowerSegment segment);
-	void TowerSegmentActionProgress(TowerSegment segment, float progress, float secondsRemaining);
-	void TowerSegmentActionCompleted(TowerSegment segment);
+	void OnBeginAction(TowerSegment segment);
+	void OnProgressAction(TowerSegment segment, float progress, float secondsRemaining);
+	void OnCompleteAction(TowerSegment segment);
 }
