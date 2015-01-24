@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// FIXME - delete this class when I finish cannibalizing it.
 public class ShaunTempPlayer : MonoBehaviour {
 
 	public ShaunTempTower tower;
