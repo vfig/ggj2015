@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GameSession : MonoBehaviour {
-
+	
 	const bool SHOW_DEBUG_TEXT = true;
 
 	public enum GameplayState {
@@ -10,16 +10,19 @@ public class GameSession : MonoBehaviour {
 		InProgress,
 		Roundup
 	}
-
+	
+	public GameRulesManager gameRulesManager;
+	
 	GameplayState gameplayState;
-
 	ShaunTempPlayer player1;
 	ShaunTempPlayer player2;
 
 	void Start() {
 
 		player1 = new ShaunTempPlayer();
+		player1.StartTemp();
 		player2 = new ShaunTempPlayer();
+		player2.StartTemp();
 
 		StartNewGame();
 	}
@@ -31,9 +34,10 @@ public class GameSession : MonoBehaviour {
 		if(SHOW_DEBUG_TEXT) {
 			int yPosition = 0;
 			DebugLabel("Gameplay state: " + gameplayState, ref yPosition);
-			DebugLabel("Player 1 Tower: " + player1, ref yPosition);
-			DebugLabel("Player 2 Tower: " + player2, ref yPosition);
+			DebugLabel("Player 1 Tower: " + player1.tower.GetCompletedSegmentCount(), ref yPosition);
+			DebugLabel("Player 2 Tower: " + player2.tower.GetCompletedSegmentCount(), ref yPosition);
 		}
+		DrawTestingUI();
 	}
 
 	void DebugLabel(string text, ref int yPosition) {
@@ -41,7 +45,7 @@ public class GameSession : MonoBehaviour {
 		yPosition += 20;
 	}
 
-	void SetGameplayState(GameplayState state) {
+	public void SetGameplayState(GameplayState state) {
 
 		Debug.Log("Setting gameplay state to: " + state);
 		gameplayState = state;
@@ -90,4 +94,63 @@ public class GameSession : MonoBehaviour {
 	}
 
 
+
+
+
+	//////////////////////
+	// TESTING STUFF /////
+	//////////////////////
+	
+	string destroyP1SegmentValue = "0";
+	string destroyP2SegmentValue = "0";
+
+	void DrawTestingUI() {
+
+		int buttonWidth = 200;
+		int buttonHeight = 40;
+		int p1XPosition = 250;
+
+		//
+		// Player 1 UI
+		//
+		if(GUI.Button(new Rect(p1XPosition, 100, buttonWidth, buttonHeight), "P1 Add segment")) {
+			Test_AddP1Segment();
+		}
+		if(GUI.Button(new Rect(p1XPosition, 190, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+			Test_DestroyP1Segment();
+		}
+		destroyP1SegmentValue = GUI.TextField(new Rect(p1XPosition, 230, buttonWidth, buttonHeight), destroyP1SegmentValue.ToString());
+
+		//
+		// Player 2 UI
+		//
+		int p2XPosition = 450;
+		if(GUI.Button(new Rect(p2XPosition, 100, buttonWidth, buttonHeight), "P2 Add segment")) {
+			Test_AddP2Segment();
+		}
+		if(GUI.Button(new Rect(p2XPosition, 190, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+			Test_DestroyP2Segment();
+		}
+		destroyP2SegmentValue = GUI.TextField(new Rect(p2XPosition, 230, buttonWidth, buttonHeight), destroyP2SegmentValue.ToString());
+	}
+
+	void Test_AddP1Segment() {
+		player1.tower.AddSegment();
+		gameRulesManager.CheckForWinner(player1, player2);
+	}
+
+	void Test_AddP2Segment() {
+		player2.tower.AddSegment();
+		gameRulesManager.CheckForWinner(player1, player2);
+	}
+
+	void Test_DestroyP1Segment() {
+		int intSegmentValue = int.Parse(destroyP1SegmentValue);
+		player1.tower.DestroySegment(intSegmentValue);
+	}
+
+	void Test_DestroyP2Segment() {
+		int intSegmentValue = int.Parse(destroyP2SegmentValue);
+		player2.tower.DestroySegment(intSegmentValue);
+	}
 }

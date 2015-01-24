@@ -5,15 +5,14 @@ public class ShaunTempPlayer : MonoBehaviour {
 
 	public ShaunTempTower tower;
 
-	void Start() {
+	public void StartTemp() {
 		tower = new ShaunTempTower();
+		tower.StartTemp();
 	}
 
 	public void Reset() {
 		tower.Reset();
 	}
-
-	
 
 	void Update() {
 	}
