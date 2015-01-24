@@ -5,7 +5,7 @@ public class Player : MonoBehaviour {
 	new public Camera camera;
 	public int playerNumber;
 	private Tribe[] tribes;
-	private Tower tower;
+	public Tower tower;
 	
 	public void Awake() {
 		camera = GetComponentInChildren<Camera>();

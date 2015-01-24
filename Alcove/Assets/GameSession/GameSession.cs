@@ -12,7 +12,6 @@ public class GameSession : MonoBehaviour {
 	}
 
 	public GUIStyle guiStyle;
-	public GameRulesManager gameRulesManager;
 	public Text getReadyText;
 	public Text winnerText;
 	public Text clickToContinueText;
@@ -84,9 +83,8 @@ public class GameSession : MonoBehaviour {
 		yPosition += 45;
 		return textFieldValue;
 	}
-
-
-	public void SetGameplayState(GameplayState state) {
+	
+	public void SetState(GameplayState state) {
 
 		// Handle closure of previous state.
 		switch (gameplayState) {
@@ -128,7 +126,7 @@ public class GameSession : MonoBehaviour {
 		winnerText.enabled = false;
 		clickToContinueText.enabled = false;
 
-		SetGameplayState(GameplayState.Pregame);
+		SetState(GameplayState.Pregame);
 	}
 	
 	// PREGAME //////////////////////////////
@@ -145,7 +143,7 @@ public class GameSession : MonoBehaviour {
 		int displayTime = 40;
 
 		if(gamestateCounter > displayTime) {
-			SetGameplayState(GameplayState.InProgress);
+			SetState(GameplayState.InProgress);
 		}
 	}
 
@@ -172,7 +170,8 @@ public class GameSession : MonoBehaviour {
 
 	void SetupRoundupState() {
 		Debug.Log("Setting up Roundup state.");
-		winnerText.text = "Winner: " + (gameRulesManager.latestWinnerIsPlayer1 ? "P1" : "P2");
+		// FIXME: Get the winner ID to this method somehow.
+		winnerText.text = "Winner: " + "Not specified";
 		winnerText.enabled = true;
 		clickToContinueText.enabled = true;
 	}
