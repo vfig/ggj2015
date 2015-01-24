@@ -6,12 +6,14 @@ public class Tribe : MonoBehaviour {
 	private float busyTime;
 	private float busyRemaining;
 
+	// Return true if the tribe is busy
 	public bool IsBusy {
 		get {
 			return (busyRemaining > 0);
 		}
 	}
 
+	// Return remaining busy amount as float in range 0..1
 	public float BusyFraction {
 		get {
 			if (busyTime > 0) {
@@ -22,13 +24,23 @@ public class Tribe : MonoBehaviour {
 		}
 	}
 
+	// Return remaining busy time as whole number of seconds
 	public int BusySeconds {
 		get {
 			return (int)Mathf.Ceil(busyRemaining);
 		}
 	}
 
+	// Make the tribe busy
 	public void StartBusy(float time) {
+		if (count == 0) {
+			Debug.Log("Ignoring StartBusy for empty Tribe", this);
+			return;
+		}
+		if (busyRemaining > 0) {
+			Debug.Log("Ignoring StartBusy for already busy Trueb", this);
+			return;
+		}
 		busyTime = time;
 		busyRemaining = time;
 	}
@@ -41,8 +53,9 @@ public class Tribe : MonoBehaviour {
 	}
 
 	private void StepOccupied(float time) {
-		busyRemaining = Mathf.Max(0, busyRemaining - time);
-		if (busyRemaining == 0) {
+		busyRemaining -= time;
+		if (busyRemaining <= 0 || count == 0) {
+			busyRemaining = 0;
 			busyTime = 0;
 		}
 	}
