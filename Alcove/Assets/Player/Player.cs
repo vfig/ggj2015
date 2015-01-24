@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
+	private GameplayManager m_owningGameplayManager;
+
 	public static bool canUpdate = true;
 
 	new public Camera camera;
@@ -14,11 +16,10 @@ public class Player : MonoBehaviour {
 		camera = GetComponentInChildren<Camera>();
 		tribes = GetComponentsInChildren<Tribe>();
 		tower = GetComponentInChildren<Tower>();
+		tower.SetOwningPlayer(this);
 	}
 
 	public void Start() {
-		Debug.Log("Player " + playerNumber + " Start");
-
 		// Set initial tribe counts
 		foreach (Tribe tribe in tribes) {
 			tribe.count = GameConstants.TRIBE_STARTING_UNIT_COUNT;
@@ -39,6 +40,11 @@ public class Player : MonoBehaviour {
 		} else if (GameInput.GetScrollDownButtonDown(playerNumber)) {
 			tower.MoveDown();
 		}
+		if (GameInput.GetScrollLeftButtonDown(playerNumber)) {
+			tower.MoveLeft();
+		} else if (GameInput.GetScrollRightButtonDown(playerNumber)) {
+			tower.MoveRight();
+		}
 
 		// Check for actions
 		for (int i = 0; i < tribes.Length; ++i) {
@@ -46,5 +52,17 @@ public class Player : MonoBehaviour {
 				tower.PerformAction(tribes[i]);
 			}
 		}
+	}
+	
+	public void SetOwningGameplayManager(GameplayManager owningGameplayManager) {
+		m_owningGameplayManager = owningGameplayManager;
+	}
+	
+	public void DestroyOpponentsSegment(int segmentIndex) {
+		m_owningGameplayManager.DestroyOpponentsSegment(playerNumber, segmentIndex);
+	}
+	
+	public void DestroyPlayersSegment(int segmentIndex) {
+		tower.DestroyPlayersSegment(segmentIndex);
 	}
 }

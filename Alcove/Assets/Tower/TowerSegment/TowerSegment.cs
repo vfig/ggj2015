@@ -8,7 +8,8 @@ public abstract class TowerSegment : MonoBehaviour
 	public const float HEIGHT = 2.0f;
 	
 	public bool hasAction;
-	public float durationSecondsAtNominalWorkRate;
+	protected float m_workRate;
+	protected float m_completion;
 
 	/* Event listener list */
 	private List<ITowerSegmentCallback> m_listenerList;
@@ -16,14 +17,9 @@ public abstract class TowerSegment : MonoBehaviour
 	/* True if the segment has an active action. */
 	private bool m_actionActive;
 	
-	private bool m_autoNextAction;
-	
 	/* The tribe that is currently in the segment */
 	private Tribe m_currentTribe;
 
-	/* New tower segment to replace at the end of the action */
-	protected TowerSegment m_newTowerSegmentPrefab;
-	
 	protected Tower m_owningTower;
 
 	/* Called on initialisation */
@@ -31,7 +27,6 @@ public abstract class TowerSegment : MonoBehaviour
 		m_listenerList = new List<ITowerSegmentCallback>();
 		m_currentTribe = null;
 		m_actionActive = false;
-		m_autoNextAction = false;
 	}
 	
 	/* Add a listener for the tower segment events */
@@ -39,14 +34,6 @@ public abstract class TowerSegment : MonoBehaviour
 		m_listenerList.Add(listener);
 	}
 
-	public void SetAutoNextAction(bool autoNextAction) {
-		m_autoNextAction = autoNextAction;
-	}
-	
-	public bool GetAutoNextAction() {
-		return m_autoNextAction;
-	}
-	
 	public Tower GetOwningTower() {
 		return m_owningTower;
 	}
@@ -59,56 +46,76 @@ public abstract class TowerSegment : MonoBehaviour
 	public bool IsComplete() {
 		return this.OnIsComplete();
 	}
-	
+
+	/* Can an action be taken on this segment? */
 	public bool IsActionable() {
 		return this.OnIsActionable();
 	}
-	
-	public void SetNewTowerSegment(TowerSegment towerSegmentPrefab) {
-		m_newTowerSegmentPrefab = towerSegmentPrefab;
-	}
-	
-	public TowerSegment GetNewTowerSegmentPrefab() {
-		return m_newTowerSegmentPrefab;
-	}
-	
+
 	public void PerformAction(Tower owningTower, Tribe tribe) {
-		m_listenerList.Add(owningTower);
-		m_listenerList.Add(tribe);
+		AddListener(owningTower);
+		AddListener(tribe);
 		m_owningTower = owningTower;
 		m_currentTribe = tribe;
 		m_actionActive = true;
+		m_completion = 0.0f;
+		m_workRate = tribe.count;
+		float secondsRemaining = Duration(m_workRate);
 		this.OnBeginAction();
 		foreach (ITowerSegmentCallback listener in m_listenerList) {
 			listener.OnBeginAction(this);
 		}
+		this.OnProgressAction(secondsRemaining);
+		foreach (ITowerSegmentCallback listener in m_listenerList) {
+			listener.OnProgressAction(this, m_completion, secondsRemaining);
+		}
 	}
 	
-	public void CompleteAction() {
-		this.OnCompleteAction();
-		foreach (ITowerSegmentCallback notify in m_listenerList) {
-			notify.OnCompleteAction(this);
-		}
+	public float Duration(float workRate) {
+		return NominalActionDurationSeconds() / workRate;
 	}
 
 	public void Update () {
 		if (m_actionActive) {
-			this.OnProgressAction();
+			m_completion = Mathf.Clamp01(m_completion + (float)m_workRate / NominalActionDurationSeconds() * Time.deltaTime);
+			float secondsRemaining = (1.0f - m_completion) * Duration(m_workRate);
+
+			this.OnProgressAction(secondsRemaining);
 			foreach (ITowerSegmentCallback listener in m_listenerList) {
-				listener.OnProgressAction(this, 0.0f, 0.0f);
+				listener.OnProgressAction(this, m_completion, secondsRemaining);
+			}
+
+			if (m_completion == 1.0f) {
+				foreach (ITowerSegmentCallback notify in m_listenerList) {
+					notify.OnCompleteAction(this);
+				}
+				m_listenerList = new List<ITowerSegmentCallback>();
+				OnCompleteAction();
 			}
 		}
 	}
 	
 	/* Virtual Methods */
+
+	public virtual float NominalActionDurationSeconds() {
+		return 0.0f;
+	}
+
+	public virtual float NominalConstructionDurationSeconds() {
+		return 0.0f;
+	}
+
+	public virtual bool OnIsActionable() {
+		return false;
+	}
 	
-	public abstract bool OnIsActionable();
+	public virtual bool OnIsComplete() {
+		return true;
+	}
 	
-	public abstract bool OnIsComplete();
+	public virtual void OnBeginAction() {}
 	
-	public abstract void OnBeginAction();
+	public virtual void OnProgressAction(float secondsRemaining) {}
 	
-	public abstract void OnProgressAction();
-	
-	public abstract void OnCompleteAction();
+	public virtual void OnCompleteAction() {}
 }

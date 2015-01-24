@@ -16,48 +16,83 @@ public class GameInput {
 	private const int SCROLL_INITIAL_COUNT = 1;
 
 	private static int currentFrameCount;
-	private static ScrollState[] scrollState;
+	private static ScrollState[] vertScrollState;
+	private static ScrollState[] horzScrollState;
 
 	public static void ResetInput() {
-		scrollState = null;
+		vertScrollState = null;
+		horzScrollState = null;
 	}
 
 	public static void Update() {
 		if (currentFrameCount == Time.frameCount) return;
 		currentFrameCount = Time.frameCount;
 
-		if (scrollState == null) {
-			scrollState = new ScrollState[GameConstants.PLAYER_COUNT];
+		if (vertScrollState == null) {
+			vertScrollState = new ScrollState[GameConstants.PLAYER_COUNT];
+		}
+		if (horzScrollState == null) {
+			horzScrollState = new ScrollState[GameConstants.PLAYER_COUNT];
 		}
 
 		for (int player = 0; player < GameConstants.PLAYER_COUNT; ++player) {
-			float axis = GetScrollAxis(player);
-			if (axis > -0.25 && axis < 0.25) {
-				scrollState[player].tick = false;
-				scrollState[player].direction = 0;
-				scrollState[player].count = 0;
-				scrollState[player].lastTime = 0;
-				scrollState[player].lastDirection = 0;
+			float vertAxis = GetVertScrollAxis(player);
+			if (vertAxis > -0.25 && vertAxis < 0.25) {
+				vertScrollState[player].tick = false;
+				vertScrollState[player].direction = 0;
+				vertScrollState[player].count = 0;
+				vertScrollState[player].lastTime = 0;
+				vertScrollState[player].lastDirection = 0;
 			} else {
-				int direction = (axis > 0 ? 1 : -1);
-				scrollState[player].direction = direction;
-				if (direction != scrollState[player].lastDirection) {
-					scrollState[player].tick = true;
-					scrollState[player].count = 1;
-					scrollState[player].lastDirection = direction;
-					scrollState[player].lastTime = Time.time;
-				} else if (scrollState[player].count <= GameInput.SCROLL_INITIAL_COUNT
-						&& (Time.time - scrollState[player].lastTime) >= GameInput.SCROLL_INITIAL_REPEAT_INTERVAL) {
-					scrollState[player].tick = true;
-					++scrollState[player].count;
-					scrollState[player].lastTime = Time.time;
-				} else if (scrollState[player].count > GameInput.SCROLL_INITIAL_COUNT
-						&& (Time.time - scrollState[player].lastTime) >= GameInput.SCROLL_FINAL_REPEAT_INTERVAL) {
-					scrollState[player].tick = true;
-					++scrollState[player].count;
-					scrollState[player].lastTime = Time.time;
+				int direction = (vertAxis > 0 ? 1 : -1);
+				vertScrollState[player].direction = direction;
+				if (direction != vertScrollState[player].lastDirection) {
+					vertScrollState[player].tick = true;
+					vertScrollState[player].count = 1;
+					vertScrollState[player].lastDirection = direction;
+					vertScrollState[player].lastTime = Time.time;
+				} else if (vertScrollState[player].count <= GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - vertScrollState[player].lastTime) >= GameInput.SCROLL_INITIAL_REPEAT_INTERVAL) {
+					vertScrollState[player].tick = true;
+					++vertScrollState[player].count;
+					vertScrollState[player].lastTime = Time.time;
+				} else if (vertScrollState[player].count > GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - vertScrollState[player].lastTime) >= GameInput.SCROLL_FINAL_REPEAT_INTERVAL) {
+					vertScrollState[player].tick = true;
+					++vertScrollState[player].count;
+					vertScrollState[player].lastTime = Time.time;
 				} else {
-					scrollState[player].tick = false;
+					vertScrollState[player].tick = false;
+				}
+			}
+
+			float horzAxis = GetHorzScrollAxis(player);
+			if (horzAxis > -0.25 && horzAxis < 0.25) {
+				horzScrollState[player].tick = false;
+				horzScrollState[player].direction = 0;
+				horzScrollState[player].count = 0;
+				horzScrollState[player].lastTime = 0;
+				horzScrollState[player].lastDirection = 0;
+			} else {
+				int direction = (horzAxis > 0 ? 1 : -1);
+				horzScrollState[player].direction = direction;
+				if (direction != horzScrollState[player].lastDirection) {
+					horzScrollState[player].tick = true;
+					horzScrollState[player].count = 1;
+					horzScrollState[player].lastDirection = direction;
+					horzScrollState[player].lastTime = Time.time;
+				} else if (horzScrollState[player].count <= GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - horzScrollState[player].lastTime) >= GameInput.SCROLL_INITIAL_REPEAT_INTERVAL) {
+					horzScrollState[player].tick = true;
+					++horzScrollState[player].count;
+					horzScrollState[player].lastTime = Time.time;
+				} else if (horzScrollState[player].count > GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - horzScrollState[player].lastTime) >= GameInput.SCROLL_FINAL_REPEAT_INTERVAL) {
+					horzScrollState[player].tick = true;
+					++horzScrollState[player].count;
+					horzScrollState[player].lastTime = Time.time;
+				} else {
+					horzScrollState[player].tick = false;
 				}
 			}
 		}
@@ -65,15 +100,25 @@ public class GameInput {
 
 	public static bool GetScrollUpButtonDown(int player) {
 		GameInput.Update();
-		return (GameInput.scrollState[player].tick && GameInput.scrollState[player].direction == -1);
+		return (GameInput.vertScrollState[player].tick && GameInput.vertScrollState[player].direction == -1);
 	}
 
 	public static bool GetScrollDownButtonDown(int player) {
 		GameInput.Update();
-		return (GameInput.scrollState[player].tick && GameInput.scrollState[player].direction == 1);
+		return (GameInput.vertScrollState[player].tick && GameInput.vertScrollState[player].direction == 1);
 	}
 
-	private static float GetScrollAxis(int player) {
+	public static bool GetScrollLeftButtonDown(int player) {
+		GameInput.Update();
+		return (GameInput.horzScrollState[player].tick && GameInput.horzScrollState[player].direction == -1);
+	}
+
+	public static bool GetScrollRightButtonDown(int player) {
+		GameInput.Update();
+		return (GameInput.horzScrollState[player].tick && GameInput.horzScrollState[player].direction == 1);
+	}
+
+	private static float GetVertScrollAxis(int player) {
 		if (XCI.GetNumPluggedCtrlrs() > player) {
 			return -XCI.GetAxis(XboxAxis.LeftStickY, player + 1);
 		} else if (player == 0) {
@@ -92,6 +137,42 @@ public class GameInput {
 			if (up && !down) {
 				return -1;
 			} else if (!up && down) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	private static float GetHorzScrollAxis(int player) {
+		if (XCI.GetNumPluggedCtrlrs() > player) {
+			bool left = XCI.GetButton(XboxButton.LeftBumper, player + 1);
+			bool right = XCI.GetButton(XboxButton.RightBumper, player + 1);
+			if (left && !right) {
+				return -1;
+			} else if (!left && right) {
+				return 1;
+			} else {
+				return XCI.GetAxis(XboxAxis.LeftStickX, player + 1);
+			}
+		} else if (player == 0) {
+			bool left = Input.GetKey("a");
+			bool right = Input.GetKey("d");
+			if (left && !right) {
+				return -1;
+			} else if (!left && right) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else if (player == 1) {
+			bool left = Input.GetKey("left");
+			bool right = Input.GetKey("right");
+			if (left && !right) {
+				return -1;
+			} else if (!left && right) {
 				return 1;
 			} else {
 				return 0;

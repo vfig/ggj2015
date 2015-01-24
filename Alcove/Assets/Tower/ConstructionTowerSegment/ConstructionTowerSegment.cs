@@ -1,35 +1,37 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ConstructionTowerSegment : TowerSegment {
+	private TowerSegment m_towerSegmentToBeConstructed;
+	private Image m_constructionImage;
 
-	private float m_constructionRate;
-	private float m_completion;
-	private float m_target;
-	
-	public override bool OnIsActionable () {
+	public void SetTowerSegmentToBeConstructed(TowerSegment prefab) {
+		m_towerSegmentToBeConstructed = prefab;
+	}
+
+	public override float NominalActionDurationSeconds() {
+		return m_towerSegmentToBeConstructed.NominalConstructionDurationSeconds();
+	}
+
+	public override bool OnIsComplete () {
 		return false;
 	}
-	
-	public override bool OnIsComplete () {
-		return (m_completion == 1.0f);
+
+	public override void OnBeginAction() {
+		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
+		m_constructionImage = GetComponentInChildren<Image>();
+		m_constructionImage.sprite = spriteRenderer.sprite;
 	}
-	
-	public override void OnBeginAction () {
-		m_constructionRate = 0.02f;
-		m_completion = 0.0f;
-		m_target = 1.0f;
+
+	public override void OnProgressAction(float secondsRemaining) {
+		m_constructionImage.fillAmount = m_completion;
 	}
-	
-	public override void OnProgressAction () {
-		m_completion += m_constructionRate;
-		if (m_completion >= m_target) {
-			m_completion = m_target;
-			this.CompleteAction();
-		}
-	}
-	
+
 	public override void OnCompleteAction () {
-		// this.SetNewTowerSegment(m_owningTower.m_staticTowerSegmentPrefab);
+		// Swap the segment with a new one
+		m_owningTower.SwapSegment(this, m_towerSegmentToBeConstructed);
+		// Add a new empty one ready to build
+		m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
 	}
 }
