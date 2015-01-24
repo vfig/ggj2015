@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public abstract class TowerSegment : MonoBehaviour
 {	
 	/* Segment height */
-	public const float HEIGHT = 2.6f;
+	public const float HEIGHT = 2.0f;
 	
 	public bool hasAction;
 	public float durationSecondsAtNominalWorkRate;

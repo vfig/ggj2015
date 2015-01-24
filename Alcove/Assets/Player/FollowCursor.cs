@@ -17,7 +17,7 @@ public class FollowCursor : MonoBehaviour {
 		Vector3 cursorPosition = cursorTransform.position;
 
 		// Find the min world space X and Y for the cursor that will keep it inside the viewport margin.
-		const float halfCursorHeight = 1.3f;
+		const float halfCursorHeight = 1.0f;
 		Vector3 cursorBottom = camera.WorldToViewportPoint(cursorPosition + Vector3.down * halfCursorHeight);
 		Vector3 cursorTop = camera.WorldToViewportPoint(cursorPosition + Vector3.up * halfCursorHeight);
 		cursorBottom.y = Mathf.Clamp(cursorBottom.y, viewportMargin, 1.0f - viewportMargin);
