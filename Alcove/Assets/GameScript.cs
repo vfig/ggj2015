@@ -17,10 +17,10 @@ public class GameScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (1)) {
 			m_playerOneScript.Click();
 		}
-		if (Input.GetMouseButtonDown (1)) {
+		if (Input.GetMouseButtonDown (0)) {
 			m_playerTwoScript.Click();
 		}
 	}
