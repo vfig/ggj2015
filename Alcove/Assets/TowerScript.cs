@@ -24,7 +24,7 @@ public class TowerScript : MonoBehaviour {
 	
 	public void AddTowerSegment() {
 
-		GameObject newSegment = Instantiate (m_towerSegmentPrefab, gameObject.transform.position), Quaternion.identity) as GameObject;
+		GameObject newSegment = Instantiate (m_towerSegmentPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
 		m_numTowerSegments++;
 
 		m_towerSegmentList.Add (newSegment);
