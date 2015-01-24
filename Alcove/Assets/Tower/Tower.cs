@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TowerScript : MonoBehaviour {
+public class Tower : MonoBehaviour {
 	
 	private List<GameObject> m_towerSegmentList;
 	public int m_numTowerSegments;
@@ -24,7 +24,7 @@ public class TowerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		SegmentScript segmentScript = m_towerSegmentList[m_numTowerSegments - 1].GetComponent<SegmentScript>();
+		TowerSegment segmentScript = m_towerSegmentList[m_numTowerSegments - 1].GetComponent<TowerSegment>();
 		
 		if (segmentScript.GetState() == SegmentState.Complete)
 		{
@@ -40,24 +40,26 @@ public class TowerScript : MonoBehaviour {
 
 		m_towerSegmentList.Add (newSegment);
 	}
-	
-	public void PerformAction()
+
+	public void PerformAction(Tribe tribe)
 	{
-		SegmentScript segmentScript = m_towerSegmentList[m_cursorPosition - 1].GetComponent<SegmentScript>();
-	
-		switch (segmentScript.GetState())
-		{
-			case SegmentState.Empty:
-				segmentScript.StartBuilding(0.01f);
-				break;
-				
-			case SegmentState.Complete:
-				segmentScript.PerformAction();
-				break;
-				
-			default:
-				break;
-		}
+		TowerSegment segment = m_towerSegmentList[m_cursorPosition - 1].GetComponent<TowerSegment>();
+
+		if (tribe.IsBusy || tribe.count == 0) return;
+		if (segment.GetState() != SegmentState.Empty) return;
+
+		// FIXME - should replace empty segment here with new building segment, and put new empty segment at
+		// the top of the tower.
+
+		Debug.Log("Allocate tribe " + tribe + " to segment " + segment + ".");
+
+		// FIXME - need to decide between predefined actions, each with their own duration.
+		GameObject actionObject = new GameObject();
+		TowerAction action = actionObject.AddComponent<TowerAction>();
+		action.durationSecondsAtNominalWorkRate = 10.0f;
+		action.Notify(tribe);
+		action.Notify(segment);
+		action.StartAction(tribe.count);
 	}
 
 	public void MoveUp(float delta)

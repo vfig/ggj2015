@@ -9,11 +9,9 @@ public enum SegmentState
 	Damaged
 }
 
-public class SegmentScript : MonoBehaviour
+public class TowerSegment : MonoBehaviour, ITowerActionEvents
 {
 	private SegmentState m_segmentState;
-	private float m_completion;
-	private float m_workRate;
 
 	public GameObject m_emptySegmentPrefab;
 	public GameObject m_buildingSegmentPrefab;
@@ -23,12 +21,9 @@ public class SegmentScript : MonoBehaviour
 	private GameObject m_buildingSegmentObject;
 	private GameObject m_completeSegmentObject;
 
-	// Use this for initialization
 	void Start ()
 	{
 		m_segmentState = SegmentState.Empty;
-		m_completion = 0.0f;
-		m_workRate = 0.0f;
 
 		m_emptySegmentObject = Instantiate (m_emptySegmentPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
 		m_buildingSegmentObject = Instantiate (m_buildingSegmentPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
@@ -38,26 +33,21 @@ public class SegmentScript : MonoBehaviour
 		m_completeSegmentObject.SetActive (false);
 	}
 	
-	// Update is called once per frame
-	void Update ()
-	{
-		m_completion += m_workRate;
-		if (m_completion > 1.0f)
-		{
-			m_completion = 1.0f;
-			ChangeState(SegmentState.Complete);
-		}
-	}
-
 	public SegmentState GetState ()
 	{
 		return m_segmentState;
 	}
 
-	public void StartBuilding(float workRate)
-	{
-		m_workRate = workRate;
+	public void TowerActionStarted(TowerAction action) {
 		ChangeState(SegmentState.Building);
+	}
+
+	public void TowerActionProgress(TowerAction action, float progress, float secondsRemaining) {
+		// FIXME - update the sprite to show building progress
+	}
+
+	public void TowerActionCompleted(TowerAction action) {
+		ChangeState(SegmentState.Complete);
 	}
 
 	public void ChangeState (SegmentState state)
@@ -77,9 +67,5 @@ public class SegmentScript : MonoBehaviour
 		if (m_segmentState == SegmentState.Complete) {
 			m_completeSegmentObject.SetActive (true);
 		}
-	}
-
-	public virtual void PerformAction()
-	{
 	}
 }

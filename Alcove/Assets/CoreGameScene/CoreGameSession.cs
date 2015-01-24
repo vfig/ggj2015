@@ -20,7 +20,6 @@ public class CoreGameSession : MonoBehaviour {
 			Player player = playerObject.GetComponent<Player>();
 			player.playerNumber = i;
 			player.camera.rect = new Rect(i * viewportXSpace, 0, viewportXSpace, 1);
-			Debug.Log("Spawned Player " + i);
 		}
 	}
 

@@ -11,12 +11,12 @@ public class GameRulesManager : MonoBehaviour {
 
 	public bool latestWinnerIsPlayer1 = false;
 
-	public void CheckForWinner(ShaunTempPlayer player1, ShaunTempPlayer player2) {
-		if(player1.tower.GetCompletedSegmentCount() >= TOWER_SEGMENTS_TO_WIN_GAME) {
-			AnnounceWinner(true);
-		} else if(player2.tower.GetCompletedSegmentCount () >= TOWER_SEGMENTS_TO_WIN_GAME) {
-			AnnounceWinner(false);
-		}
+	public void CheckForWinner(Object player1, Object player2) {
+		// if(player1.tower.GetCompletedSegmentCount() >= TOWER_SEGMENTS_TO_WIN_GAME) {
+		// 	AnnounceWinner(true);
+		// } else if(player2.tower.GetCompletedSegmentCount () >= TOWER_SEGMENTS_TO_WIN_GAME) {
+		// 	AnnounceWinner(false);
+		// }
 	}
 
 	public void AnnounceWinner(bool winnerIsPlayer1) {
