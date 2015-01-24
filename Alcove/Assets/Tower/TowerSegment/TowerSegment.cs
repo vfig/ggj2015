@@ -91,45 +91,13 @@ public abstract class TowerSegment : MonoBehaviour
 		}
 	}
 
-	public float Duration(float constructionRate) {
-		return durationSecondsAtNominalWorkRate / constructionRate;
-	}
-
-	public void StartAction(int constructionRate) {
-	/*
-		if (CanStartAction) {
-			this.m_constructionRate = constructionRate;
-			m_completion = 0.0f;
-			float secondsRemaining = Duration(constructionRate);
-			foreach (ITowerSegmentCallback listener in m_listenerList) {
-				listener.OnBeginAction(this);
-				listener.OnProgressAction(this, m_completion, secondsRemaining);
-			}
-			m_underConstruction = true;
-		}
-		*/
-	}
-
 	public void Update () {
 		if (m_actionActive) {
 			this.OnProgressAction();
 			foreach (ITowerSegmentCallback listener in m_listenerList) {
-				listener.OnProgressAction(this, 0.0f, Duration(0.0f));
+				listener.OnProgressAction(this, 0.0f, 0.0f);
 			}
 		}
-	/*
-		if (m_underConstruction) {
-			m_completion = Mathf.Clamp01(m_completion + (float)m_constructionRate / durationSecondsAtNominalWorkRate * Time.deltaTime);
-			float secondsRemaining = (1.0f - m_completion) * Duration(m_constructionRate);
-			foreach (ITowerSegmentCallback listener in m_listenerList) {
-				listener.OnProgressAction(this, m_completion, secondsRemaining);
-			}
-
-			if (m_completion == 1.0f) {
-				CompleteAction();
-			}
-		}
-		*/
 	}
 	
 	/* Virtual Methods */
