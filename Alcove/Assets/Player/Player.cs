@@ -42,6 +42,11 @@ public class Player : MonoBehaviour {
 		} else if (GameInput.GetScrollDownButtonDown(playerNumber)) {
 			tower.MoveDown();
 		}
+		if (GameInput.GetScrollLeftButtonDown(playerNumber)) {
+			tower.MoveLeft();
+		} else if (GameInput.GetScrollRightButtonDown(playerNumber)) {
+			tower.MoveRight();
+		}
 
 		// Check for actions
 		for (int i = 0; i < tribes.Length; ++i) {
