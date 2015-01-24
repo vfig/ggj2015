@@ -53,7 +53,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		// Under-construction segment immediately replaces the empty segment
 		TowerSegment constructionSegment = SwapSegment(m_cursorPosition, m_constructionSegmentPrefab);
 		// Final plain segment to eventually replace the under-construction segment
-		constructionSegment.constructingTowerSegmentPrefab = m_plainSegmentPrefab;
+		constructionSegment.m_newTowerSegmentPrefab = m_plainSegmentPrefab;
 		// Add a new empty segment so we can begin building immediately
 		AddSegment(m_emptySegmentPrefab);
 
@@ -69,9 +69,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public void TowerSegmentActionCompleted(TowerSegment segment) {
 		int index = segments.IndexOf(segment);
-		if (index >= 0 && segment.constructingTowerSegmentPrefab != null) {
+		if (index >= 0 && segment.m_newTowerSegmentPrefab != null) {
 			// Swap the segment with a new one
-			SwapSegment(index, segment.constructingTowerSegmentPrefab);
+			SwapSegment(index, segment.m_newTowerSegmentPrefab);
 		}
 	}
 
