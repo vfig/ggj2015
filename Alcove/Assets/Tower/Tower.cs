@@ -107,4 +107,9 @@ public class Tower : MonoBehaviour, ITowerActionEvents {
 		}
 		return completedSegmentCount;
 	}
+	
+	public Vector3 GetSelectorPosition()
+	{
+		return m_selector.transform.position;
+	}
 }
