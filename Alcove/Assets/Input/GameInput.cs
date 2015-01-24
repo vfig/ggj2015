@@ -163,4 +163,27 @@ public class GameInput {
 			return false;
 		}
 	}
+
+	public static bool GetAnyTribeButtonDown(int player) {
+		for(int i=0; i<4; i++) {
+			if(GetTribeButtonUp(i, player)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static bool GetAnyTribeButtonDownForAnyPlayer() {
+		for(int i=0; i<4; i++) {
+			if(GetTribeButtonUp(i, 0)) {
+				return true;
+			}
+		}
+		for(int i=0; i<4; i++) {
+			if(GetTribeButtonUp(i, 1)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

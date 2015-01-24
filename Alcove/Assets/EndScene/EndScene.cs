@@ -4,11 +4,11 @@ using System.Collections;
 public class EndScene : MonoBehaviour {
 
 	void Start() {
-	
+		GameInput.ResetInput();
 	}
 
 	void Update() {
-		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
+		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
 			Application.LoadLevel("StartScene");
 		}
 	}

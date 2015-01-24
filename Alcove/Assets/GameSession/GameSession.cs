@@ -201,8 +201,8 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Update_Roundup() {
-		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
-			Application.LoadLevel("StartScene");
+		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
+			Application.LoadLevel("EndScene");
 		}
 	}
 
