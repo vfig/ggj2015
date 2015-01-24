@@ -105,7 +105,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		{
 			m_cursorPosition--;
 		}
-		m_selector.transform.position = transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
+		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
 
 	public int GetCompletedSegmentCount()
