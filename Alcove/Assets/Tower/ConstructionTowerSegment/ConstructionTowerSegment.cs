@@ -9,7 +9,7 @@ public class ConstructionTowerSegment : TowerSegment {
 	}
 
 	public override float NominalActionDurationSeconds() {
-		return 10.0f; // FIXME - needs to correspond with what's being constructed.
+		return m_towerSegmentToBeConstructed.NominalConstructionDurationSeconds();
 	}
 
 	public override bool OnIsComplete () {

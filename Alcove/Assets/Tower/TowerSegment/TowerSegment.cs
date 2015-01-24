@@ -100,7 +100,11 @@ public abstract class TowerSegment : MonoBehaviour
 	public virtual float NominalActionDurationSeconds() {
 		return 0.0f;
 	}
-	
+
+	public virtual float NominalConstructionDurationSeconds() {
+		return 0.0f;
+	}
+
 	public virtual bool OnIsActionable() {
 		return false;
 	}

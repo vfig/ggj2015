@@ -3,6 +3,10 @@ using System.Collections;
 
 public class CannonTowerSegment : TowerSegment {
 
+	public override float NominalConstructionDurationSeconds() {
+		return 30;
+	}
+
 	public override bool OnIsActionable () {
 		return true;
 	}
