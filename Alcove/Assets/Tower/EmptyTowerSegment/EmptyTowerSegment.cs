@@ -8,18 +8,18 @@ public class EmptyTowerSegment : TowerSegment {
 	public TowerSegment GetTowerSegmentToBeConstructed() {
 		return m_towerSegmentToBeConstructed;
 	}
-	
+
+	public void PerformAction(Tower owningTower, Tribe tribe, TowerSegment prefab) {
+		m_towerSegmentToBeConstructed = prefab;
+		PerformAction(owningTower, tribe);
+	}
+
 	public override bool OnIsActionable () {
 		return true;
 	}
 	
 	public override bool OnIsComplete () {
 		return false;
-	}
-	
-	public override void OnBeginAction () {
-		/* TODO: Allow player to select new tower segment */
-		m_towerSegmentToBeConstructed = m_owningTower.m_cannonTowerSegmentPrefab;
 	}
 	
 	public override void OnCompleteAction () {

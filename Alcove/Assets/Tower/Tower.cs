@@ -89,8 +89,14 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
-		
-		segment.PerformAction(this, tribe);
+
+
+		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
+		if (emptySegment != null) {
+			emptySegment.PerformAction(this, tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
+		} else {
+			segment.PerformAction(this, tribe);
+		}
 	}
 
 	public void OnBeginAction(TowerSegment segment) {
