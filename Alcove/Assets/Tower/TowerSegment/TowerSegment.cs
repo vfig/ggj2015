@@ -8,8 +8,8 @@ public abstract class TowerSegment : MonoBehaviour
 	public const float HEIGHT = 2.0f;
 	
 	public bool hasAction;
-	private float m_workRate;
-	private float m_completion;
+	protected float m_workRate;
+	protected float m_completion;
 
 	/* Event listener list */
 	private List<ITowerSegmentCallback> m_listenerList;

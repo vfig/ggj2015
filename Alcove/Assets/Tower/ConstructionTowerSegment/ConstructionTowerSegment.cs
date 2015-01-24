@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ConstructionTowerSegment : TowerSegment {
 	private TowerSegment m_towerSegmentToBeConstructed;
-	
+	private Image m_constructionImage;
+
 	public void SetTowerSegmentToBeConstructed(TowerSegment prefab) {
 		m_towerSegmentToBeConstructed = prefab;
 	}
@@ -14,6 +16,16 @@ public class ConstructionTowerSegment : TowerSegment {
 
 	public override bool OnIsComplete () {
 		return false;
+	}
+
+	public override void OnBeginAction() {
+		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
+		m_constructionImage = GetComponentInChildren<Image>();
+		m_constructionImage.sprite = spriteRenderer.sprite;
+	}
+
+	public override void OnProgressAction(float secondsRemaining) {
+		m_constructionImage.fillAmount = m_completion;
 	}
 
 	public override void OnCompleteAction () {
