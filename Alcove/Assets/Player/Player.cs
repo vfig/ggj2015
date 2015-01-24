@@ -5,7 +5,7 @@ public class Player : MonoBehaviour {
 	new public Camera camera;
 	public int playerNumber;
 	private Tribe[] tribes;
-	private Tower tower;
+	public Tower tower;
 	
 	public void Awake() {
 		camera = GetComponentInChildren<Camera>();
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour {
 
 		// Set initial tribe counts
 		foreach (Tribe tribe in tribes) {
-			tribe.count = GameRulesManager.TRIBE_STARTING_UNIT_COUNT;
+			tribe.count = GameConstants.TRIBE_STARTING_UNIT_COUNT;
 		}
 	}
 

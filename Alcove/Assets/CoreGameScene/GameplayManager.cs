@@ -2,7 +2,7 @@
 using System.Collections;
 
 // CoreGameSession starts by creating players, ends when it detects a win condition
-public class CoreGameSession : MonoBehaviour {
+public class GameplayManager : MonoBehaviour {
 
 	public GameObject playerPrefab;
 

@@ -92,6 +92,18 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		}
 		m_selector.transform.position = transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
 	}
+
+	public int GetCompletedSegmentCount()
+	{
+		int completedSegmentCount = 0;
+		for(int i=0; i<segments.Count; i++)
+		{
+			if(segments[i].GetCompletion() >= 1.0) {
+				completedSegmentCount++;
+			}
+		}
+		return completedSegmentCount;
+	}
 	
 	public Vector3 GetSelectorPosition()
 	{

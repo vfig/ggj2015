@@ -9,7 +9,7 @@ public class StartScene : MonoBehaviour {
 
 	void Update() {
 		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
-			Application.LoadLevel("GameSessionTestScene");
+			Application.LoadLevel("GameScene");
 		}
 	}
 }
