@@ -56,7 +56,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		newSegment.transform.parent = oldSegment.transform.parent;
 		newSegment.transform.localPosition = oldSegment.transform.localPosition;
 		segments[index] = newSegment;
-		Debug.Log("Destroying old segment " + oldSegment + " from index " + index + ", replaced by " + newSegment);
 		Destroy(oldSegment.gameObject);
 		return newSegment;
 	}

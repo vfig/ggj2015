@@ -20,8 +20,6 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Start() {
-		Debug.Log("Player " + playerNumber + " Start");
-
 		// Set initial tribe counts
 		foreach (Tribe tribe in tribes) {
 			tribe.count = GameConstants.TRIBE_STARTING_UNIT_COUNT;
