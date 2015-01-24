@@ -7,11 +7,18 @@ public class GameplayManager : MonoBehaviour {
 	public GameObject playerPrefab;
 
 	private GameSession gameSession;
+	private GameObject minimap;
 	private Player[] players;
 
-	public void Start () {
-		// Spawn players, allocate world and viewport space for each
+	public void Start() {
 
+		// Obtain a reference to the main game session script.
+		GameObject gameSessionGameObject = GameObject.Find("GameSession") as GameObject;
+		if(gameSessionGameObject) {
+			gameSession = gameSessionGameObject.GetComponent<GameSession> ();
+		}
+
+		// Spawn players, allocate world and viewport space for each
 		const float worldXSpace = 10.0f;
 		const float viewportXSpace = 1.0f / (float)GameConstants.PLAYER_COUNT;
 		players = new Player[GameConstants.PLAYER_COUNT];
@@ -25,6 +32,22 @@ public class GameplayManager : MonoBehaviour {
 			player.camera.rect = new Rect(i * viewportXSpace, 0, viewportXSpace, 1);
 			players[i] = player;
 		}
+
+		float xPosition = (players[0].transform.position.x + players[1].transform.position.x) / 2;
+		CreateMinimapObject(xPosition);
+	}
+
+	void CreateMinimapObject(float xFocalPosition) {
+		minimap = new GameObject();
+		Camera minimapCamera = minimap.AddComponent<Camera>();
+
+		float widthFraction = 0.07f;
+		float heightFraction = 0.3f;
+		minimapCamera.isOrthoGraphic = true;
+		minimapCamera.rect = new Rect(0.5f - widthFraction/2, 0.5f - heightFraction/2, widthFraction, heightFraction);
+		minimapCamera.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.6f);
+		minimapCamera.orthographicSize = 28.0f;
+		minimap.camera.transform.position = new Vector3(xFocalPosition, 25.0f, -5.0f);
 	}
 
 	public void LateUpdate() {
@@ -32,23 +55,24 @@ public class GameplayManager : MonoBehaviour {
 	}
 
 	public void CheckForWinner() {
+		if(gameSession == null) {
+			return;
+		}
 		int winner = -1; // 0 or 1 for player (zero-indexed), -1 for no winner. 
+		RoundupInfo info = new RoundupInfo();
 		int p1Segments = players[0].tower.GetCompletedSegmentCount();
 		int p2Segments = players[1].tower.GetCompletedSegmentCount();
-		if(p1Segments > GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		if(p1Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 0;
+			info.winningPlayerText = "Player 1";
 		}
-		if(p2Segments > GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		if(p2Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 1;
+			info.winningPlayerText = "Player 2";
 		}
 
 		if(winner != -1) {
-			// FIXME: Once we're using LoadLevelAdditive to merge the old GameSession and
-			// CoreGameSession, we should be setting state to Roundup here, because we want to perform
-			// the roundup step in the game 'flow', which might show a message and a little bit of celebration
-			// before getting rid of the game scene and all its celebrating tribe characters and all that jazz.
-			//gameSession.SetState(GameSession.GameplayState.Roundup);
-			Application.LoadLevel("StartScene");
+			gameSession.SetState(GameSession.GameplayState.Roundup, info);
 		}
 	}
 

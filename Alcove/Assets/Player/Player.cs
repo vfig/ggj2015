@@ -2,11 +2,14 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
+
+	public static bool canUpdate = true;
+
 	new public Camera camera;
 	public int playerNumber;
 	private Tribe[] tribes;
 	public Tower tower;
-	
+
 	public void Awake() {
 		camera = GetComponentInChildren<Camera>();
 		tribes = GetComponentsInChildren<Tribe>();
@@ -23,6 +26,11 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Update() {
+
+		if(!canUpdate) {
+			return;
+		}
+
 		GameInput.Update();
 
 		// Move the cursor
@@ -38,9 +46,5 @@ public class Player : MonoBehaviour {
 				tower.PerformAction(tribes[i]);
 			}
 		}
-		
-		// update camera
-		Vector3 selectorPosition = tower.GetSelectorPosition();
-		camera.transform.position = new Vector3(selectorPosition.x, selectorPosition.y, -10.0f);
 	}
 }

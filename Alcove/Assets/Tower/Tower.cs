@@ -67,6 +67,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		AddSegment(m_emptySegmentPrefab);
 
 		Debug.Log("Allocate tribe " + tribe + " to segment " + constructionSegment + ".");
+
 		constructionSegment.StartAction(tribe.count);
 		*/
 	}
@@ -117,10 +118,5 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			}
 		}
 		return completedSegmentCount;
-	}
-	
-	public Vector3 GetSelectorPosition()
-	{
-		return m_selector.transform.position;
 	}
 }

@@ -6,33 +6,34 @@ using UnityEngine.UI;
 public class GameSession : MonoBehaviour {
 
 	public enum GameplayState {
+		LoadGameplayScene,
 		Pregame,
-		LoadingLevel,
 		InProgress,
 		Roundup
 	}
 
 	public GUIStyle guiStyle;
-	public Text getReadyText;
-	public Text winnerText;
-	public Text clickToContinueText;
+	public GameObject pregamePanel;
+	public GameObject roundupPanel;
+	public GameObject goPanel;
+	public Text winningPlayerNameText;
 	
 	GameplayManager gameplayManager;
-	GameplayState gameplayState;
-	float gamestateCounter;
+	GameplayState state;
+	float stateCounter;
 
 	void Start() {
 		StartNewGame();
 	}
 
 	void Update() {
-		gamestateCounter += (Time.deltaTime * 60);
-		switch(gameplayState) {
+		stateCounter += (Time.deltaTime * 60);
+		switch(state) {
+		case GameplayState.LoadGameplayScene:
+			Update_LoadGameplayScene();
+			break;
 		case GameplayState.Pregame:
 			Update_Pregame();
-			break;
-		case GameplayState.LoadingLevel:
-			Update_LoadingLevel();
 			break;
 		case GameplayState.InProgress:
 			Update_InProgress();
@@ -44,11 +45,11 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		switch(gameplayState) {
+		switch(state) {
 		case GameplayState.Pregame:
 			DrawPregameUi();
 			break;
-		case GameplayState.LoadingLevel:
+		case GameplayState.LoadGameplayScene:
 			break;
 		case GameplayState.InProgress:
 			DrawInProgressUi();
@@ -100,14 +101,14 @@ public class GameSession : MonoBehaviour {
 		return textFieldValue;
 	}
 	
-	public void SetState(GameplayState state) {
+	public void SetState(GameplayState newState, Object data=null) {
 
 		// Handle closure of previous state.
-		switch(gameplayState) {
+		switch(state) {
+		case GameplayState.LoadGameplayScene:
+			break;
 		case GameplayState.Pregame:
 			Stop_Pregame();
-			break;
-		case GameplayState.LoadingLevel:
 			break;
 		case GameplayState.InProgress:
 			Stop_InProgress();
@@ -117,106 +118,104 @@ public class GameSession : MonoBehaviour {
 			break;
 		}
 
-		//Debug.Log("Setting gameplay state to: " + state);
-		gameplayState = state;
+		stateCounter = 0;
+		state = newState;
 
-		switch(state) {
-		case GameplayState.Pregame:
-			Setup_Pregame();
+		switch(newState) {
+		case GameplayState.LoadGameplayScene:
+			Setup_LoadGameplayScene();
 			break;
-		case GameplayState.LoadingLevel:
-			Setup_LoadingLevel();
+		case GameplayState.Pregame:
+			Setup_Pregame(data);
 			break;
 		case GameplayState.InProgress:
-			Setup_InProgress();
+			Setup_InProgress(data);
 			break;
 		case GameplayState.Roundup:
-			Setup_Roundup();
+			Setup_Roundup(data);
 			break;
 		}
 	}
 
 	void StartNewGame() {
-		//Debug.Log("Starting new game.");
 
 		// This method's for initialisation of a game round,
 		// and SetupPregameState can be used to introduce the game
 		// (panning of camera or whatever).
 
-		getReadyText.enabled = false;
-		winnerText.enabled = false;
-		clickToContinueText.enabled = false;
+		Player.canUpdate = false;
+		pregamePanel.SetActive(false);
+		roundupPanel.SetActive(false);
+		goPanel.SetActive(false);
 
-		SetState(GameplayState.Pregame);
+		SetState(GameplayState.LoadGameplayScene);
 	}
 	
 	// PREGAME //////////////////////////////
-
-	void Setup_Pregame() {
-		// This state's not for initialisation,
-		// it's for any sort of intro we have.
-		//Debug.Log("Setting up Pregame state.");
-		getReadyText.enabled = true;
-	}
-
-	void Update_Pregame() {
-
-		int displayTime = 40;
-
-		if(gamestateCounter > displayTime) {
-			SetState(GameplayState.LoadingLevel);
-		}
-	}
-
-	void Stop_Pregame() {
-		getReadyText.enabled = false;
-	}
-
-	// LOADING LEVEL //////////////////////////////
-
-	void Setup_LoadingLevel() {
+	
+	void Setup_LoadGameplayScene(Object data=null) {
 		Application.LoadLevelAdditive("GameplaySubScene");
 	}
 
-	void Update_LoadingLevel() {
-		if(GrabGameplayManagerReference ()) {
+	void Setup_Pregame(Object data=null) {
+		// This state's not for initialisation,
+		// it's for any sort of intro we have.
+		pregamePanel.SetActive(true);
+	}
+
+	void Setup_InProgress(Object data=null) {
+		Player.canUpdate = true;
+		goPanel.SetActive(true);
+		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
+		canvas.SetAlpha(1.0f);
+	}
+
+	void Setup_Roundup(Object data=null) {
+		Player.canUpdate = false;
+		roundupPanel.SetActive(true);
+		RoundupInfo info = data as RoundupInfo;
+		winningPlayerNameText.text = info.winningPlayerText;
+	}
+	
+	void Update_LoadGameplayScene() {
+		if(GrabGameplayManagerReference()) {
+			SetState(GameplayState.Pregame);
+		}
+	}
+
+	void Update_Pregame() {
+		int displayTime = GameConstants.PREGAME_DISPLAY_TIME;
+		if(stateCounter > displayTime) {
 			SetState(GameplayState.InProgress);
 		}
 	}
 
-	// IN PROGRESS //////////////////////////////
-
-	void Setup_InProgress() {
-		//Debug.Log("Setting up InProgress state.");
-	}
-
 	void Update_InProgress() {
-		// Wait for the CoreGameSession to tell us of a win
-	}
-
-	void Stop_InProgress() {
-		
-	}
-
-	// ROUNDUP //////////////////////////////
-
-	void Setup_Roundup() {
-		//Debug.Log("Setting up Roundup state.");
-		// FIXME: Get the winner ID to this method somehow.
-		winnerText.text = "Winner: " + "Not specified";
-		winnerText.enabled = true;
-		clickToContinueText.enabled = true;
-	}
-
-	void Update_Roundup() {
-		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
-			Application.LoadLevel("StartScene");
+		if(stateCounter > 40) {
+			CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer> ();
+			canvas.SetAlpha (canvas.GetAlpha () - 0.1f);
+			if (canvas.GetAlpha () <= 0.0f) {
+				goPanel.SetActive (false);
+			}
 		}
 	}
 
+	void Update_Roundup() {
+		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
+			Application.LoadLevel("EndScene");
+		}
+	}
+
+	void Stop_Pregame(Object data=null) {
+		pregamePanel.SetActive(false);
+	}
+
+	void Stop_InProgress() {
+		goPanel.SetActive(false);
+	}
+
 	void Stop_Roundup() {
-		winnerText.enabled = false;
-		clickToContinueText.enabled = false;
+		roundupPanel.SetActive(false);
 	}
 
 
