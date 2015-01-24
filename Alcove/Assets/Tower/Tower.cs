@@ -11,9 +11,10 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment m_emptyTowerSegmentPrefab;
 	public TowerSegment m_constructionTowerSegmentPrefab;
 	public TowerSegment m_staticTowerSegmentPrefab;
+	public TowerSegment m_cannonTowerSegmentPrefab;
 	public TowerSegment m_baseTowerSegmentPrefab;
 	
-	void Start () {
+	void Awake () {
 		segments = new List<TowerSegment> ();
 		m_cursorPosition = 0;
 		AddTowerSegment(m_baseTowerSegmentPrefab);
@@ -37,6 +38,10 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		Debug.Log("Destroying old segment " + oldSegment + " from index " + index + ", replaced by " + newSegment);
 		Destroy(oldSegment.gameObject);
 		if (autoNextAction) {
+			EmptyTowerSegment emptySegment = oldSegment as EmptyTowerSegment;
+			if (emptySegment) {
+				newSegment.SetNewTowerSegment(emptySegment.GetTowerSegmentToBeConstructed());
+			}
 			newSegment.PerformAction(oldSegment.GetOwningTower(), oldSegment.GetOwningTribe());
 		}
 		return newSegment;
@@ -52,24 +57,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		}
 		
 		segment.PerformAction(this, tribe);
-
-		// if (!segment.CanStartAction) return;
-		// if (tribe.IsBusy || tribe.count == 0) return;
-
-		// FIXME - deal with non-empty segments! the stuff below assumes the only action is to build on an empty segment
-
-		/*
-		// Under-construction segment immediately replaces the empty segment
-		TowerSegment constructionSegment = SwapSegment(m_cursorPosition, m_constructionSegmentPrefab);
-		// Final plain segment to eventually replace the under-construction segment
-		constructionSegment.m_newTowerSegmentPrefab = m_plainSegmentPrefab;
-		// Add a new empty segment so we can begin building immediately
-		AddSegment(m_emptySegmentPrefab);
-
-		Debug.Log("Allocate tribe " + tribe + " to segment " + constructionSegment + ".");
-
-		constructionSegment.StartAction(tribe.count);
-		*/
 	}
 
 	public void OnBeginAction(TowerSegment segment) {
@@ -105,7 +92,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		{
 			m_cursorPosition--;
 		}
-		m_selector.transform.position = transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
+		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
 
 	public int GetCompletedSegmentCount()
