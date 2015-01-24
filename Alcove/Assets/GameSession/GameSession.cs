@@ -7,6 +7,7 @@ public class GameSession : MonoBehaviour {
 
 	public enum GameplayState {
 		Pregame,
+		LoadingLevel,
 		InProgress,
 		Roundup
 	}
@@ -15,7 +16,8 @@ public class GameSession : MonoBehaviour {
 	public Text getReadyText;
 	public Text winnerText;
 	public Text clickToContinueText;
-
+	
+	GameplayManager gameplayManager;
 	GameplayState gameplayState;
 	float gamestateCounter;
 
@@ -27,13 +29,16 @@ public class GameSession : MonoBehaviour {
 		gamestateCounter += (Time.deltaTime * 60);
 		switch(gameplayState) {
 		case GameplayState.Pregame:
-			UpdatePregameState();
+			Update_Pregame();
+			break;
+		case GameplayState.LoadingLevel:
+			Update_LoadingLevel();
 			break;
 		case GameplayState.InProgress:
-			UpdateInProgressState();
+			Update_InProgress();
 			break;
 		case GameplayState.Roundup:
-			UpdateRoundupState();
+			Update_Roundup();
 			break;
 		}
 	}
@@ -43,15 +48,26 @@ public class GameSession : MonoBehaviour {
 		case GameplayState.Pregame:
 			DrawPregameUi();
 			break;
+		case GameplayState.LoadingLevel:
+			break;
 		case GameplayState.InProgress:
+			DrawInProgressUi();
 			break;
 		case GameplayState.Roundup:
 			DrawRoundupUi();
 			break;
 		}
 	}
-
+	
 	void DrawPregameUi() {
+	}
+
+	void DrawInProgressUi() {
+		int yPosition = 10;
+		int p1Segments = gameplayManager.GetPlayer(0).tower.GetCompletedSegmentCount();
+		int p2Segments = gameplayManager.GetPlayer(1).tower.GetCompletedSegmentCount();
+		QuickTopLeftText("P1 Tower: " +  p1Segments, ref yPosition);
+		QuickTopLeftText("P2 Tower: " +  p2Segments, ref yPosition);
 	}
 
 	void DrawRoundupUi() {
@@ -87,15 +103,17 @@ public class GameSession : MonoBehaviour {
 	public void SetState(GameplayState state) {
 
 		// Handle closure of previous state.
-		switch (gameplayState) {
+		switch(gameplayState) {
 		case GameplayState.Pregame:
-			StopPregameState();
+			Stop_Pregame();
+			break;
+		case GameplayState.LoadingLevel:
 			break;
 		case GameplayState.InProgress:
-			StopInProgressState();
+			Stop_InProgress();
 			break;
 		case GameplayState.Roundup:
-			StopRoundupState();
+			Stop_Roundup();
 			break;
 		}
 
@@ -104,13 +122,16 @@ public class GameSession : MonoBehaviour {
 
 		switch(state) {
 		case GameplayState.Pregame:
-			SetupPregameState();
+			Setup_Pregame();
+			break;
+		case GameplayState.LoadingLevel:
+			Setup_LoadingLevel();
 			break;
 		case GameplayState.InProgress:
-			SetupInProgressState();
+			Setup_InProgress();
 			break;
 		case GameplayState.Roundup:
-			SetupRoundupState();
+			Setup_Roundup();
 			break;
 		}
 	}
@@ -131,44 +152,55 @@ public class GameSession : MonoBehaviour {
 	
 	// PREGAME //////////////////////////////
 
-	void SetupPregameState() {
+	void Setup_Pregame() {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
 		Debug.Log("Setting up Pregame state.");
 		getReadyText.enabled = true;
 	}
 
-	void UpdatePregameState() {
+	void Update_Pregame() {
 
 		int displayTime = 40;
 
 		if(gamestateCounter > displayTime) {
+			SetState(GameplayState.LoadingLevel);
+		}
+	}
+
+	void Stop_Pregame() {
+		getReadyText.enabled = false;
+	}
+
+	// LOADING LEVEL //////////////////////////////
+
+	void Setup_LoadingLevel() {
+		Application.LoadLevelAdditive("GameplaySubScene");
+	}
+
+	void Update_LoadingLevel() {
+		if(GrabGameplayManagerReference ()) {
 			SetState(GameplayState.InProgress);
 		}
 	}
 
-	void StopPregameState() {
-		getReadyText.enabled = false;
-	}
-
 	// IN PROGRESS //////////////////////////////
 
-	void SetupInProgressState() {
+	void Setup_InProgress() {
 		Debug.Log("Setting up InProgress state.");
-		Application.LoadLevel("GameplaySubScene");
 	}
-	
-	void UpdateInProgressState() {
+
+	void Update_InProgress() {
 		// Wait for the CoreGameSession to tell us of a win
 	}
 
-	void StopInProgressState() {
-
+	void Stop_InProgress() {
+		
 	}
 
 	// ROUNDUP //////////////////////////////
 
-	void SetupRoundupState() {
+	void Setup_Roundup() {
 		Debug.Log("Setting up Roundup state.");
 		// FIXME: Get the winner ID to this method somehow.
 		winnerText.text = "Winner: " + "Not specified";
@@ -176,14 +208,29 @@ public class GameSession : MonoBehaviour {
 		clickToContinueText.enabled = true;
 	}
 
-	void UpdateRoundupState() {
+	void Update_Roundup() {
 		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
 			Application.LoadLevel("StartScene");
 		}
 	}
 
-	void StopRoundupState() {
+	void Stop_Roundup() {
 		winnerText.enabled = false;
 		clickToContinueText.enabled = false;
+	}
+
+
+
+
+	// MISC HELPER METHODS ///////////////
+
+	bool GrabGameplayManagerReference() {
+		GameObject gameplayManagerObject = GameObject.Find("GameplayManager") as GameObject;
+		Debug.Log ("gameplayManagerObject: " + gameplayManagerObject);
+		if(gameplayManagerObject) {
+			gameplayManager = gameplayManagerObject.GetComponent<GameplayManager>();
+			return true;
+		}
+		return false;
 	}
 }

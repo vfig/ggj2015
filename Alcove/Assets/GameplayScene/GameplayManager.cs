@@ -43,10 +43,16 @@ public class GameplayManager : MonoBehaviour {
 		}
 
 		if(winner != -1) {
+			// FIXME: Once we're using LoadLevelAdditive to merge the old GameSession and
+			// CoreGameSession, we should be setting state to Roundup here, because we want to perform
+			// the roundup step in the game 'flow', which might show a message and a little bit of celebration
+			// before getting rid of the game scene and all its celebrating tribe characters and all that jazz.
+			//gameSession.SetState(GameSession.GameplayState.Roundup);
 			Application.LoadLevel("StartScene");
 		}
-		// FIXME: Once we're using LoadLevelAdditive to merge the old GameSession and
-		// CoreGameSession, we should be setting state to Roundup here.
-		//gameSession.SetState(GameSession.GameplayState.Roundup);
+	}
+
+	public Player GetPlayer(int index) {
+		return players[index];
 	}
 }
