@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public static bool canUpdate;
+	public static bool canUpdate = true;
 
 	new public Camera camera;
 	public int playerNumber;

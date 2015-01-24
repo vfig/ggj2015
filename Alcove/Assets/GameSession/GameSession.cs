@@ -16,6 +16,7 @@ public class GameSession : MonoBehaviour {
 	public GameObject pregamePanel;
 	public GameObject roundupPanel;
 	public GameObject goPanel;
+	public Text winningPlayerNameText;
 	
 	GameplayManager gameplayManager;
 	GameplayState state;
@@ -100,7 +101,7 @@ public class GameSession : MonoBehaviour {
 		return textFieldValue;
 	}
 	
-	public void SetState(GameplayState newState) {
+	public void SetState(GameplayState newState, Object data=null) {
 
 		// Handle closure of previous state.
 		switch(state) {
@@ -125,13 +126,13 @@ public class GameSession : MonoBehaviour {
 			Setup_LoadGameplayScene();
 			break;
 		case GameplayState.Pregame:
-			Setup_Pregame();
+			Setup_Pregame(data);
 			break;
 		case GameplayState.InProgress:
-			Setup_InProgress();
+			Setup_InProgress(data);
 			break;
 		case GameplayState.Roundup:
-			Setup_Roundup();
+			Setup_Roundup(data);
 			break;
 		}
 	}
@@ -151,11 +152,35 @@ public class GameSession : MonoBehaviour {
 	}
 	
 	// PREGAME //////////////////////////////
+	
+	void Setup_LoadGameplayScene(Object data=null) {
+		Application.LoadLevelAdditive("GameplaySubScene");
+	}
 
-	void Setup_Pregame() {
+	void Setup_Pregame(Object data=null) {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
 		pregamePanel.SetActive(true);
+	}
+
+	void Setup_InProgress(Object data=null) {
+		Player.canUpdate = true;
+		goPanel.SetActive(true);
+		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
+		canvas.SetAlpha(1.0f);
+	}
+
+	void Setup_Roundup(Object data=null) {
+		Player.canUpdate = false;
+		roundupPanel.SetActive(true);
+		RoundupInfo info = data as RoundupInfo;
+		winningPlayerNameText.text = info.winningPlayerText;
+	}
+	
+	void Update_LoadGameplayScene() {
+		if(GrabGameplayManagerReference()) {
+			SetState(GameplayState.Pregame);
+		}
 	}
 
 	void Update_Pregame() {
@@ -165,58 +190,28 @@ public class GameSession : MonoBehaviour {
 		}
 	}
 
-	void Stop_Pregame() {
-		pregamePanel.SetActive(false);
-	}
-
-	// LOADING LEVEL //////////////////////////////
-
-	void Setup_LoadGameplayScene() {
-		Application.LoadLevelAdditive("GameplaySubScene");
-	}
-
-	void Update_LoadGameplayScene() {
-		if(GrabGameplayManagerReference()) {
-			SetState(GameplayState.Pregame);
-		}
-	}
-
-	// IN PROGRESS //////////////////////////////
-
-	void Setup_InProgress() {
-		Player.canUpdate = true;
-		goPanel.SetActive(true);
-		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
-		canvas.SetAlpha(1.0f);
-	}
-
 	void Update_InProgress() {
 		if(stateCounter > 40) {
 			CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer> ();
 			canvas.SetAlpha (canvas.GetAlpha () - 0.1f);
 			if (canvas.GetAlpha () <= 0.0f) {
-					goPanel.SetActive (false);
+				goPanel.SetActive (false);
 			}
 		}
-	}
-
-	void Stop_InProgress() {
-		goPanel.SetActive(false);
-	}
-
-	// ROUNDUP //////////////////////////////
-
-	void Setup_Roundup() {
-		// FIXME: Get the winner ID to this method somehow.
-		Player.canUpdate = false;
-		roundupPanel.SetActive(true);
-		//winnerText.text = "Winner: " + "Not specified";
 	}
 
 	void Update_Roundup() {
 		if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) {
 			Application.LoadLevel("StartScene");
 		}
+	}
+
+	void Stop_Pregame(Object data=null) {
+		pregamePanel.SetActive(false);
+	}
+
+	void Stop_InProgress() {
+		goPanel.SetActive(false);
 	}
 
 	void Stop_Roundup() {

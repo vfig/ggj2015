@@ -15,8 +15,6 @@ public class GameplayManager : MonoBehaviour {
 		GameObject gameSessionGameObject = GameObject.Find ("GameSession") as GameObject;
 		if(gameSessionGameObject) {
 			gameSession = gameSessionGameObject.GetComponent<GameSession> ();
-		} else {
-			Debug.Log("Couldn't obtain game session script in GameplayManager.");
 		}
 
 		// Spawn players, allocate world and viewport space for each
@@ -40,18 +38,24 @@ public class GameplayManager : MonoBehaviour {
 	}
 
 	public void CheckForWinner() {
+		if(gameSession == null) {
+			return;
+		}
 		int winner = -1; // 0 or 1 for player (zero-indexed), -1 for no winner. 
+		RoundupInfo info = new RoundupInfo();
 		int p1Segments = players[0].tower.GetCompletedSegmentCount();
 		int p2Segments = players[1].tower.GetCompletedSegmentCount();
 		if(p1Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 0;
+			info.winningPlayerText = "Player 1";
 		}
 		if(p2Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 1;
+			info.winningPlayerText = "Player 2";
 		}
 
 		if(winner != -1) {
-			gameSession.SetState(GameSession.GameplayState.Roundup);
+			gameSession.SetState(GameSession.GameplayState.Roundup, info);
 		}
 	}
 
