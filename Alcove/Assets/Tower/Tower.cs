@@ -66,6 +66,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public void DestroyPlayersSegment(int segmentIndex) {
+		if (segmentIndex >= segments.Count) return;
 		TowerSegment segment = segments[segmentIndex];
 		if (segment.OnIsComplete()) {
 			Destroy(segment.gameObject);
