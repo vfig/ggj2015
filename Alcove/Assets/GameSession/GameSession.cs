@@ -6,15 +6,15 @@ using UnityEngine.UI;
 public class GameSession : MonoBehaviour {
 
 	public enum GameplayState {
+		LoadGameplayScene,
 		Pregame,
-		LoadingLevel,
 		InProgress,
 		Roundup
 	}
 
 	public GUIStyle guiStyle;
-	public Text getReadyText;
-	public Text winnerText;
+	public GameObject pregamePanel;
+	public GameObject roundupPanel;
 	public Text clickToContinueText;
 	
 	GameplayManager gameplayManager;
@@ -28,11 +28,11 @@ public class GameSession : MonoBehaviour {
 	void Update() {
 		gamestateCounter += (Time.deltaTime * 60);
 		switch(gameplayState) {
+		case GameplayState.LoadGameplayScene:
+			Update_LoadGameplayScene();
+			break;
 		case GameplayState.Pregame:
 			Update_Pregame();
-			break;
-		case GameplayState.LoadingLevel:
-			Update_LoadingLevel();
 			break;
 		case GameplayState.InProgress:
 			Update_InProgress();
@@ -48,7 +48,7 @@ public class GameSession : MonoBehaviour {
 		case GameplayState.Pregame:
 			DrawPregameUi();
 			break;
-		case GameplayState.LoadingLevel:
+		case GameplayState.LoadGameplayScene:
 			break;
 		case GameplayState.InProgress:
 			DrawInProgressUi();
@@ -104,10 +104,10 @@ public class GameSession : MonoBehaviour {
 
 		// Handle closure of previous state.
 		switch(gameplayState) {
+		case GameplayState.LoadGameplayScene:
+			break;
 		case GameplayState.Pregame:
 			Stop_Pregame();
-			break;
-		case GameplayState.LoadingLevel:
 			break;
 		case GameplayState.InProgress:
 			Stop_InProgress();
@@ -121,11 +121,11 @@ public class GameSession : MonoBehaviour {
 		gameplayState = state;
 
 		switch(state) {
+		case GameplayState.LoadGameplayScene:
+			Setup_LoadGameplayScene();
+			break;
 		case GameplayState.Pregame:
 			Setup_Pregame();
-			break;
-		case GameplayState.LoadingLevel:
-			Setup_LoadingLevel();
 			break;
 		case GameplayState.InProgress:
 			Setup_InProgress();
@@ -143,11 +143,11 @@ public class GameSession : MonoBehaviour {
 		// and SetupPregameState can be used to introduce the game
 		// (panning of camera or whatever).
 
-		getReadyText.enabled = false;
-		winnerText.enabled = false;
+		pregamePanel.SetActive(false);
+		roundupPanel.SetActive(false);
 		clickToContinueText.enabled = false;
 
-		SetState(GameplayState.Pregame);
+		SetState(GameplayState.LoadGameplayScene);
 	}
 	
 	// PREGAME //////////////////////////////
@@ -156,31 +156,29 @@ public class GameSession : MonoBehaviour {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
 		//Debug.Log("Setting up Pregame state.");
-		getReadyText.enabled = true;
+		pregamePanel.SetActive(true);
 	}
 
 	void Update_Pregame() {
-
-		int displayTime = 40;
-
+		int displayTime = GameConstants.PREGAME_DISPLAY_TIME;
 		if(gamestateCounter > displayTime) {
-			SetState(GameplayState.LoadingLevel);
+			SetState(GameplayState.InProgress);
 		}
 	}
 
 	void Stop_Pregame() {
-		getReadyText.enabled = false;
+		pregamePanel.SetActive(false);
 	}
 
 	// LOADING LEVEL //////////////////////////////
 
-	void Setup_LoadingLevel() {
+	void Setup_LoadGameplayScene() {
 		Application.LoadLevelAdditive("GameplaySubScene");
 	}
 
-	void Update_LoadingLevel() {
-		if(GrabGameplayManagerReference ()) {
-			SetState(GameplayState.InProgress);
+	void Update_LoadGameplayScene() {
+		if(GrabGameplayManagerReference()) {
+			SetState(GameplayState.Pregame);
 		}
 	}
 
@@ -203,8 +201,8 @@ public class GameSession : MonoBehaviour {
 	void Setup_Roundup() {
 		//Debug.Log("Setting up Roundup state.");
 		// FIXME: Get the winner ID to this method somehow.
-		winnerText.text = "Winner: " + "Not specified";
-		winnerText.enabled = true;
+		roundupPanel.SetActive (true);
+		//winnerText.text = "Winner: " + "Not specified";
 		clickToContinueText.enabled = true;
 	}
 
@@ -215,7 +213,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Stop_Roundup() {
-		winnerText.enabled = false;
+		roundupPanel.SetActive(false);
 		clickToContinueText.enabled = false;
 	}
 
