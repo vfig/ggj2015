@@ -30,6 +30,6 @@ public class ConstructionTowerSegment : TowerSegment {
 	}
 	
 	public override void OnCompleteAction () {
-		this.SetNewTowerSegment(m_owningTower.m_staticTowerSegmentPrefab);
+		// this.SetNewTowerSegment(m_owningTower.m_staticTowerSegmentPrefab);
 	}
 }

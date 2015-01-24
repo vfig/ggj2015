@@ -20,7 +20,7 @@ public class EmptyTowerSegment : TowerSegment {
 	public override void OnBeginAction () {
 		/* TODO: Allow player to select new tower segment */
 		
-		m_towerSegmentToBeConstructed = m_owningTower.m_staticTowerSegmentPrefab;
+		m_towerSegmentToBeConstructed = m_owningTower.m_cannonTowerSegmentPrefab;
 		
 		SetAutoNextAction(true);
 	}
