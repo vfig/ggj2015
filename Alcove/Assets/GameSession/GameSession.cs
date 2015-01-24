@@ -10,6 +10,7 @@ public class GameSession : MonoBehaviour {
 		Roundup
 	}
 
+	public GUIStyle guiStyle;
 	public GameRulesManager gameRulesManager;
 	public Text getReadyText;
 	public Text winnerText;
@@ -31,7 +32,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Update() {
-		gamestateCounter++;
+		gamestateCounter += (Time.deltaTime * 60);
 		switch(gameplayState) {
 		case GameplayState.Pregame:
 			UpdatePregameState();
@@ -67,7 +68,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void AddDebugLabel(string text, ref int yPosition) {
-		GUI.Label(new Rect(10, yPosition, 200, 30), text);
+		GUI.Label(new Rect(10, yPosition, 400, 30), text, guiStyle);
 		yPosition += 20;
 	}
 
@@ -132,7 +133,10 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void UpdatePregameState() {
-		if(gamestateCounter > 70) {
+
+		int displayTime = 40;
+
+		if(gamestateCounter > displayTime) {
 			SetGameplayState(GameplayState.InProgress);
 		}
 	}
@@ -190,8 +194,12 @@ public class GameSession : MonoBehaviour {
 
 		int yPosition = 0;
 		AddDebugLabel("Gameplay state: " + gameplayState, ref yPosition);
-		AddDebugLabel("Player 1 Tower: " + player1.tower.GetCompletedSegmentCount(), ref yPosition);
-		AddDebugLabel("Player 2 Tower: " + player2.tower.GetCompletedSegmentCount(), ref yPosition);
+		AddDebugLabel("", ref yPosition);
+		AddDebugLabel("Player 1 Tower: " + player1.tower.GetTowerAscii(), ref yPosition);
+		AddDebugLabel("Player 2 Tower: " + player2.tower.GetTowerAscii(), ref yPosition);
+		AddDebugLabel("", ref yPosition);
+		AddDebugLabel("Player 1 Tribes: " + player1.GetTribesSummary(), ref yPosition);
+		AddDebugLabel("Player 2 Tribes: " + player2.GetTribesSummary(), ref yPosition);
 
 		int buttonWidth = 200;
 		int buttonHeight = 40;
@@ -200,25 +208,31 @@ public class GameSession : MonoBehaviour {
 		//
 		// Player 1 UI
 		//
-		if(GUI.Button(new Rect(p1XPosition, 100, buttonWidth, buttonHeight), "P1 Add segment")) {
+		if(GUI.Button(new Rect(p1XPosition, 200, buttonWidth, buttonHeight), "P1 Add segment")) {
 			Test_AddP1Segment();
 		}
-		if(GUI.Button(new Rect(p1XPosition, 190, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+		if(GUI.Button(new Rect(p1XPosition, 290, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
 			Test_DestroyP1Segment();
 		}
-		destroyP1SegmentValue = GUI.TextField(new Rect(p1XPosition, 230, buttonWidth, buttonHeight), destroyP1SegmentValue.ToString());
+		destroyP1SegmentValue = GUI.TextField(new Rect(p1XPosition, 330, buttonWidth, buttonHeight), destroyP1SegmentValue.ToString());
+		if(GUI.Button(new Rect(p1XPosition, 380, buttonWidth, buttonHeight), "Start a task")) {
+			player1.DoTestTask();
+		}
 
 		//
 		// Player 2 UI
 		//
 		int p2XPosition = 450;
-		if(GUI.Button(new Rect(p2XPosition, 100, buttonWidth, buttonHeight), "P2 Add segment")) {
+		if(GUI.Button(new Rect(p2XPosition, 200, buttonWidth, buttonHeight), "P2 Add segment")) {
 			Test_AddP2Segment();
 		}
-		if(GUI.Button(new Rect(p2XPosition, 190, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+		if(GUI.Button(new Rect(p2XPosition, 290, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
 			Test_DestroyP2Segment();
 		}
-		destroyP2SegmentValue = GUI.TextField(new Rect(p2XPosition, 230, buttonWidth, buttonHeight), destroyP2SegmentValue.ToString());
+		destroyP2SegmentValue = GUI.TextField(new Rect(p2XPosition, 330, buttonWidth, buttonHeight), destroyP2SegmentValue.ToString());
+		if(GUI.Button(new Rect(p2XPosition, 380, buttonWidth, buttonHeight), "Start a task")) {
+			player2.DoTestTask();
+		}
 	}
 
 	void Test_AddP1Segment() {

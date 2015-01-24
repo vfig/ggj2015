@@ -3,7 +3,8 @@ using System.Collections;
 
 public class GameRulesManager : MonoBehaviour {
 	
-	const int TOWER_SEGMENTS_TO_WIN_GAME = 10;
+	public const int TOWER_SEGMENTS_TO_WIN_GAME = 15;
+	public const int NUM_TRIBES_PER_PLAYER = 4;
 
 	public GameSession gameSession;
 

@@ -28,6 +28,19 @@ public class ShaunTempTower : MonoBehaviour {
 		}
 	}
 
+	public string GetTowerAscii() {
+		string tower = "";
+		for(int i=0; i<GameRulesManager.TOWER_SEGMENTS_TO_WIN_GAME; i++) {
+			if(completedSegments >= i) {
+				tower += "»";
+			} else {
+				tower += "_";
+			}
+		}
+		tower += "|";
+		return tower;
+	}
+
 	public int GetCompletedSegmentCount() {
 		return completedSegments;
 	}
