@@ -3,7 +3,77 @@ using System.Collections;
 using XboxCtrlrInput;
 
 public class GameInput {
-	public static float GetScrollAxis(int player) {
+	struct ScrollState {
+		public bool tick;
+		public int direction;
+		public int count;
+		public float lastTime;
+		public int lastDirection;
+	}
+
+	private const float SCROLL_INITIAL_REPEAT_INTERVAL = 0.3f;
+	private const float SCROLL_FINAL_REPEAT_INTERVAL = 0.1f;
+	private const int SCROLL_INITIAL_COUNT = 1;
+
+	private static int currentFrameCount;
+	private static ScrollState[] scrollState;
+
+	public static void ResetInput() {
+		scrollState = null;
+	}
+
+	public static void Update() {
+		if (currentFrameCount == Time.frameCount) return;
+		currentFrameCount = Time.frameCount;
+
+		if (scrollState == null) {
+			scrollState = new ScrollState[GameRulesManager.PLAYER_COUNT];
+		}
+
+		for (int player = 0; player < GameRulesManager.PLAYER_COUNT; ++player) {
+			float axis = GetScrollAxis(player);
+			if (axis > -0.25 && axis < 0.25) {
+				scrollState[player].tick = false;
+				scrollState[player].direction = 0;
+				scrollState[player].count = 0;
+				scrollState[player].lastTime = 0;
+				scrollState[player].lastDirection = 0;
+			} else {
+				int direction = (axis > 0 ? 1 : -1);
+				scrollState[player].direction = direction;
+				if (direction != scrollState[player].lastDirection) {
+					scrollState[player].tick = true;
+					scrollState[player].count = 1;
+					scrollState[player].lastDirection = direction;
+					scrollState[player].lastTime = Time.time;
+				} else if (scrollState[player].count <= GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - scrollState[player].lastTime) >= GameInput.SCROLL_INITIAL_REPEAT_INTERVAL) {
+					scrollState[player].tick = true;
+					++scrollState[player].count;
+					scrollState[player].lastTime = Time.time;
+				} else if (scrollState[player].count > GameInput.SCROLL_INITIAL_COUNT
+						&& (Time.time - scrollState[player].lastTime) >= GameInput.SCROLL_FINAL_REPEAT_INTERVAL) {
+					scrollState[player].tick = true;
+					++scrollState[player].count;
+					scrollState[player].lastTime = Time.time;
+				} else {
+					scrollState[player].tick = false;
+				}
+			}
+		}
+	}
+
+	public static bool GetScrollUpButtonDown(int player) {
+		GameInput.Update();
+		return (GameInput.scrollState[player].tick && GameInput.scrollState[player].direction == -1);
+	}
+
+	public static bool GetScrollDownButtonDown(int player) {
+		GameInput.Update();
+		return (GameInput.scrollState[player].tick && GameInput.scrollState[player].direction == 1);
+	}
+
+	private static float GetScrollAxis(int player) {
 		if (XCI.GetNumPluggedCtrlrs() > player) {
 			return -XCI.GetAxis(XboxAxis.LeftStickY, player + 1);
 		} else if (player == 0) {
