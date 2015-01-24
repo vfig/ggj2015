@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EmptyTowerSegment : TowerSegment {
-
-	private TowerSegment m_towerSegmentToBeConstructed;
+public class StaticTowerSegment : TowerSegment {
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 	
 	}
 	
@@ -20,14 +18,8 @@ public class EmptyTowerSegment : TowerSegment {
 	}
 	
 	public virtual void OnBeginAction (Tribe tribe) {
-		
-		/* TODO: Allow player to select new tower segment */
-		m_towerSegmentToBeConstructed = m_staticTowerSegmentPrefab;
-		
-		this.SetNewTowerSegment(m_constructionTowerSegmentPrefab);
 	}
 	
 	public virtual void OnCompleteAction () {
-	
 	}
 }

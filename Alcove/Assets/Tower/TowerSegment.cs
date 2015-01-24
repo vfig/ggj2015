@@ -2,8 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TowerSegment : MonoBehaviour
+public abstract class TowerSegment : MonoBehaviour
 {
+	/* Tower Segment Prefabs */
+	public TowerSegment m_emptyTowerSegmentPrefab;
+	public TowerSegment m_constructionTowerSegmentPrefab;
+	public TowerSegment m_staticTowerSegmentPrefab;
+	
 	/* Segment height */
 	public const float HEIGHT = 2.6f;
 	
@@ -22,10 +27,10 @@ public class TowerSegment : MonoBehaviour
 	/* The current completion of the segment */
 	private float m_completion;
 	
-	/* Tribe that is currently in the segment */
+	/* The tribe that is currently in the segment */
 	private Tribe m_currentTribe;
 
-	/*  */
+	/* New tower segment to replace at the end of the action */
 	public TowerSegment m_newTowerSegmentPrefab;
 
 	/* Called on initialisation */
@@ -37,31 +42,49 @@ public class TowerSegment : MonoBehaviour
 		m_constructionRate = 0.0f;
 	}
 	
-	/* Add a listener for the tower segment events. */
+	/* Add a listener for the tower segment events */
 	public void AddListener(ITowerSegmentCallback listener) {
 		m_listenerList.Add(listener);
 	}
 
-	/* Is the tower segment finished construction. */
+	/* Is the tower segment finished construction */
 	public bool IsComplete() {
 		return (m_completion ==  1.0f);
 	}
 	
-	/* Is the tower segment waiting for an action. */
+	/* Is the tower segment waiting for an action */
 	public bool IsIdle() {
 		return m_underConstruction;
+	}
+	
+	public bool IsActionable() {
+		return this.OnIsActionable();
+	}
+	
+	public void SetNewTowerSegment(TowerSegment towerSegmentPrefab) {
+		m_newTowerSegmentPrefab = m_newTowerSegmentPrefab;
 	}
 	
 	public void PerformAction(Tower parent, Tribe tribe) {
 		m_listenerList.Add (parent);
 		m_listenerList.Add(tribe);
 		m_currentTribe = tribe;
+		this.OnBeginAction(tribe);
 	}
+	
 	
 	
 	/* Virtual Methods */
 	
-	// Add virtual methods for segment.
+	public abstract bool OnIsActionable();
+	
+	public abstract void OnBeginAction();
+	
+	public abstract void OnCompleteAction();
+	
+	  
+	
+	// Add virtual methods for segment
 	
 	public bool CanStartAction {
 		get {
