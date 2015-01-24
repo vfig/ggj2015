@@ -19,14 +19,14 @@ public class TowerScript : MonoBehaviour {
 
 	}
 	
-	void AddTowerSegment() {
+	public void AddTowerSegment() {
 
 		GameObject newSegment = Instantiate (m_gameObjectPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 
 		m_segmentList.Add (newSegment);
 	}
 
-	void RemoveTowerSegment() {
+	public void RemoveTowerSegment() {
 
 	}
 }

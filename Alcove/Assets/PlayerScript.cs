@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerScript : MonoBehaviour {
 	
 	public GameObject m_towerObject;
-	public TowerScript m_towerScript;
+	private TowerScript m_towerScript;
 	
 	// Use this for initialization
 	void Start () {
@@ -13,5 +13,9 @@ public class PlayerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+	}
+
+	public void Click() {
+		m_towerScript.AddTowerSegment ();
 	}
 }
