@@ -12,10 +12,30 @@ public class PlayerScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 	}
 
-	public void Click() {
-		m_towerScript.AddTowerSegment ();
+	public void Click()
+	{
+		m_towerScript.PerformAction();
+	}
+
+	public void AnalogueUp(float delta)
+	{
+		m_towerScript.MoveUp (delta);
+	}
+
+	public void AnalogueDown(float delta)
+	{
+		m_towerScript.MoveDown (delta);
+	}
+
+	public void AnalogueLeft(float delta)
+	{
+	}
+
+	public void AnalogueRight(float delta)
+	{
 	}
 }
