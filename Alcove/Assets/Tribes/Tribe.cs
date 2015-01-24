@@ -52,7 +52,11 @@ public class Tribe : MonoBehaviour {
 		StepOccupied(Time.deltaTime);
 	}
 
-	private void StepOccupied(float time) {
+	public void Reset() {
+		
+	}
+
+	public void StepOccupied(float time) {
 		busyRemaining -= time;
 		if (busyRemaining <= 0 || count == 0) {
 			busyRemaining = 0;

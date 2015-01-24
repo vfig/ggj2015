@@ -5,6 +5,7 @@ public class ShaunTempPlayer : MonoBehaviour {
 
 	public ShaunTempTower tower;
 	public Tribe[] tribes;
+	public int nominatedTribeIndex;
 
 	public void StartTemp() {
 		tower = new ShaunTempTower();
@@ -24,20 +25,45 @@ public class ShaunTempPlayer : MonoBehaviour {
 		}
 	}
 
+	public void NominateTribeForActionSelection(int index) {
+		nominatedTribeIndex = index;
+	}
+
+	public bool IsTribeNominated() {
+		return nominatedTribeIndex >= 0;
+	}
+
+	public void PerformActionWithNominatedTribe(ActionType actionType) {
+		Tribe tribe = tribes[nominatedTribeIndex];
+		if(tribe.IsBusy) {
+			return;
+		}
+		tribes[nominatedTribeIndex].StartBusy(5);
+		nominatedTribeIndex = -1;
+	}
+
 	public void Reset() {
 
+		nominatedTribeIndex = -1;
 		tower.Reset();
 
 		int count = tribes.Length;
 		for(int i=0; i<count; i++) {
-			//tribes[i].Reset();
+			tribes[i].Reset();
 		}
 	}
 
 	void Update() {
+	}
+
+	public bool IsTribeAvailable(int index) {
+		return !tribes[index].IsBusy;
+	}
+
+	public void UpdateTemp() {
 		int count = tribes.Length;
 		for(int i=0; i<count; i++) {
-			//tribes[i].Update();
+			tribes[i].StepOccupied(Time.deltaTime);
 		}
 	}
 
@@ -50,7 +76,8 @@ public class ShaunTempPlayer : MonoBehaviour {
 	}
 
 	string GetSingleTribeSummary(Tribe tribe) {
-		string workingDescription = tribe.IsBusy ? ("work:" + tribe.BusyFraction) : "idle";
+		float busyFraction = (int)(tribe.BusyFraction * 100.0f) / 100.0f;
+		string workingDescription = tribe.IsBusy ? ("work:" + busyFraction) : "idle";
 		return "{" + tribe.count + "u, " + workingDescription + "}";
 	}
 

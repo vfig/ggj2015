@@ -67,10 +67,32 @@ public class GameSession : MonoBehaviour {
 
 	}
 
-	void AddDebugLabel(string text, ref int yPosition) {
+	void QuickTopLeftText(string text, ref int yPosition) {
 		GUI.Label(new Rect(10, yPosition, 400, 30), text, guiStyle);
 		yPosition += 20;
 	}
+
+	void QuickText(string text, int xPosition, ref int yPosition) {
+		GUI.Label(new Rect(xPosition, yPosition, 200, 40), text);
+		yPosition += 45;
+	}
+
+	bool QuickButton(string text, int xPosition, ref int yPosition, int width=200, bool show=true) {
+		if(!show) {
+			yPosition += 45;
+			return false;
+		}
+		bool pressed = GUI.Button(new Rect(xPosition, yPosition, width, 40), text);
+		yPosition += 45;
+		return pressed;
+	}
+
+	string QuickTextField(string text, int xPosition, ref int yPosition) {
+		string textFieldValue = GUI.TextField(new Rect(xPosition, yPosition, 200, 40), text);
+		yPosition += 45;
+		return textFieldValue;
+	}
+
 
 	public void SetGameplayState(GameplayState state) {
 
@@ -152,7 +174,8 @@ public class GameSession : MonoBehaviour {
 	}
 	
 	void UpdateInProgressState() {
-		
+		player1.UpdateTemp();
+		player2.UpdateTemp();
 	}
 
 	void StopInProgressState() {
@@ -193,45 +216,86 @@ public class GameSession : MonoBehaviour {
 	void DrawInGameTestingUi() {
 
 		int yPosition = 0;
-		AddDebugLabel("Gameplay state: " + gameplayState, ref yPosition);
-		AddDebugLabel("", ref yPosition);
-		AddDebugLabel("Player 1 Tower: " + player1.tower.GetTowerAscii(), ref yPosition);
-		AddDebugLabel("Player 2 Tower: " + player2.tower.GetTowerAscii(), ref yPosition);
-		AddDebugLabel("", ref yPosition);
-		AddDebugLabel("Player 1 Tribes: " + player1.GetTribesSummary(), ref yPosition);
-		AddDebugLabel("Player 2 Tribes: " + player2.GetTribesSummary(), ref yPosition);
-
-		int buttonWidth = 200;
-		int buttonHeight = 40;
-		int p1XPosition = 250;
+		QuickTopLeftText("Gameplay state: " + gameplayState, ref yPosition);
+		QuickTopLeftText("", ref yPosition);
+		QuickTopLeftText("Player 1 Tower: " + player1.tower.GetTowerAscii(), ref yPosition);
+		QuickTopLeftText("Player 2 Tower: " + player2.tower.GetTowerAscii(), ref yPosition);
+		QuickTopLeftText("", ref yPosition);
+		QuickTopLeftText("Player 1 Tribes: " + player1.GetTribesSummary(), ref yPosition);
+		QuickTopLeftText("Player 2 Tribes: " + player2.GetTribesSummary(), ref yPosition);
 
 		//
 		// Player 1 UI
 		//
-		if(GUI.Button(new Rect(p1XPosition, 200, buttonWidth, buttonHeight), "P1 Add segment")) {
-			Test_AddP1Segment();
-		}
-		if(GUI.Button(new Rect(p1XPosition, 290, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+		int p1XPosition = 250;
+		yPosition = 220;
+
+		QuickText("Player 1", p1XPosition, ref yPosition);
+		if(QuickButton("Destroy segment (at index)", p1XPosition, ref yPosition)) {
 			Test_DestroyP1Segment();
 		}
-		destroyP1SegmentValue = GUI.TextField(new Rect(p1XPosition, 330, buttonWidth, buttonHeight), destroyP1SegmentValue.ToString());
-		if(GUI.Button(new Rect(p1XPosition, 380, buttonWidth, buttonHeight), "Start a task")) {
-			player1.DoTestTask();
+		destroyP1SegmentValue = QuickTextField (destroyP1SegmentValue, p1XPosition, ref yPosition);
+		if(QuickButton("Tribe 1", p1XPosition, ref yPosition, 100, player1.IsTribeAvailable(0))) {
+			player1.NominateTribeForActionSelection(0);
+		}
+		if(QuickButton("Tribe 2", p1XPosition, ref yPosition, 100, player1.IsTribeAvailable(1))) {
+			player1.NominateTribeForActionSelection(1);
+		}
+		if(QuickButton("Tribe 3", p1XPosition, ref yPosition, 100, player1.IsTribeAvailable(2))) {
+			player1.NominateTribeForActionSelection(2);
+		}
+		if(QuickButton("Tribe 4", p1XPosition, ref yPosition, 100, player1.IsTribeAvailable(3))) {
+			player1.NominateTribeForActionSelection(3);
+		}
+		yPosition -= 180;
+		if(QuickButton("(Up) Build", p1XPosition+100, ref yPosition, 100, player1.IsTribeNominated())) {
+			player1.PerformActionWithNominatedTribe(ActionType.Build);
+		}
+		if(QuickButton("(Left) Defend", p1XPosition+100, ref yPosition, 100, player1.IsTribeNominated())) {
+			player1.PerformActionWithNominatedTribe(ActionType.Defend);
+		}
+		if(QuickButton("(Right) Recruit", p1XPosition+100, ref yPosition, 100, player1.IsTribeNominated())) {
+			player1.PerformActionWithNominatedTribe(ActionType.Recruit);
+		}
+		if(QuickButton("(Down) Occupy", p1XPosition+100, ref yPosition, 100, player1.IsTribeNominated())) {
+			player1.PerformActionWithNominatedTribe(ActionType.Occupy);
 		}
 
 		//
 		// Player 2 UI
 		//
-		int p2XPosition = 450;
-		if(GUI.Button(new Rect(p2XPosition, 200, buttonWidth, buttonHeight), "P2 Add segment")) {
-			Test_AddP2Segment();
-		}
-		if(GUI.Button(new Rect(p2XPosition, 290, buttonWidth, buttonHeight), "Destroy segment (at index)")) {
+		yPosition = 220;
+		int p2XPosition = 480;
+
+		QuickText("Player 2", p2XPosition, ref yPosition);
+		if(QuickButton("Destroy segment (at index)", p2XPosition, ref yPosition)) {
 			Test_DestroyP2Segment();
 		}
-		destroyP2SegmentValue = GUI.TextField(new Rect(p2XPosition, 330, buttonWidth, buttonHeight), destroyP2SegmentValue.ToString());
-		if(GUI.Button(new Rect(p2XPosition, 380, buttonWidth, buttonHeight), "Start a task")) {
-			player2.DoTestTask();
+		destroyP2SegmentValue = QuickTextField (destroyP1SegmentValue, p2XPosition, ref yPosition);
+		if(QuickButton("Tribe 1", p2XPosition, ref yPosition, 100, player2.IsTribeAvailable(0))) {
+			player2.NominateTribeForActionSelection(0);
+		}
+		if(QuickButton("Tribe 2", p2XPosition, ref yPosition, 100, player2.IsTribeAvailable(1))) {
+			player2.NominateTribeForActionSelection(1);
+		}
+		if(QuickButton("Tribe 3", p2XPosition, ref yPosition, 100, player2.IsTribeAvailable(2))) {
+			player2.NominateTribeForActionSelection(2);
+		}
+		if(QuickButton("Tribe 4", p2XPosition, ref yPosition, 100, player2.IsTribeAvailable(3))) {
+			player2.NominateTribeForActionSelection(3);
+		}
+		yPosition -= 180;
+		if(QuickButton("(Up) Build", p2XPosition+100, ref yPosition, 100, player2.IsTribeNominated())) {
+			player2.PerformActionWithNominatedTribe(ActionType.Build);
+		}
+		if(QuickButton("(Right) Defend", p2XPosition+100, ref yPosition, 100, player2.IsTribeNominated())) {
+			player2.PerformActionWithNominatedTribe(ActionType.Defend);
+		}
+		if(QuickButton("(Left) Recruit", p2XPosition+100, ref yPosition, 100, player2.IsTribeNominated())) {
+			player2.PerformActionWithNominatedTribe(ActionType.Recruit);
+		}
+		if(QuickButton("(Down) Occupy", p2XPosition+100, ref yPosition, 100, player2.IsTribeNominated())) {
+			player2.PerformActionWithNominatedTribe(ActionType.Occupy);
 		}
 	}
 
