@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class FollowCursor : MonoBehaviour {
-	private Camera camera;
+	new private Camera camera;
 	private Transform cameraTransform;
 	public Transform cursorTransform;
 	public const float viewportMargin = 0.05f;

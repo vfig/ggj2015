@@ -19,18 +19,15 @@ public class EmptyTowerSegment : TowerSegment {
 	
 	public override void OnBeginAction () {
 		/* TODO: Allow player to select new tower segment */
-		
 		m_towerSegmentToBeConstructed = m_owningTower.m_cannonTowerSegmentPrefab;
-		
-		SetAutoNextAction(true);
-	}
-	
-	public override void OnProgressAction () {
-		/* Complete instantly to move on to construction segment. */
-		this.CompleteAction();
 	}
 	
 	public override void OnCompleteAction () {
-		this.SetNewTowerSegment(m_owningTower.m_constructionTowerSegmentPrefab);
+		// Swap the segment with a new construction one, and immediately begin its action
+		ConstructionTowerSegment newSegment =
+			(m_owningTower.SwapSegment(this, m_owningTower.m_constructionTowerSegmentPrefab)
+			as ConstructionTowerSegment);
+		newSegment.SetTowerSegmentToBeConstructed(GetTowerSegmentToBeConstructed());
+		newSegment.PerformAction(GetOwningTower(), GetOwningTribe());
 	}
 }

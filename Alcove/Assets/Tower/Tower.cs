@@ -21,8 +21,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 	}
-	
-	private TowerSegment AddTowerSegment(TowerSegment towerSegmentPrefab) {
+
+	public TowerSegment AddTowerSegment(TowerSegment towerSegmentPrefab) {
 		TowerSegment newSegment = (TowerSegment)Instantiate(towerSegmentPrefab);
 		newSegment.transform.parent = transform;
 		newSegment.transform.localPosition = Vector3.up * (float)segments.Count * TowerSegment.HEIGHT;
@@ -30,21 +30,14 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		return newSegment;
 	}
 
-	private TowerSegment SwapSegment(int index, TowerSegment prefab, bool autoNextAction) {
-		TowerSegment oldSegment = segments[index];
+	public TowerSegment SwapSegment(TowerSegment oldSegment, TowerSegment prefab) {
+		int index = segments.IndexOf(oldSegment);
 		TowerSegment newSegment = (TowerSegment)Instantiate(prefab);
 		newSegment.transform.parent = oldSegment.transform.parent;
 		newSegment.transform.localPosition = oldSegment.transform.localPosition;
 		segments[index] = newSegment;
 		Debug.Log("Destroying old segment " + oldSegment + " from index " + index + ", replaced by " + newSegment);
 		Destroy(oldSegment.gameObject);
-		if (autoNextAction) {
-			EmptyTowerSegment emptySegment = oldSegment as EmptyTowerSegment;
-			if (emptySegment) {
-				newSegment.SetNewTowerSegment(emptySegment.GetTowerSegmentToBeConstructed());
-			}
-			newSegment.PerformAction(oldSegment.GetOwningTower(), oldSegment.GetOwningTribe());
-		}
 		return newSegment;
 	}
 	
@@ -72,7 +65,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable()) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.count == 0) {
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
@@ -87,15 +80,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 
 	public void OnCompleteAction(TowerSegment segment) {
-		int index = segments.IndexOf(segment);
-		if (index >= 0 && segment.GetNewTowerSegmentPrefab() != null) {
-			// Swap the segment with a new one
-			SwapSegment(index, segment.GetNewTowerSegmentPrefab(), segment.GetAutoNextAction());
-			
-			if (segment.IsComplete()) {
-				AddTowerSegment(m_emptyTowerSegmentPrefab);
-			}
-		}
 	}
 
 	public void MoveUp()
