@@ -41,13 +41,13 @@ public class GameplayManager : MonoBehaviour {
 		minimap = new GameObject();
 		Camera minimapCamera = minimap.AddComponent<Camera>();
 
-		float widthFraction = 0.1f;
+		float widthFraction = 0.07f;
 		float heightFraction = 0.3f;
 		minimapCamera.isOrthoGraphic = true;
 		minimapCamera.rect = new Rect(0.5f - widthFraction/2, 0.5f - heightFraction/2, widthFraction, heightFraction);
 		minimapCamera.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.6f);
-		minimapCamera.orthographicSize = 16.0f;
-		minimap.camera.transform.position = new Vector3(xFocalPosition, 0.0f, -5.0f);
+		minimapCamera.orthographicSize = 28.0f;
+		minimap.camera.transform.position = new Vector3(xFocalPosition, 25.0f, -5.0f);
 	}
 
 	public void LateUpdate() {

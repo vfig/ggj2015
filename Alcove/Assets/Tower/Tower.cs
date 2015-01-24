@@ -59,11 +59,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 		Debug.Log("Allocate tribe " + tribe + " to segment " + constructionSegment + ".");
 
-		// HACK ////
-		constructionSegment.AddListener(tribe);
-		constructionSegment.AddListener(this);
-		////////////
-
 		constructionSegment.StartAction(tribe.count);
 	}
 
