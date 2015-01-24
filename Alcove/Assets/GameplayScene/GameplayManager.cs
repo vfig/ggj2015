@@ -9,9 +9,17 @@ public class GameplayManager : MonoBehaviour {
 	private GameSession gameSession;
 	private Player[] players;
 
-	public void Start () {
-		// Spawn players, allocate world and viewport space for each
+	public void Start() {
 
+		// Obtain a reference to the main game session script.
+		GameObject gameSessionGameObject = GameObject.Find ("GameSession") as GameObject;
+		if(gameSessionGameObject) {
+			gameSession = gameSessionGameObject.GetComponent<GameSession> ();
+		} else {
+			Debug.Log("Couldn't obtain game session script in GameplayManager.");
+		}
+
+		// Spawn players, allocate world and viewport space for each
 		const float worldXSpace = 10.0f;
 		const float viewportXSpace = 1.0f / (float)GameConstants.PLAYER_COUNT;
 		players = new Player[GameConstants.PLAYER_COUNT];
@@ -35,20 +43,15 @@ public class GameplayManager : MonoBehaviour {
 		int winner = -1; // 0 or 1 for player (zero-indexed), -1 for no winner. 
 		int p1Segments = players[0].tower.GetCompletedSegmentCount();
 		int p2Segments = players[1].tower.GetCompletedSegmentCount();
-		if(p1Segments > GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		if(p1Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 0;
 		}
-		if(p2Segments > GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		if(p2Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
 			winner = 1;
 		}
 
 		if(winner != -1) {
-			// FIXME: Once we're using LoadLevelAdditive to merge the old GameSession and
-			// CoreGameSession, we should be setting state to Roundup here, because we want to perform
-			// the roundup step in the game 'flow', which might show a message and a little bit of celebration
-			// before getting rid of the game scene and all its celebrating tribe characters and all that jazz.
-			//gameSession.SetState(GameSession.GameplayState.Roundup);
-			Application.LoadLevel("StartScene");
+			gameSession.SetState(GameSession.GameplayState.Roundup);
 		}
 	}
 
