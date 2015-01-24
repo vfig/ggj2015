@@ -5,10 +5,12 @@ using System.Collections;
 public class GameplayManager : MonoBehaviour {
 
 	public GameObject playerPrefab;
+	public GameObject recruitmentAreaPrefab;
 
 	private GameSession gameSession;
 	private GameObject minimap;
 	private Player[] players;
+	private RecruitmentArea recruitmentArea;
 
 	public void Start() {
 
@@ -35,6 +37,18 @@ public class GameplayManager : MonoBehaviour {
 
 		float xPosition = (players[0].transform.position.x + players[1].transform.position.x) / 2;
 		CreateMinimapObject(xPosition);
+
+		// Create recruitment area based on central position between the two towers.
+		CreateRecruitmentArea(players[0].tower, players[1].tower);
+	}
+
+	void CreateRecruitmentArea(Tower tower1, Tower tower2) {
+		GameObject recruitmentAreaGameObject = Instantiate(recruitmentAreaPrefab) as GameObject;
+		recruitmentArea = recruitmentAreaGameObject.GetComponent<RecruitmentArea>();
+		float xPosition = (tower1.transform.position.x + tower2.transform.position.x) / 2;
+		xPosition -= GameConstants.RECRUITMENT_AREA_GROUND_WIDTH / 2;
+		Vector3 position = new Vector3(xPosition, GameConstants.RECRUITMENT_AREA_GROUND_Y, 0.0f);
+		recruitmentArea.gameObject.transform.position = position;
 	}
 
 	void CreateMinimapObject(float xFocalPosition) {
