@@ -1,71 +1,72 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public enum SegmentState
+public class TowerSegment : MonoBehaviour
 {
-	Empty,
-	Building,
-	Complete,
-	Damaged
-}
+	public const float HEIGHT = 2.6f;
+	public bool hasAction;
+	public float durationSecondsAtNominalWorkRate;
+	public TowerSegment constructingTowerSegmentPrefab;
 
-public class TowerSegment : MonoBehaviour, ITowerActionEvents
-{
-	private SegmentState m_segmentState;
+	private List<ITowerActionEvents> notifyList;
+	private bool isRunning;
+	private int workRate;
+	private float completion;
 
-	public GameObject m_emptySegmentPrefab;
-	public GameObject m_buildingSegmentPrefab;
-	public GameObject m_completeSegmentPrefab;
-
-	private GameObject m_emptySegmentObject;
-	private GameObject m_buildingSegmentObject;
-	private GameObject m_completeSegmentObject;
-
-	void Start ()
-	{
-		m_segmentState = SegmentState.Empty;
-
-		m_emptySegmentObject = Instantiate (m_emptySegmentPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-		m_buildingSegmentObject = Instantiate (m_buildingSegmentPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-		m_completeSegmentObject = Instantiate (m_completeSegmentPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-
-		m_buildingSegmentObject.SetActive (false);
-		m_completeSegmentObject.SetActive (false);
-	}
-	
-	public SegmentState GetState ()
-	{
-		return m_segmentState;
-	}
-
-	public void TowerActionStarted(TowerAction action) {
-		ChangeState(SegmentState.Building);
-	}
-
-	public void TowerActionProgress(TowerAction action, float progress, float secondsRemaining) {
-		// FIXME - update the sprite to show building progress
-	}
-
-	public void TowerActionCompleted(TowerAction action) {
-		ChangeState(SegmentState.Complete);
-	}
-
-	public void ChangeState (SegmentState state)
-	{
-		m_segmentState = state;
-	
-		m_emptySegmentObject.SetActive (false);
-		m_buildingSegmentObject.SetActive (false);
-		m_completeSegmentObject.SetActive (false);
-
-		if (m_segmentState == SegmentState.Empty) {
-			m_emptySegmentObject.SetActive (true);
+	public bool CanStartAction {
+		get {
+			return (hasAction && !isRunning && completion == 0.0f);
 		}
-		if (m_segmentState == SegmentState.Building) {
-			m_buildingSegmentObject.SetActive (true);
+	}
+
+	public void Awake() {
+		isRunning = false;
+		notifyList = new List<ITowerActionEvents>();
+	}
+
+	public void Notify(ITowerActionEvents notify) {
+		notifyList.Add(notify);
+	}
+
+	public float Duration(int workRate) {
+		return durationSecondsAtNominalWorkRate / (float)workRate;
+	}
+
+	public void StartAction(int workRate) {
+		if (CanStartAction) {
+			this.workRate = workRate;
+			completion = 0.0f;
+			float secondsRemaining = Duration(workRate);
+			foreach (ITowerActionEvents notify in notifyList) {
+				notify.TowerActionStarted(this);
+				notify.TowerActionProgress(this, completion, secondsRemaining);
+			}
+			isRunning = true;
 		}
-		if (m_segmentState == SegmentState.Complete) {
-			m_completeSegmentObject.SetActive (true);
+	}
+
+	public void Update () {
+		if (isRunning) {
+			completion = Mathf.Clamp01(completion + (float)workRate / durationSecondsAtNominalWorkRate * Time.deltaTime);
+			float secondsRemaining = (1.0f - completion) * Duration(workRate);
+			foreach (ITowerActionEvents notify in notifyList) {
+				notify.TowerActionProgress(this, completion, secondsRemaining);
+			}
+
+			if (completion == 1.0f) {
+				CompleteAction();
+			}
 		}
+	}
+
+	private void CompleteAction() {
+		if (isRunning) {
+			foreach (ITowerActionEvents notify in notifyList) {
+				notify.TowerActionCompleted(this);
+			}
+			isRunning = false;
+		}
+		Destroy(gameObject);
 	}
 }

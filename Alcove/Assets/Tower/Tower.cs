@@ -2,73 +2,89 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tower : MonoBehaviour {
-	
-	private List<GameObject> m_towerSegmentList;
-	public int m_numTowerSegments;
+public class Tower : MonoBehaviour, ITowerActionEvents {
+	private List<TowerSegment> segments;
 	public int m_cursorPosition;
 
-	public GameObject m_towerBase;
 	public GameObject m_selector;
 
-	public GameObject m_towerSegmentPrefab;
+	public TowerSegment m_emptySegmentPrefab;
+	public TowerSegment m_constructionSegmentPrefab;
+	public TowerSegment m_plainSegmentPrefab;
+	public TowerSegment m_baseSegmentPrefab;
 	
-	// Use this for initialization
 	void Start () {
-		m_towerSegmentList = new List<GameObject> ();
-		m_numTowerSegments = 0;
+		segments = new List<TowerSegment> ();
 		m_cursorPosition = 0;
-		AddEmptyTowerSegment ();
+		AddSegment(m_baseSegmentPrefab);
+		AddSegment(m_emptySegmentPrefab);
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	private TowerSegment AddSegment(TowerSegment prefab)
 	{
-		TowerSegment segmentScript = m_towerSegmentList[m_numTowerSegments - 1].GetComponent<TowerSegment>();
-		
-		if (segmentScript.GetState() == SegmentState.Complete)
-		{
-			AddEmptyTowerSegment ();
-		}
+		TowerSegment segment = (TowerSegment)Instantiate(prefab);
+		segment.transform.parent = transform;
+		segment.transform.localPosition = Vector3.up * (float)segments.Count * TowerSegment.HEIGHT;
+		Debug.Log("Adding new segment " + segment + " at index " + segments.Count);
+		segments.Add(segment);
+		return segment;
 	}
-	
-	public void AddEmptyTowerSegment()
-	{
-		m_numTowerSegments++;
-	
-		GameObject newSegment = Instantiate (m_towerSegmentPrefab, m_towerBase.transform.position + new Vector3(0.0f, (float)(m_numTowerSegments) * 2.6f, 0.0f), Quaternion.identity) as GameObject;
 
-		m_towerSegmentList.Add (newSegment);
+	private TowerSegment SwapSegment(int index, TowerSegment prefab) {
+		TowerSegment oldSegment = segments[index];
+		TowerSegment newSegment = (TowerSegment)Instantiate(prefab);
+		newSegment.transform.parent = oldSegment.transform.parent;
+		newSegment.transform.localPosition = oldSegment.transform.localPosition;
+		segments[index] = newSegment;
+		Debug.Log("Destroying old segment " + oldSegment + " from index " + index + ", replaced by " + newSegment);
+		Destroy(oldSegment.gameObject);
+		return newSegment;
 	}
 
 	public void PerformAction(Tribe tribe)
 	{
-		TowerSegment segment = m_towerSegmentList[m_cursorPosition - 1].GetComponent<TowerSegment>();
+		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
+		if (!segment.CanStartAction) return;
 		if (tribe.IsBusy || tribe.count == 0) return;
-		if (segment.GetState() != SegmentState.Empty) return;
 
-		// FIXME - should replace empty segment here with new building segment, and put new empty segment at
-		// the top of the tower.
+		// FIXME - deal with non-empty segments! the stuff below assumes the only action is to build on an empty segment
 
-		Debug.Log("Allocate tribe " + tribe + " to segment " + segment + ".");
+		// Under-construction segment immediately replaces the empty segment
+		TowerSegment constructionSegment = SwapSegment(m_cursorPosition, m_constructionSegmentPrefab);
+		// Final plain segment to eventually replace the under-construction segment
+		constructionSegment.constructingTowerSegmentPrefab = m_plainSegmentPrefab;
+		// Add a new empty segment so we can begin building immediately
+		AddSegment(m_emptySegmentPrefab);
 
-		// FIXME - need to decide between predefined actions, each with their own duration.
-		GameObject actionObject = new GameObject();
-		TowerAction action = actionObject.AddComponent<TowerAction>();
-		action.durationSecondsAtNominalWorkRate = 10.0f;
-		action.Notify(tribe);
-		action.Notify(segment);
-		action.StartAction(tribe.count);
+		// Start the construction
+		constructionSegment.Notify(tribe);
+		constructionSegment.Notify(this);
+		Debug.Log("Allocate tribe " + tribe + " to segment " + constructionSegment + ".");
+		constructionSegment.StartAction(tribe.count);
+	}
+
+	public void TowerActionStarted(TowerSegment segment) {
+	}
+
+	public void TowerActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
+	}
+
+	public void TowerActionCompleted(TowerSegment segment) {
+		int index = segments.IndexOf(segment);
+		if (index >= 0 && segment.constructingTowerSegmentPrefab != null) {
+			// Swap the segment with a new one
+			SwapSegment(index, segment.constructingTowerSegmentPrefab);
+		}
 	}
 
 	public void MoveUp(float delta)
 	{
-		if (m_cursorPosition < (m_numTowerSegments))
+		if (m_cursorPosition < (segments.Count - 1))
 		{
 			m_cursorPosition++;
 		}
-		m_selector.transform.position = m_towerBase.transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
+		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
 	
 	public void MoveDown(float delta)
@@ -77,6 +93,6 @@ public class Tower : MonoBehaviour {
 		{
 			m_cursorPosition--;
 		}
-		m_selector.transform.position = m_towerBase.transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
+		m_selector.transform.position = transform.position + new Vector3 (0.0f, (float)(m_cursorPosition) * 2.6f, 0.0f);
 	}
 }

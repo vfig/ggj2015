@@ -2,7 +2,7 @@
 using System.Collections;
 
 public interface ITowerActionEvents {
-	void TowerActionStarted(TowerAction action);
-	void TowerActionProgress(TowerAction action, float progress, float secondsRemaining);
-	void TowerActionCompleted(TowerAction action);
+	void TowerActionStarted(TowerSegment segment);
+	void TowerActionProgress(TowerSegment segment, float progress, float secondsRemaining);
+	void TowerActionCompleted(TowerSegment segment);
 }

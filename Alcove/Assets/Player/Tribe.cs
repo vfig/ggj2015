@@ -36,16 +36,16 @@ public class Tribe : MonoBehaviour, ITowerActionEvents {
 		}
 	}
 
-	public void TowerActionStarted(TowerAction action) {
+	public void TowerActionStarted(TowerSegment segment) {
 		busy = true;
 	}
 
-	public void TowerActionProgress(TowerAction action, float progress, float secondsRemaining) {
+	public void TowerActionProgress(TowerSegment segment, float progress, float secondsRemaining) {
 		busyFraction = progress;
 		busyRemaining = secondsRemaining;
 	}
 
-	public void TowerActionCompleted(TowerAction action) {
+	public void TowerActionCompleted(TowerSegment segment) {
 		busy = false;
 	}
 }
