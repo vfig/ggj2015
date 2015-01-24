@@ -98,7 +98,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		int completedSegmentCount = 0;
 		for(int i=0; i<segments.Count; i++)
 		{
-			if(segments[i].GetCompletion() >= 1.0) {
+			if(segments[i].IsComplete()) {
 				completedSegmentCount++;
 			}
 		}

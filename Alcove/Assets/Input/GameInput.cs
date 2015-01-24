@@ -27,10 +27,10 @@ public class GameInput {
 		currentFrameCount = Time.frameCount;
 
 		if (scrollState == null) {
-			scrollState = new ScrollState[GameRulesManager.PLAYER_COUNT];
+			scrollState = new ScrollState[GameConstants.PLAYER_COUNT];
 		}
 
-		for (int player = 0; player < GameRulesManager.PLAYER_COUNT; ++player) {
+		for (int player = 0; player < GameConstants.PLAYER_COUNT; ++player) {
 			float axis = GetScrollAxis(player);
 			if (axis > -0.25 && axis < 0.25) {
 				scrollState[player].tick = false;
