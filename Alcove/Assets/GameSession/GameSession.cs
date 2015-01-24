@@ -155,7 +155,7 @@ public class GameSession : MonoBehaviour {
 
 	void SetupInProgressState() {
 		Debug.Log("Setting up InProgress state.");
-		Application.LoadLevel("CoreGameScene");
+		Application.LoadLevel("GameplaySubScene");
 	}
 	
 	void UpdateInProgressState() {
