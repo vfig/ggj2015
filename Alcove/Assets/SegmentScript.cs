@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class tower : MonoBehaviour {
+public class SegmentScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
