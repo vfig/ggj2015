@@ -13,6 +13,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public AudioClip selectionClip;
 	public AudioClip startBuildingClip;
+	public AudioClip demolitionClip;
 
 	private int m_activeWorkshops;
 	private int m_activeLaboratories;
@@ -104,6 +105,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		if (segmentIndex >= segments.Count) return;
 		TowerSegment segment = segments[segmentIndex];
 		if (segment.OnIsComplete()) {
+			AudioSource.PlayClipAtPoint(demolitionClip, Vector3.zero);
 			Destroy(segment.gameObject);
 			segments.RemoveAt(segmentIndex);
 			for (int i = segmentIndex; i < (segments.Count); i++) {
