@@ -5,7 +5,6 @@ public class GameConstants {
 
 	// Gameplay
 	public const int PLAYER_COUNT = 2;
-	public const int TOWER_SEGMENTS_TO_WIN_GAME = 999;
 	public const int NUM_TRIBES_PER_PLAYER = 4;
 
 	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 4.0f;
@@ -28,7 +27,7 @@ public class GameConstants {
 	public const int TRIBE_STARTING_UNIT_COUNT = 4;
 	public const int TRIBE_UNITS_PER_BEDCHAMBER = 4;
 	
-	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 10.0f;
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 10.0f; // Always takes this full time
 	
 	public const int CONSTRUCTION_TOWER_SEGMENT_TRIBE_COST = 0;
 	
@@ -54,6 +53,6 @@ public class GameConstants {
 	public const float MURDERHOLES_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int MURDERHOLES_TOWER_SEGMENT_TRIBE_COST = 2;
 
-	public const float WIN_TOWER_SEGMENT_BUILD_TIME = 1.0f;
-	public const int WIN_TOWER_SEGMENT_TRIBE_SIZE = 8; // Must be divisible by 4
+	public const float WIN_TOWER_SEGMENT_BUILD_TIME = 30.0f; // Always takes this full time
+	public const int WIN_TOWER_SEGMENT_TRIBE_SIZE = 20; // Number of workers consumed per tribe when building
 }

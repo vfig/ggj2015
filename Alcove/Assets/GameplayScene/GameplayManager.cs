@@ -93,13 +93,10 @@ public class GameplayManager : MonoBehaviour {
 		}
 		int winner = -1; // 0 or 1 for player (zero-indexed), -1 for no winner. 
 		RoundupInfo info = new RoundupInfo();
-		int p1Segments = players[0].tower.GetCompletedSegmentCount();
-		int p2Segments = players[1].tower.GetCompletedSegmentCount();
-		if(p1Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		if(players[0].tower.GetCompletedWinSegment()) {
 			winner = 0;
 			info.winningPlayerText = "Player 1";
-		}
-		if(p2Segments >= GameConstants.TOWER_SEGMENTS_TO_WIN_GAME) {
+		} else if(players[1].tower.GetCompletedWinSegment()) {
 			winner = 1;
 			info.winningPlayerText = "Player 2";
 		}

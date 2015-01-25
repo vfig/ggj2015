@@ -13,6 +13,11 @@ public class WinTowerSegment : TowerSegment {
 	public override bool OnIsActionable () {
 		return false;
 	}
+
+	public override float OnGetActionWorkRate() {
+		// No speed boosts from tribe size or laboratories
+		return 1.0f;
+	}
 	
 	public override bool OnIsComplete () {
 		return true;

@@ -163,9 +163,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count == 0 || tribe.Count < segment.OnGetTribeCost()) {
 			AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
-			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
 
@@ -173,7 +172,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		if (emptySegment != null) {
 			TowerSegment segmentToConstruct = m_constructableTowerSegments[m_selectedPrefabIndex];
 
-			int minimumPerTribeSize = segmentToConstruct.OnGetMinimumTribeSize() / 4;
+			int minimumPerTribeSize = segmentToConstruct.OnGetMinimumTribeSize();
 			bool enoughTribes = true;
 			for (int i = 0; i < 4; ++i) {
 				if (m_owningPlayer.tribes[i].Count < minimumPerTribeSize) {
@@ -181,9 +180,12 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 				}
 			}
 			if (enoughTribes) {
+				for (int i = 0; i < 4; ++i) {
+					m_owningPlayer.tribes[i].Count -= minimumPerTribeSize;
+				}
 				emptySegment.PerformAction(tribe, segmentToConstruct);
 			} else {
-				/* TODO: Add some kind of notification that the segment cannot be built. */
+				AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
 			}
 		} else {
 			segment.PerformAction(tribe);
@@ -278,16 +280,15 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		}
 	}
 
-	public int GetCompletedSegmentCount()
-	{
-		int completedSegmentCount = 0;
+	public bool GetCompletedWinSegment() {
 		for(int i=0; i<segments.Count; i++)
 		{
-			if(segments[i].IsComplete()) {
-				completedSegmentCount++;
+			WinTowerSegment segment = segments[i] as WinTowerSegment;
+			if (segment != null && segment.IsComplete()) {
+				return true;
 			}
 		}
-		return completedSegmentCount;
+		return false;
 	}
 	
 	public void SetOwningPlayer(Player owningPlayer) {
