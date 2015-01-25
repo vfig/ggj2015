@@ -22,6 +22,9 @@ public class ConstructionTowerSegment : TowerSegment {
 		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
 		m_constructionImage = GetComponentInChildren<Image>();
 		m_constructionImage.sprite = spriteRenderer.sprite;
+		
+		// Add a new empty one ready to build
+		m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
 	}
 
 	public override void OnProgressAction(float secondsRemaining) {
@@ -31,8 +34,6 @@ public class ConstructionTowerSegment : TowerSegment {
 	public override void OnCompleteAction () {
 		// Swap the segment with a new one
 		m_owningTower.SwapSegment(this, m_towerSegmentToBeConstructed);
-		// Add a new empty one ready to build
-		m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
 	}
 
 	public override bool ShowsWorkingArea() {
