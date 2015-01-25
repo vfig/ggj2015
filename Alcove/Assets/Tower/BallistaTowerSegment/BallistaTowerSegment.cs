@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BallistaTowerSegment : TowerSegment {
 
+	public AudioClip ballistaClip;
 	private bool m_inUse;
 	
 	public override float OnGetConstructionDuration() {
@@ -35,6 +36,7 @@ public class BallistaTowerSegment : TowerSegment {
 	
 	public override void OnCompleteAction () {
 		m_owningTower.DestroyOpponentsSegment(this);
+		AudioSource.PlayClipAtPoint(ballistaClip, Vector3.zero);
 		this.Reset ();
 		m_inUse = false;
 	}

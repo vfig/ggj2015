@@ -106,15 +106,13 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public void DestroyPlayersSegment(int segmentIndex) {
-		if (segmentIndex >= segments.Count) {
+		if (segmentIndex >= segments.Count
+		    || (segments[segmentIndex] as EmptyTowerSegment) != null) {
 			/* TODO: Add sound effect. */
 			return;
 		}
 		TowerSegment segment = segments[segmentIndex];
 		if (!segment.IsComplete()) {
-			if (segment.TribeSign.gameObject) {
-				Destroy (segments[segmentIndex].TribeSign.gameObject);
-			}
 			segment.CancelAction();
 		}
 		AudioSource.PlayClipAtPoint(demolitionClip, Vector3.zero);
@@ -122,8 +120,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		segments.RemoveAt(segmentIndex);
 		for (int i = segmentIndex; i < (segments.Count); i++) {
 			segments[i].transform.position += new Vector3(0.0f, -2.0f, 0.0f);
-			MoveDown();
 		}
+		MoveDown();
 	}
 	
 	public void DestroyAllRecruits() {

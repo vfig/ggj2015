@@ -35,8 +35,6 @@ public abstract class TowerSegment : MonoBehaviour
 
 	public TowerSegment TowerSegmentPrefab { get { return m_towerSegmentPrefab; } set { m_towerSegmentPrefab = value; } }
 
-	public GameObject TribeSign { get { return m_tribeSign; } set { m_tribeSign = value; } }
-
 	/* Called on initialisation */
 	public void Awake() {
 		m_listenerList = new List<ITowerSegmentCallback>();
@@ -96,6 +94,12 @@ public abstract class TowerSegment : MonoBehaviour
 					Destroy(m_workingArea.gameObject);
 				}
 			}
+		}
+	}
+
+	void OnDestroy() {
+		if(m_tribeSign) {
+			Destroy (m_tribeSign.gameObject);
 		}
 	}
 
