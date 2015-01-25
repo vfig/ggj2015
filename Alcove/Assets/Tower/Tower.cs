@@ -11,6 +11,11 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	public AudioClip selectionClip;
+	public AudioClip startBuildingClip;
+	public AudioClip demolitionClip;
+
+	private int m_activeWorkshops;
 	private int m_activeLaboratories;
 
 	public TowerSegment m_baseTowerSegmentPrefab;
@@ -100,6 +105,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		if (segmentIndex >= segments.Count) return;
 		TowerSegment segment = segments[segmentIndex];
 		if (segment.OnIsComplete()) {
+			AudioSource.PlayClipAtPoint(demolitionClip, Vector3.zero);
 			Destroy(segment.gameObject);
 			segments.RemoveAt(segmentIndex);
 			for (int i = segmentIndex; i < (segments.Count); i++) {
@@ -146,8 +152,10 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
+			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
 			emptySegment.PerformAction(this, tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
 		} else {
+			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
 			segment.PerformAction(this, tribe);
 		}
 	}
@@ -185,6 +193,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+
 		if (m_selectedPrefabIndex > 0) {
 			--m_selectedPrefabIndex;
 		} else {
@@ -199,6 +209,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+		
 		if (m_selectedPrefabIndex < (m_constructableTowerSegments.Count - 1)) {
 			++m_selectedPrefabIndex;
 		} else {

@@ -8,6 +8,8 @@ public class GameplayManager : MonoBehaviour {
 	public GameObject recruitmentAreaPrefab;
 	public GameObject workingAreaPrefab;
 
+	public AudioClip recruitClip;
+
 	private GameSession gameSession;
 	private GameObject minimap;
 	private Player[] players;
@@ -129,7 +131,11 @@ public class GameplayManager : MonoBehaviour {
 	}
 
 	public void CollectRecruits(Tribe tribe) {
-		tribe.Recruit (recruitmentArea.DestroyAllUnitsOfColour(tribe.m_unitColour));
+		int unitCount = recruitmentArea.DestroyAllUnitsOfColour (tribe.m_unitColour);
+		if(unitCount > 0) {
+			AudioSource.PlayClipAtPoint(recruitClip, Vector3.zero);
+		}
+		tribe.Recruit (unitCount);
 	}
 	
 	public TowerSegment GetOpponentTowerSegmentPrefab(int playerIndex, int segmentIndex) {
