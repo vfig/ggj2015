@@ -135,7 +135,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count == 0) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}

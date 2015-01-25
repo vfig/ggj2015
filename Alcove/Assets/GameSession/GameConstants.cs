@@ -21,4 +21,29 @@ public class GameConstants {
 	
 	public const int MAX_NUMBER_OF_ACTIVE_WORKSHOPS = 1;
 
+	/* Balancing */
+	
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 50.0f;
+	
+	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	
+	public const float ARCHERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float ARCHERS_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int ARCHERS_TOWER_SEGMENT_TRIBE_COST = 8;
+	
+	public const float CANNONS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float CANNONS_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int CANNONS_TOWER_SEGMENT_TRIBE_COST = 4;
+	
+	public const float WORKSHOP_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float WORKSHOP_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int WORKSHOP_TOWER_SEGMENT_TRIBE_COST = 2;
+
+	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int WIZARDTOWER_TOWER_SEGMENT_TRIBE_COST = 10;
+
+	public const float MURDERHOLES_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float MURDERHOLES_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int MURDERHOLES_TOWER_SEGMENT_TRIBE_COST = 4;
 }

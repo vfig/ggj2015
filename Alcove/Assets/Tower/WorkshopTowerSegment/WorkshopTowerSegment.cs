@@ -9,11 +9,15 @@ public class WorkshopTowerSegment : TowerSegment {
 	}
 	
 	public override float NominalConstructionDurationSeconds() {
-		return 20.0f;
+		return GameConstants.WORKSHOP_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 50.0f;
+		return GameConstants.WORKSHOP_TOWER_SEGMENT_ACTION_TIME;
+	}
+	
+	public override int OnGetTribeCost() {
+		return GameConstants.WORKSHOP_TOWER_SEGMENT_TRIBE_COST;
 	}
 	
 	public override void OnBeginAction () {

@@ -3,11 +3,15 @@ using System.Collections;
 
 public class WizartowerTowerSegment : TowerSegment {
 	public override float NominalConstructionDurationSeconds() {
-		return 30.0f;
+		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 30.0f;
+		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME;
+	}
+	
+	public override int OnGetTribeCost() {
+		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_TRIBE_COST;
 	}
 	
 	public override bool OnIsActionable () {

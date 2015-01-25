@@ -3,11 +3,15 @@ using System.Collections;
 
 public class MurderholesTowerSegment : TowerSegment {
 	public override float NominalConstructionDurationSeconds() {
-		return 100.0f;
+		return GameConstants.MURDERHOLES_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 100.0f;
+		return GameConstants.MURDERHOLES_TOWER_SEGMENT_ACTION_TIME;
+	}
+	
+	public override int OnGetTribeCost() {
+		return GameConstants.MURDERHOLES_TOWER_SEGMENT_TRIBE_COST;
 	}
 	
 	public override bool OnIsActionable () {

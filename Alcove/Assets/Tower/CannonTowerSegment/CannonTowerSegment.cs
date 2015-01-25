@@ -5,11 +5,15 @@ public class CannonTowerSegment : TowerSegment {
 	private bool m_fired = false;
 
 	public override float NominalConstructionDurationSeconds() {
-		return 200.0f;
+		return GameConstants.CANNONS_TOWER_SEGMENT_BUILD_TIME;
 	}
 
 	public override float NominalActionDurationSeconds() {
-		return 500.0f;
+		return GameConstants.CANNONS_TOWER_SEGMENT_ACTION_TIME;
+	}
+	
+	public override int OnGetTribeCost() {
+		return GameConstants.CANNONS_TOWER_SEGMENT_TRIBE_COST;
 	}
 
 	public override bool OnIsActionable () {

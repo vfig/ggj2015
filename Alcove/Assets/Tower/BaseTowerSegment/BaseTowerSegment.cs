@@ -10,7 +10,7 @@ public class BaseTowerSegment : TowerSegment {
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 50.0f;
+		return GameConstants.BASE_TOWER_SEGMENT_ACTION_TIME;
 	}
 	
 	public override void OnBeginAction () {

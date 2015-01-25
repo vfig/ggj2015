@@ -125,7 +125,10 @@ public abstract class TowerSegment : MonoBehaviour
 					notify.OnCompleteAction(this);
 				}
 				m_listenerList = new List<ITowerSegmentCallback>();
-				OnCompleteAction();
+				
+				m_currentTribe.Count -= OnGetTribeCost();
+				
+				this.OnCompleteAction();
 				
 				Destroy(m_tribeSign.gameObject);
 			}
@@ -147,7 +150,7 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual int OnGetTribeCost() {
-		return 0;
+		return 1;
 	}
 	
 	public virtual bool OnIsActionable() {
