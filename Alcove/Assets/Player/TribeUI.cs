@@ -6,16 +6,19 @@ public class TribeUI : MonoBehaviour {
 	public Tribe tribe;
 	private CanvasGroup group;
 	private Image image;
-	private Text text;
+	private Text[] texts;
 
 	public void Start() {
 		group = GetComponentInChildren<CanvasGroup>();
 		image = GetComponentInChildren<Image>();
-		text = GetComponentInChildren<Text>();
+		texts = GetComponentsInChildren<Text>();
 	}
 
 	public void Update() {
-		text.text = tribe.Count.ToString() + " / " + tribe.UnitLimit.ToString();
+		string label = tribe.Count.ToString() + " / " + tribe.UnitLimit.ToString();
+		foreach (Text text in texts) {
+			text.text = label;
+		}
 		if (tribe.IsBusy) {
 			group.alpha = 0.25f + (0.5f * tribe.BusyFraction);
 			image.fillAmount = tribe.BusyFraction;
