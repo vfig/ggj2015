@@ -129,19 +129,25 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public GameObject CreateTribeSign(Tribe tribe) {
+		GameObject obj;
 		if (tribe.m_unitColour == UnitColour.Blue) {
-			return Instantiate(m_owningTower.m_tribeXSignPrefab) as GameObject;
+			obj = Instantiate(m_owningTower.m_tribeXSignPrefab) as GameObject;
 		}
 		else if (tribe.m_unitColour == UnitColour.Red) {
-			return Instantiate(m_owningTower.m_tribeBSignPrefab) as GameObject;
+			obj = Instantiate(m_owningTower.m_tribeBSignPrefab) as GameObject;
 		}
 		else if (tribe.m_unitColour == UnitColour.Yellow) {
-			return Instantiate(m_owningTower.m_tribeYSignPrefab) as GameObject;
+			obj = Instantiate(m_owningTower.m_tribeYSignPrefab) as GameObject;
 		}
 		else if (tribe.m_unitColour == UnitColour.Green) {
-			return Instantiate(m_owningTower.m_tribeASignPrefab) as GameObject;
+			obj = Instantiate(m_owningTower.m_tribeASignPrefab) as GameObject;
 		}
-		else return null;
+		else {
+			return null;
+		}
+		TribeSignUI ui = obj.GetComponent<TribeSignUI>();
+		ui.tribe = tribe;
+		return obj;
 	}
 
 	/* Virtual Methods */
