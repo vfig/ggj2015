@@ -39,15 +39,17 @@ public class RecruitmentArea : MonoBehaviour {
 		}
 	}
 
-	public void DestroyAllUnits() {
-		for(int i=0; i<units.Count; i++) {
+	public int DestroyAllUnits() {
+		int count = units.Count;
+		for(int i=0; i<count; i++) {
 			RecruitmentAreaUnit unit = units[i] as RecruitmentAreaUnit;
 			DestroyObject(unit.gameObject);
 		}
 		units.Clear();
+		return count;
 	}
 
-	public void DestroyAllUnitsOfColour(UnitColour colour) {
+	public int CollectAllUnitsOfColour(UnitColour colour) {
 		int numRemoved = 0;
 		for(int i=units.Count-1; i>=0; i--) {
 			RecruitmentAreaUnit unit = units[i] as RecruitmentAreaUnit;
@@ -57,6 +59,7 @@ public class RecruitmentArea : MonoBehaviour {
 			}
 		}
 		Debug.Log("Removed " + numRemoved + " units of colour '" + colour + "' from recruitment area.");
+		return numRemoved;
 	}
 
 	private RecruitmentAreaUnit SpawnUnit() {
