@@ -11,9 +11,9 @@ public class StartScene : MonoBehaviour {
 		GameInput.Update();
 
 		if(GameInput.GetAnyStartButtonDown()) {
-			Application.LoadLevel("GameScene");
-		} else if(GameInput.GetAnyTribeButtonDown(0) || GameInput.GetAnyTribeButtonDown(1)) {
 			Application.LoadLevel("InstructionsScene");
+		} else if(GameInput.GetAnyTribeButtonDown(0) || GameInput.GetAnyTribeButtonDown(1)) {
+			Application.LoadLevel("GameScene");
 		} else if(GameInput.GetAnyCancelButtonDown()) {
 			Application.LoadLevel("EndScene");
 		}
