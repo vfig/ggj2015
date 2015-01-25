@@ -34,8 +34,12 @@ public class PrefabSelector : MonoBehaviour {
 		spriteRenderer.sortingOrder = 4;
 		obj.transform.localScale = 0.75f * Vector3.one;
 		obj.transform.parent = transform;
-		obj.transform.localPosition = Vector3.zero;
+		obj.transform.localPosition = Vector3.up * 1.0f;
 		m_selectedSprite = obj.transform;
+		if (m_selectedSprite == null) {
+			Debug.Log("m_selectedSprite is null: " + m_selectedSprite);
+		}
+
 
 		// Not using this label for now.
 		buildingCost.gameObject.SetActive(false);

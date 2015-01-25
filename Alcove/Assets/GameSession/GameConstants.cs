@@ -53,4 +53,7 @@ public class GameConstants {
 	public const float MURDERHOLES_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	public const float MURDERHOLES_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int MURDERHOLES_TOWER_SEGMENT_TRIBE_COST = 2;
+
+	public const float WIN_TOWER_SEGMENT_BUILD_TIME = 1.0f;
+	public const int WIN_TOWER_SEGMENT_TRIBE_SIZE = 8; // Must be divisible by 4
 }

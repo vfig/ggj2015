@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
 
 	new public Camera camera;
 	public int playerNumber;
-	private Tribe[] tribes;
+	public Tribe[] tribes;
 	public Tower tower;
 
 	public void Awake() {

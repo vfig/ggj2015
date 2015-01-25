@@ -182,7 +182,8 @@ public abstract class TowerSegment : MonoBehaviour
 	public virtual float OnGetConstructionDuration() {
 		return 0.0f;
 	}
-	
+
+	/* Total tribe population (evenly divided) required to build */
 	public virtual int OnGetMinimumTribeSize() {
 		return 1;
 	}
@@ -213,5 +214,9 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual void OnCancelAction() {	
+	}
+
+	public virtual bool IsFinalSegment() {
+		return false;
 	}
 }

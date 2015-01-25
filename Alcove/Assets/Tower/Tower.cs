@@ -27,6 +27,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment m_wizardtowerTowerSegmentPrefab;
 	public TowerSegment m_laboratoryTowerSegmentPrefab;
 	public TowerSegment m_murderholesTowerSegmentPrefab;
+	public TowerSegment m_winTowerSegmentPrefabPlayer0;
+	public TowerSegment m_winTowerSegmentPrefabPlayer1;
 	
 	public GameObject m_tribeXSignPrefab;
 	public GameObject m_tribeYSignPrefab;
@@ -54,6 +56,12 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 
 	void Start() {
+		if (m_owningPlayer.playerNumber == 0) {
+			m_constructableTowerSegments.Add(m_winTowerSegmentPrefabPlayer0);
+		} else {
+			m_constructableTowerSegments.Add(m_winTowerSegmentPrefabPlayer1);
+		}
+
 		m_prefabSelector = GetComponentInChildren<PrefabSelector>();
 		foreach (TowerSegment segment in m_constructableTowerSegments) {
 			m_prefabSelector.AddSelection(segment);
@@ -163,7 +171,20 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
-			emptySegment.PerformAction(tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
+			TowerSegment segmentToConstruct = m_constructableTowerSegments[m_selectedPrefabIndex];
+
+			int minimumPerTribeSize = segmentToConstruct.OnGetMinimumTribeSize() / 4;
+			bool enoughTribes = true;
+			for (int i = 0; i < 4; ++i) {
+				if (m_owningPlayer.tribes[i].Count < minimumPerTribeSize) {
+					enoughTribes = false;
+				}
+			}
+			if (enoughTribes) {
+				emptySegment.PerformAction(tribe, segmentToConstruct);
+			} else {
+				/* TODO: Add some kind of notification that the segment cannot be built. */
+			}
 		} else {
 			segment.PerformAction(tribe);
 		}
