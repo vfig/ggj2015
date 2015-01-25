@@ -9,8 +9,11 @@ public class StartScene : MonoBehaviour {
 
 	void Update() {
 		GameInput.Update();
-		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
+		/*if(GameInput.GetStartButtonDownAnyPlayer()) {
 			Application.LoadLevel("GameScene");
 		}
+		if(GameInput.GetBackButtonDownAnyPlayer()) {
+			Application.LoadLevel("EndScene");
+		}*/
 	}
 }

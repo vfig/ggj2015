@@ -17,12 +17,18 @@ public class GameSession : MonoBehaviour {
 	public GameObject roundupPanel;
 	public GameObject goPanel;
 	public Text winningPlayerNameText;
+
+	[HideInInspector]
+	private AudioSource musicSource;
+
+	public AudioClip introClip;
 	
 	GameplayManager gameplayManager;
 	GameplayState state;
 	float stateCounter;
 
 	void Start() {
+		musicSource = GetComponent<AudioSource>();
 		StartNewGame();
 	}
 
@@ -151,7 +157,7 @@ public class GameSession : MonoBehaviour {
 		SetState(GameplayState.LoadGameplayScene);
 	}
 	
-	// PREGAME //////////////////////////////
+	// PREGAME /////////////////////////introClip/////
 	
 	void Setup_LoadGameplayScene(Object data=null) {
 		Application.LoadLevelAdditive("GameplaySubScene");
@@ -160,10 +166,12 @@ public class GameSession : MonoBehaviour {
 	void Setup_Pregame(Object data=null) {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
+		AudioSource.PlayClipAtPoint(introClip, Vector3.zero);
 		pregamePanel.SetActive(true);
 	}
 
 	void Setup_InProgress(Object data=null) {
+		musicSource.Play();
 		SetCanUpdates(true);
 		goPanel.SetActive(true);
 		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
@@ -212,6 +220,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Stop_InProgress() {
+		musicSource.Stop();
 		goPanel.SetActive(false);
 	}
 
