@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class CannonTowerSegment : TowerSegment {
-	private bool m_fired = false;
-
 	public override float OnGetConstructionDuration() {
 		return GameConstants.CANNONS_TOWER_SEGMENT_BUILD_TIME;
 	}
@@ -17,15 +15,11 @@ public class CannonTowerSegment : TowerSegment {
 	}
 
 	public override bool OnIsActionable () {
-		return !m_fired;
+		return true;
 	}
 	
 	public override bool OnIsComplete () {
 		return true;
-	}
-	
-	public override void OnBeginAction (float secondsRemaining) {
-		m_fired = true;
 	}
 	
 	public override void OnProgressAction (float secondsRemaining) {

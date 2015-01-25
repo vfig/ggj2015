@@ -24,8 +24,10 @@ public class WizartowerTowerSegment : TowerSegment {
 	
 	public override void OnCompleteAction () {
 		TowerSegment opponentTowerSegment = m_owningTower.GetOpponentTowerSegmentPrefab(this);
-		m_owningTower.DestroyOpponentsSegment(this);
-		m_owningTower.SwapSegment(this, opponentTowerSegment);
+		if (opponentTowerSegment != null) {
+			m_owningTower.DestroyOpponentsSegment(this);
+			m_owningTower.SwapSegment(this, opponentTowerSegment);
+		}
 		this.Reset ();
 	}
 }

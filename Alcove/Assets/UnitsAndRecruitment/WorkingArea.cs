@@ -19,8 +19,8 @@ public class WorkingArea : MonoBehaviour {
 	public GameObject unitPrefab;
 
 	public void SetCountTimeAndColor(int unitCount, float time, UnitColour color) {
-		spawnMaxTime = time * 0.1f;
-		despawnMaxTime = time * 0.9f;
+		spawnMaxTime = time * 0.25f;
+		despawnMaxTime = time * 0.75f;
 		unitColor = color;
 		maxUnitCount = unitCount;
 	}

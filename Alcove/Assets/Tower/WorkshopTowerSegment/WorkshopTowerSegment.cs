@@ -15,7 +15,11 @@ public class WorkshopTowerSegment : TowerSegment {
 	public override float OnGetActionDuration() {
 		return GameConstants.WORKSHOP_TOWER_SEGMENT_ACTION_TIME;
 	}
-	
+
+	public override float OnGetActionWorkRate() {
+		return 1.0f / m_workerCount;
+	}
+
 	public override int OnGetTribeCost() {
 		return GameConstants.WORKSHOP_TOWER_SEGMENT_TRIBE_COST;
 	}

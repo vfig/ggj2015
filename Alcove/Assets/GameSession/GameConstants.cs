@@ -13,8 +13,9 @@ public class GameConstants {
 	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 4.0f;
 	public const float RECRUITMENT_AREA_GROUND_WIDTH = 15.0f;
 	public const float RECRUITMENT_AREA_GROUND_Y = -0.54f;
-	public const float RECRUITMENT_UNIT_WALK_SPEED = 0.8f;
+	public const float RECRUITMENT_UNIT_WALK_SPEED = 0.5f;
 	public const float RECRUITMENT_UNIT_ANIMATION_SPEED = 8.5f;
+	public const float RECRUITMENT_UNIT_RUN_SPEED = 2.0f;
 
 	public const float WORKING_AREA_GROUND_WIDTH = 5.0f;
 	public const float WORKING_AREA_GROUND_Y = -0.54f;
@@ -26,7 +27,7 @@ public class GameConstants {
 
 	/* Balancing */
 	
-	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 50.0f;
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 20.0f;
 	
 	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	
@@ -39,7 +40,7 @@ public class GameConstants {
 	public const int CANNONS_TOWER_SEGMENT_TRIBE_COST = 4;
 	
 	public const float WORKSHOP_TOWER_SEGMENT_BUILD_TIME = 30.0f;
-	public const float WORKSHOP_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const float WORKSHOP_TOWER_SEGMENT_ACTION_TIME = 1.0f;
 	public const int WORKSHOP_TOWER_SEGMENT_TRIBE_COST = 2;
 
 	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 30.0f;
