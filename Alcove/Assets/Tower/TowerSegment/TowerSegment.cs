@@ -24,6 +24,8 @@ public abstract class TowerSegment : MonoBehaviour
 
 	private TowerSegment m_towerSegmentPrefab;
 
+	private GameObject m_tribeSign;
+
 	/* Called on initialisation */
 	public void Awake() {
 		m_listenerList = new List<ITowerSegmentCallback>();
@@ -67,6 +69,22 @@ public abstract class TowerSegment : MonoBehaviour
 		this.m_actionActive = false;
 	}
 
+	public GameObject CreateTribeSign(Tribe tribe) {
+		if (tribe.m_unitColour == UnitColour.Blue) {
+			return Instantiate(m_owningTower.m_tribeXSignPrefab) as GameObject;
+		}
+		else if (tribe.m_unitColour == UnitColour.Red) {
+			return Instantiate(m_owningTower.m_tribeBSignPrefab) as GameObject;
+		}
+		else if (tribe.m_unitColour == UnitColour.Yellow) {
+			return Instantiate(m_owningTower.m_tribeYSignPrefab) as GameObject;
+		}
+		else if (tribe.m_unitColour == UnitColour.Green) {
+			return Instantiate(m_owningTower.m_tribeASignPrefab) as GameObject;
+		}
+		else return null;
+	}
+
 	public void PerformAction(Tower owningTower, Tribe tribe) {
 		AddListener(owningTower);
 		AddListener(tribe);
@@ -76,6 +94,8 @@ public abstract class TowerSegment : MonoBehaviour
 		m_completion = 0.0f;
 		m_workRate = tribe.Count;
 		float secondsRemaining = Duration(m_workRate);
+		m_tribeSign = CreateTribeSign(tribe);
+		m_tribeSign.transform.position = transform.position + new Vector3(2.0f, 0.5f, 0.0f);
 		this.OnBeginAction();
 		foreach (ITowerSegmentCallback listener in m_listenerList) {
 			listener.OnBeginAction(this);
@@ -92,7 +112,7 @@ public abstract class TowerSegment : MonoBehaviour
 
 	public void Update () {
 		if (m_actionActive) {
-			m_completion = Mathf.Clamp01(m_completion + (float)m_workRate / NominalActionDurationSeconds() * Time.deltaTime);
+			m_completion = Mathf.Clamp01(m_completion + (float)(m_workRate * (m_owningTower.ActiveWorkshops + 1)) / NominalActionDurationSeconds() * Time.deltaTime);
 			float secondsRemaining = (1.0f - m_completion) * Duration(m_workRate);
 
 			this.OnProgressAction(secondsRemaining);
@@ -106,6 +126,8 @@ public abstract class TowerSegment : MonoBehaviour
 				}
 				m_listenerList = new List<ITowerSegmentCallback>();
 				OnCompleteAction();
+				
+				Destroy(m_tribeSign.gameObject);
 			}
 		}
 	}

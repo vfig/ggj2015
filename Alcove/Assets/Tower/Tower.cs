@@ -11,6 +11,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	private int m_activeWorkshops;
+
 	public TowerSegment m_baseTowerSegmentPrefab;
 	public TowerSegment m_emptyTowerSegmentPrefab;
 	public TowerSegment m_constructionTowerSegmentPrefab;
@@ -21,12 +23,20 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment m_wizardtowerTowerSegmentPrefab;
 	public TowerSegment m_laboratoryTowerSegmentPrefab;
 	public TowerSegment m_murderholesTowerSegmentPrefab;
+	
+	public GameObject m_tribeXSignPrefab;
+	public GameObject m_tribeYSignPrefab;
+	public GameObject m_tribeASignPrefab;
+	public GameObject m_tribeBSignPrefab;
 
 	public List<TowerSegment> m_constructableTowerSegments;
+	
+	public int ActiveWorkshops { get { return m_activeWorkshops; } }
 	
 	void Awake () {
 		segments = new List<TowerSegment> ();
 		m_cursorPosition = 0;
+		m_activeWorkshops = 0;
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 
@@ -220,5 +230,19 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	
 	public void SetOwningPlayer(Player owningPlayer) {
 		m_owningPlayer = owningPlayer;
+	}
+	
+	public void RegisterWorkshop() {
+		this.m_activeWorkshops++;
+		if (m_activeWorkshops > GameConstants.MAX_NUMBER_OF_ACTIVE_WORKSHOPS) {
+			m_activeWorkshops = GameConstants.MAX_NUMBER_OF_ACTIVE_WORKSHOPS;
+		}
+	}
+	
+	public void UnRegisterWorkshop() {
+		this.m_activeWorkshops--;
+		if (m_activeWorkshops < 0) {
+			m_activeWorkshops = 0;
+		}
 	}
 }

@@ -18,5 +18,7 @@ public class GameConstants {
 
 	public const int PREGAME_DISPLAY_TIME = 90;
 	public const int GO_MESSAGE_DISPLAY_TIME = 40;
+	
+	public const int MAX_NUMBER_OF_ACTIVE_WORKSHOPS = 1;
 
 }

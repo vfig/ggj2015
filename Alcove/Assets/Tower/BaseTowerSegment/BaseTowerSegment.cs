@@ -2,15 +2,19 @@
 using System.Collections;
 
 public class BaseTowerSegment : TowerSegment {
+
+	private bool m_inUSe;
+
 	public override bool OnIsActionable () {
-		return true;
+		return (m_inUSe == false);
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 100.0f;
+		return 50.0f;
 	}
 	
 	public override void OnBeginAction () {
+		m_inUSe = true;
 	}
 	
 	public override void OnProgressAction (float secondsRemaining) {
@@ -19,5 +23,6 @@ public class BaseTowerSegment : TowerSegment {
 	public override void OnCompleteAction () {
 		m_owningTower.CollectRecruits(m_currentTribe);
 		this.Reset ();
+		m_inUSe = false;
 	}
 }
