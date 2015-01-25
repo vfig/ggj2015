@@ -23,6 +23,7 @@ public class GameSession : MonoBehaviour {
 	private AudioSource musicSource;
 
 	public AudioClip introClip;
+	public AudioClip victoryClip;
 	
 	GameplayManager gameplayManager;
 	GameplayState state;
@@ -105,6 +106,10 @@ public class GameSession : MonoBehaviour {
 	
 	public void SetState(GameplayState newState, Object data=null) {
 
+		if(newState == GameplayState.Roundup && state == GameplayState.Roundup) {
+			return;
+		}
+
 		// Handle closure of previous state.
 		switch(state) {
 		case GameplayState.LoadGameplayScene:
@@ -179,6 +184,7 @@ public class GameSession : MonoBehaviour {
 
 	void Setup_Roundup(Object data=null) {
 		SetCanUpdates(false);
+		AudioSource.PlayClipAtPoint(victoryClip, Vector3.zero);
 		roundupPanel.SetActive(true);
 		RoundupInfo info = data as RoundupInfo;
 		winningPlayerNameText.text = info.winningPlayerText;

@@ -11,6 +11,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	public AudioClip wrongClip;
 	public AudioClip selectionClip;
 	public AudioClip demolitionClip;
 
@@ -106,15 +107,13 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public void DestroyPlayersSegment(int segmentIndex) {
-		if (segmentIndex >= segments.Count) {
+		if (segmentIndex >= segments.Count
+		    || (segments[segmentIndex] as EmptyTowerSegment) != null) {
 			/* TODO: Add sound effect. */
 			return;
 		}
 		TowerSegment segment = segments[segmentIndex];
 		if (!segment.IsComplete()) {
-			if (segment.TribeSign.gameObject) {
-				Destroy (segments[segmentIndex].TribeSign.gameObject);
-			}
 			segment.CancelAction();
 		}
 		AudioSource.PlayClipAtPoint(demolitionClip, Vector3.zero);
@@ -122,8 +121,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		segments.RemoveAt(segmentIndex);
 		for (int i = segmentIndex; i < (segments.Count); i++) {
 			segments[i].transform.position += new Vector3(0.0f, -2.0f, 0.0f);
-			MoveDown();
 		}
+		MoveDown();
 	}
 	
 	public void DestroyAllRecruits() {
@@ -157,10 +156,10 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
 		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
+			AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
-
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {

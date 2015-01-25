@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class MurderholesTowerSegment : TowerSegment {
+
+	public AudioClip murderHoleClip;
+
 	public override float OnGetConstructionDuration() {
 		return GameConstants.MURDERHOLES_TOWER_SEGMENT_BUILD_TIME;
 	}
@@ -24,6 +27,7 @@ public class MurderholesTowerSegment : TowerSegment {
 	
 	public override void OnCompleteAction () {
 		m_owningTower.DestroyAllRecruits();
+		AudioSource.PlayClipAtPoint(murderHoleClip, Vector3.zero);
 		this.Reset ();
 	}
 }

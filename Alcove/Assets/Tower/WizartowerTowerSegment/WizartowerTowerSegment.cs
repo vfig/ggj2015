@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class WizartowerTowerSegment : TowerSegment {
+
+	public AudioClip wizardTowerClip;
+
 	public override float OnGetConstructionDuration() {
 		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME;
 	}
@@ -25,6 +28,7 @@ public class WizartowerTowerSegment : TowerSegment {
 	public override void OnCompleteAction () {
 		TowerSegment opponentTowerSegment = m_owningTower.GetOpponentTowerSegmentPrefab(1);
 		if (opponentTowerSegment != null) {
+			AudioSource.PlayClipAtPoint(wizardTowerClip, Vector3.zero);
 			m_owningTower.DestroyOpponentsSegment(1);
 			m_owningTower.SwapSegment(this, opponentTowerSegment);
 		}

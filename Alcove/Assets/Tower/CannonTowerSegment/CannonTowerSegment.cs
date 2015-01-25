@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class CannonTowerSegment : TowerSegment {
+
+	public AudioClip cannonClip;
+
 	public override float OnGetConstructionDuration() {
 		return GameConstants.CANNONS_TOWER_SEGMENT_BUILD_TIME;
 	}
@@ -28,6 +31,7 @@ public class CannonTowerSegment : TowerSegment {
 	
 	public override void OnCompleteAction () {
 		m_owningTower.DestroyOpponentsSegment(this);
+		AudioSource.PlayClipAtPoint(cannonClip, Vector3.zero);
 		this.Reset ();
 	}
 }
