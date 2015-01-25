@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public TowerSegment m_emptyTowerSegmentPrefab;
 	public TowerSegment m_constructionTowerSegmentPrefab;
-	public TowerSegment m_staticTowerSegmentPrefab;
+	public TowerSegment m_bedchambersTowerSegmentPrefab;
 	public TowerSegment m_cannonTowerSegmentPrefab;
 	public TowerSegment m_baseTowerSegmentPrefab;
 
@@ -26,7 +26,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 
 		m_constructableTowerSegments = new List<TowerSegment>();
-		m_constructableTowerSegments.Add(m_staticTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_bedchambersTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_cannonTowerSegmentPrefab);
 	}
 

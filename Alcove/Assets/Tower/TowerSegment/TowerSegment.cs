@@ -104,7 +104,15 @@ public abstract class TowerSegment : MonoBehaviour
 	public virtual float NominalConstructionDurationSeconds() {
 		return 0.0f;
 	}
-
+	
+	public virtual int OnGetMinimumTribeSize() {
+		return 1;
+	}
+	
+	public virtual int OnGetTribeCost() {
+		return 0;
+	}
+	
 	public virtual bool OnIsActionable() {
 		return false;
 	}
