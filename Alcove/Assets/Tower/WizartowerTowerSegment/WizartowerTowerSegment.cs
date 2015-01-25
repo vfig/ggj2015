@@ -22,13 +22,6 @@ public class WizartowerTowerSegment : TowerSegment {
 		return true;
 	}
 	
-	public override void OnBeginAction () {
-	}
-	
-	public override void OnProgressAction (float secondsRemaining) {
-		// FIXME - animate arrows?
-	}
-	
 	public override void OnCompleteAction () {
 		TowerSegment opponentTowerSegment = m_owningTower.GetOpponentTowerSegmentPrefab(this);
 		m_owningTower.DestroyOpponentsSegment(this);

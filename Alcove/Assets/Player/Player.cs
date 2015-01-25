@@ -80,6 +80,10 @@ public class Player : MonoBehaviour {
 		m_owningGameplayManager.DestroyAllRecruits();
 	}
 	
+	public void BeginCollectRecruits(Tribe tribe, float time) {
+		m_owningGameplayManager.BeginCollectRecruitsForPlayer(playerNumber, tribe, time);
+	}
+
 	public void CollectRecruits(Tribe tribe) {
 		m_owningGameplayManager.CollectRecruits(tribe);
 	}

@@ -23,11 +23,17 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 	public float minX;
 	public float maxX;
 
+	private float speed;
+	private bool walkingToGoal;
+	private float goalX;
+
 	void Awake() {
 		colour = GetRandomColour();
 		direction = UnitDirection.Left;
 		minX = 0;
 		maxX = 0;
+		walkingToGoal = false;
+		speed = GameConstants.RECRUITMENT_UNIT_WALK_SPEED;
 	}
 
 	void Start() {
@@ -60,7 +66,7 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 	void UpdateWalking() {
 		switch(direction) {
 		case UnitDirection.Left:
-			SetDeltaX(-GameConstants.RECRUITMENT_UNIT_WALK_SPEED * Time.deltaTime);
+			SetDeltaX(-speed * Time.deltaTime);
 			SetScaleXSign(-1);
 			if(GetX() <= minX) {
 				SetX(minX);
@@ -68,13 +74,22 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 			}
 			break;
 		case UnitDirection.Right:
-			SetDeltaX(GameConstants.RECRUITMENT_UNIT_WALK_SPEED * Time.deltaTime);
+			SetDeltaX(speed * Time.deltaTime);
 			SetScaleXSign(1);
 			if(GetX() >= maxX) {
 				SetX(maxX);
 				direction = UnitDirection.Left;
 			}
 			break;
+		}
+
+		if (walkingToGoal) {
+			if ((direction == UnitDirection.Left && transform.position.x <= goalX)
+				|| (direction == UnitDirection.Right && transform.position.x >= goalX)) {
+				walkingToGoal = false;
+				renderer.enabled = false;
+				speed = 0;
+			}
 		}
 	}
 
@@ -98,6 +113,18 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 
 	float GetX() {
 		return transform.localPosition.x;
+	}
+
+	public void WalkToGoal(float x, float time) {
+		walkingToGoal = true;
+		goalX = x;
+		if (transform.position.x > x) {
+			direction = UnitDirection.Left;
+		} else {
+			direction = UnitDirection.Right;
+		}
+		speed = Mathf.Max(1.8f * GameConstants.RECRUITMENT_UNIT_WALK_SPEED,
+			Mathf.Abs(transform.position.x - x) / time);
 	}
 
 	public void SetColour(UnitColour colour) {

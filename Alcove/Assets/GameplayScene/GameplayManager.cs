@@ -113,7 +113,12 @@ public class GameplayManager : MonoBehaviour {
 	public void DestroyAllRecruits() {
 		recruitmentArea.DestroyAllUnits();
 	}
-	
+
+	public void BeginCollectRecruitsForPlayer(int playerIndex, Tribe tribe, float time) {
+		Vector3 doorPosition = players[playerIndex].transform.position;
+		recruitmentArea.CollectUnitsOfColour(tribe.m_unitColour, doorPosition.x, time);
+	}
+
 	public void CollectRecruits(Tribe tribe) {
 		tribe.Recruit (recruitmentArea.DestroyAllUnitsOfColour(tribe.m_unitColour));
 	}

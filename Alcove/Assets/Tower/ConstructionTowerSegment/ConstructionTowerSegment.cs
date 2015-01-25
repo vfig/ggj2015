@@ -18,7 +18,7 @@ public class ConstructionTowerSegment : TowerSegment {
 		return false;
 	}
 
-	public override void OnBeginAction() {
+	public override void OnBeginAction(float secondsRemaining) {
 		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
 		m_constructionImage = GetComponentInChildren<Image>();
 		m_constructionImage.sprite = spriteRenderer.sprite;

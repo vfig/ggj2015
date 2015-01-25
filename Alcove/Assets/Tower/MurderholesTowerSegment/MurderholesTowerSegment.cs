@@ -22,13 +22,6 @@ public class MurderholesTowerSegment : TowerSegment {
 		return true;
 	}
 	
-	public override void OnBeginAction () {
-	}
-	
-	public override void OnProgressAction (float secondsRemaining) {
-		// FIXME - animate arrows?
-	}
-	
 	public override void OnCompleteAction () {
 		m_owningTower.DestroyAllRecruits();
 		this.Reset ();

@@ -13,13 +13,11 @@ public class BaseTowerSegment : TowerSegment {
 		return GameConstants.BASE_TOWER_SEGMENT_ACTION_TIME;
 	}
 	
-	public override void OnBeginAction () {
+	public override void OnBeginAction (float secondsRemaining) {
 		m_inUSe = true;
+		m_owningTower.BeginCollectRecruits(m_currentTribe, secondsRemaining);
 	}
-	
-	public override void OnProgressAction (float secondsRemaining) {
-	}
-	
+
 	public override void OnCompleteAction () {
 		m_owningTower.CollectRecruits(m_currentTribe);
 		this.Reset ();

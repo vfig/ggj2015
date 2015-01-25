@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class RecruitmentArea : MonoBehaviour {
+	struct CollectingState {
+		public bool collecting;
+		public float doorPosition;
+		public float timeRemaining;
+	}
 
 	[HideInInspector]
 	public static bool canUpdate = true;
@@ -11,7 +16,13 @@ public class RecruitmentArea : MonoBehaviour {
 	float spawnCounter;
 	float groundWidth;
 
+	private CollectingState[] collectingState;
+
 	public GameObject unitPrefab;
+
+	public void Awake() {
+		collectingState = new CollectingState[GameConstants.NUM_TRIBES_PER_PLAYER];
+	}
 
 	void Start() {
 		units = new ArrayList();
@@ -29,6 +40,7 @@ public class RecruitmentArea : MonoBehaviour {
 			return;
 		}
 		UpdateSpawning();
+		UpdateCollecting();
 	}
 
 	void UpdateSpawning() {
@@ -39,6 +51,23 @@ public class RecruitmentArea : MonoBehaviour {
 		}
 	}
 
+	void UpdateCollecting() {
+		int count = units.Count;
+		for(int j=0; j<count; j++) {
+			RecruitmentAreaUnit unit = units[j] as RecruitmentAreaUnit;
+			int i = (int)unit.GetColour();
+			if (collectingState[i].collecting) {
+				unit.WalkToGoal(collectingState[i].doorPosition, collectingState[i].timeRemaining);
+			}
+		}
+		for (int i = 0; i < collectingState.Length; ++i) {
+			collectingState[i].timeRemaining -= Time.deltaTime;
+			if (collectingState[i].timeRemaining <= 0) {
+				collectingState[i].collecting = false;
+			}
+		}
+	}
+
 	public int DestroyAllUnits() {
 		int count = units.Count;
 		for(int i=0; i<count; i++) {
@@ -46,6 +75,9 @@ public class RecruitmentArea : MonoBehaviour {
 			DestroyObject(unit.gameObject);
 		}
 		units.Clear();
+		for (int i = 0; i < collectingState.Length; ++i) {
+			collectingState[i].collecting = false;
+		}
 		return count;
 	}
 
@@ -59,7 +91,15 @@ public class RecruitmentArea : MonoBehaviour {
 				numRemoved++;
 			}
 		}
+		collectingState[(int)colour].collecting = false;
 		return numRemoved;
+	}
+
+	public void CollectUnitsOfColour(UnitColour color, float doorPosition, float time) {
+		int index = (int)color;
+		collectingState[index].collecting = true;
+		collectingState[index].doorPosition = doorPosition;
+		collectingState[index].timeRemaining = time;
 	}
 
 	private RecruitmentAreaUnit SpawnUnit() {
@@ -86,6 +126,18 @@ public class RecruitmentArea : MonoBehaviour {
 		float scale = 1.2f;
 		unit.transform.localScale = new Vector3(scale, scale, scale);
 		units.Add(unit);
+
 		return unit;
+	}
+
+	public static UnitColour GetRandomColour() {
+		int result = Random.Range(0, 4);
+		switch(result) {
+			case 0: return UnitColour.Blue;
+			case 1: return UnitColour.Green;
+			case 2: return UnitColour.Red;
+			case 3: return UnitColour.Yellow;
+		}
+		return UnitColour.Red;
 	}
 }

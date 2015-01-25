@@ -20,12 +20,9 @@ public class WorkshopTowerSegment : TowerSegment {
 		return GameConstants.WORKSHOP_TOWER_SEGMENT_TRIBE_COST;
 	}
 	
-	public override void OnBeginAction () {
+	public override void OnBeginAction (float secondsRemaining) {
 		m_inUSe = true;
 		m_owningTower.RegisterWorkshop();
-	}
-	
-	public override void OnProgressAction (float secondsRemaining) {
 	}
 	
 	public override void OnCompleteAction () {

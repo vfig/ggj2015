@@ -25,7 +25,7 @@ public class ArchersTowerSegment : TowerSegment {
 		return true;
 	}
 	
-	public override void OnBeginAction () {
+	public override void OnBeginAction (float secondsRemaining) {
 		m_inUse = true;
 	}
 	

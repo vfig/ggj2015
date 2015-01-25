@@ -118,6 +118,10 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		m_owningPlayer.DestroyAllRecruits();
 	}
 	
+	public void BeginCollectRecruits(Tribe tribe, float time) {
+		m_owningPlayer.BeginCollectRecruits(tribe, time);
+	}
+
 	public void CollectRecruits(Tribe tribe) {
 		m_owningPlayer.CollectRecruits(tribe);
 	}

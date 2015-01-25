@@ -24,7 +24,7 @@ public class CannonTowerSegment : TowerSegment {
 		return true;
 	}
 	
-	public override void OnBeginAction () {
+	public override void OnBeginAction (float secondsRemaining) {
 		m_fired = true;
 	}
 	

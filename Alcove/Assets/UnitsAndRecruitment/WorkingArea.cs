@@ -76,8 +76,8 @@ public class WorkingArea : MonoBehaviour {
 		RecruitmentAreaUnit unit = unitGameObject.GetComponent<RecruitmentAreaUnit>();
 		unit.transform.parent = transform;
 		unit.SetColour(unitColor);
-		unit.minX = -GameConstants.WORKING_AREA_GROUND_WIDTH / 2.0f;
-		unit.maxX = GameConstants.WORKING_AREA_GROUND_WIDTH / 2.0f;
+		unit.minX = -groundWidth / 2.0f;
+		unit.maxX = groundWidth / 2.0f;
 
 		float startingXPosition = 0.0f;
 		RecruitmentAreaUnit.UnitDirection direction;

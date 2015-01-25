@@ -104,7 +104,7 @@ public abstract class TowerSegment : MonoBehaviour
 		}
 		m_tribeSign = CreateTribeSign(tribe);
 		m_tribeSign.transform.position = transform.position + new Vector3(2.0f, 0.5f, 0.0f);
-		this.OnBeginAction();
+		this.OnBeginAction(secondsRemaining);
 		foreach (ITowerSegmentCallback listener in m_listenerList) {
 			listener.OnBeginAction(this);
 		}
@@ -173,7 +173,7 @@ public abstract class TowerSegment : MonoBehaviour
 		return true;
 	}
 	
-	public virtual void OnBeginAction(){
+	public virtual void OnBeginAction(float secondsRemaining){
 	}
 	
 	public virtual void OnProgressAction(float secondsRemaining) {
