@@ -123,7 +123,7 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 		} else {
 			direction = UnitDirection.Right;
 		}
-		speed = Mathf.Max(1.8f * GameConstants.RECRUITMENT_UNIT_WALK_SPEED,
+		speed = Mathf.Max(GameConstants.RECRUITMENT_UNIT_RUN_SPEED,
 			Mathf.Abs(transform.position.x - x) / time);
 	}
 
