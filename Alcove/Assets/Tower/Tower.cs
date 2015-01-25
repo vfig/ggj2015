@@ -11,6 +11,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	public AudioClip selectionClip;
+
 	private int m_activeWorkshops;
 
 	public TowerSegment m_baseTowerSegmentPrefab;
@@ -183,6 +185,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public void MoveLeft()
 	{
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
 		// Ensure the empty segment is selected
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
@@ -197,6 +200,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	
 	public void MoveRight()
 	{
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
 		// Ensure the empty segment is selected
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;

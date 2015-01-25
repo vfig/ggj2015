@@ -8,7 +8,7 @@ public class StartScene : MonoBehaviour {
 	}
 
 	void Update() {
-		GameInput.Update();
+		GameInput.Update ();
 		/*if(GameInput.GetStartButtonDownAnyPlayer()) {
 			Application.LoadLevel("GameScene");
 		}
