@@ -25,32 +25,32 @@ public class GameConstants {
 
 	/* Balancing */
 	
-	public const int TRIBE_STARTING_UNIT_COUNT = 1;
-	public const int TRIBE_UNITS_PER_BEDCHAMBER = 1;
+	public const int TRIBE_STARTING_UNIT_COUNT = 4;
+	public const int TRIBE_UNITS_PER_BEDCHAMBER = 4;
 	
 	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 10.0f;
 	
 	public const int CONSTRUCTION_TOWER_SEGMENT_TRIBE_COST = 0;
 	
-	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	
-	public const float BALLISTA_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float BALLISTA_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	public const float BALLISTA_TOWER_SEGMENT_ACTION_TIME = 100.0f;
 	public const int BALLISTA_TOWER_SEGMENT_TRIBE_COST = 4;
 	
-	public const float CANNONS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float CANNONS_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	public const float CANNONS_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int CANNONS_TOWER_SEGMENT_TRIBE_COST = 10;
 	
-	public const float LABORATORY_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float LABORATORY_TOWER_SEGMENT_BUILD_TIME = 2.0f;
 	public const float LABORATORY_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int LABORATORY_TOWER_SEGMENT_TRIBE_COST = 2;
 
-	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	public const float WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int WIZARDTOWER_TOWER_SEGMENT_TRIBE_COST = 1;
 
-	public const float MURDERHOLES_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float MURDERHOLES_TOWER_SEGMENT_BUILD_TIME = 60.0f;
 	public const float MURDERHOLES_TOWER_SEGMENT_ACTION_TIME = 50.0f;
 	public const int MURDERHOLES_TOWER_SEGMENT_TRIBE_COST = 2;
 }
