@@ -15,6 +15,18 @@ public class PrefabSelector : MonoBehaviour {
 		m_towerSegments = new List<TowerSegment>();
 	}
 
+	public void Show() {
+		if (m_selectedSprite) {
+			m_selectedSprite.GetComponent<SpriteRenderer>().enabled = true;
+		}
+	}
+
+	public void Hide() {
+		if (m_selectedSprite) {
+			m_selectedSprite.GetComponent<SpriteRenderer>().enabled = false;
+		}
+	}
+
 	public void Start() {
 		GameObject obj = new GameObject();
 		SpriteRenderer spriteRenderer = obj.AddComponent<SpriteRenderer>();

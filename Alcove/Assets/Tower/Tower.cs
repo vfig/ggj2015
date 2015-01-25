@@ -12,7 +12,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public PrefabSelector m_prefabSelector;
 
 	public AudioClip selectionClip;
-	public AudioClip startBuildingClip;
 	public AudioClip demolitionClip;
 
 	private int m_activeWorkshops;
@@ -43,16 +42,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		m_activeLaboratories = 0;
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
-
-		m_baseTowerSegmentPrefab.OwningTower = this;
-		m_emptyTowerSegmentPrefab.OwningTower = this;
-		m_constructionTowerSegmentPrefab.OwningTower = this;
-		m_bedchambersTowerSegmentPrefab.OwningTower = this;
-		m_cannonTowerSegmentPrefab.OwningTower = this;
-		m_ballistaTowerSegmentPrefab.OwningTower = this;
-		m_wizardtowerTowerSegmentPrefab.OwningTower = this;
-		m_laboratoryTowerSegmentPrefab.OwningTower = this;
-		m_murderholesTowerSegmentPrefab.OwningTower = this;
 
 		m_constructableTowerSegments = new List<TowerSegment>();
 		m_constructableTowerSegments.Add(m_ballistaTowerSegmentPrefab);
@@ -175,10 +164,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
-			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
 			emptySegment.PerformAction(tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
 		} else {
-			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
 			segment.PerformAction(tribe);
 		}
 	}
@@ -263,9 +250,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		// Ensure the empty segment is selected
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) {
-			m_prefabSelector.gameObject.SetActive(false);
+			m_prefabSelector.Hide();
 		} else {
-			m_prefabSelector.gameObject.SetActive(true);
+			m_prefabSelector.Show();
 			m_prefabSelector.transform.position = segment.transform.position;
 			m_prefabSelector.SetSelectedIndex(m_selectedPrefabIndex);
 		}
