@@ -22,7 +22,10 @@ public class GameplayManager : MonoBehaviour {
 
 		// Spawn players, allocate world and viewport space for each
 		const float worldXSpace = 10.0f;
-		const float viewportXSpace = 1.0f / (float)GameConstants.PLAYER_COUNT;
+		const float viewportMiddleArea = 0.12f;
+		const float halfMiddleArea = viewportMiddleArea * 0.5f;
+		// Player viewports each occupy half the screen minus half of the middle area.
+		const float viewportXSpace = 0.5f - halfMiddleArea;
 		players = new Player[GameConstants.PLAYER_COUNT];
 		for (int i = 0; i < players.Length; ++i) {
 			GameObject playerObject = (GameObject)Instantiate(
@@ -31,7 +34,11 @@ public class GameplayManager : MonoBehaviour {
 				Quaternion.identity);
 			Player player = playerObject.GetComponent<Player>();
 			player.playerNumber = i;
-			player.camera.rect = new Rect(i * viewportXSpace, 0, viewportXSpace, 1);
+			if(i == 0) {
+				player.camera.rect = new Rect(0, 0, viewportXSpace, 1);
+			} else {
+				player.camera.rect = new Rect(0.5f + halfMiddleArea, 0, viewportXSpace, 1);
+			}
 			player.SetOwningGameplayManager(this);
 			players[i] = player;
 		}
@@ -56,10 +63,9 @@ public class GameplayManager : MonoBehaviour {
 		minimap = new GameObject();
 		Camera minimapCamera = minimap.AddComponent<Camera>();
 
-		float widthFraction = 0.07f;
-		float heightFraction = 0.3f;
+		float widthFraction = 0.12f;
 		minimapCamera.isOrthoGraphic = true;
-		minimapCamera.rect = new Rect(0.5f - widthFraction/2, 0.7f - heightFraction/2, widthFraction, heightFraction);
+		minimapCamera.rect = new Rect(0.5f - widthFraction/2, 0.0f, widthFraction, 1.0f);
 		minimapCamera.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.6f);
 		minimapCamera.orthographicSize = 28.0f;
 		minimap.camera.transform.position = new Vector3(xFocalPosition, 25.0f, -5.0f);
