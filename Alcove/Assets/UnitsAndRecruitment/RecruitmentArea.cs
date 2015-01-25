@@ -49,7 +49,7 @@ public class RecruitmentArea : MonoBehaviour {
 		return count;
 	}
 
-	public int CollectAllUnitsOfColour(UnitColour colour) {
+	public int DestroyAllUnitsOfColour(UnitColour colour) {
 		int numRemoved = 0;
 		for(int i=units.Count-1; i>=0; i--) {
 			RecruitmentAreaUnit unit = units[i] as RecruitmentAreaUnit;
@@ -58,7 +58,6 @@ public class RecruitmentArea : MonoBehaviour {
 				units.RemoveAt(i);
 			}
 		}
-		Debug.Log("Removed " + numRemoved + " units of colour '" + colour + "' from recruitment area.");
 		return numRemoved;
 	}
 

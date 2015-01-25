@@ -13,7 +13,7 @@ public class UnitAnimationTestScene : MonoBehaviour {
 			int unitCount = recruitmentArea.DestroyAllUnits();
 		}
 		if(Input.GetKeyDown(KeyCode.RightArrow)) {
-			int unitCount = recruitmentArea.CollectAllUnitsOfColour(UnitColour.Green);
+			int unitCount = recruitmentArea.DestroyAllUnitsOfColour(UnitColour.Green);
 		}
 	}
 }
