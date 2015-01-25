@@ -43,7 +43,9 @@ public class ConstructionTowerSegment : TowerSegment {
 		m_constructionImage.sprite = spriteRenderer.sprite;
 		
 		// Add a new empty one ready to build
-		m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
+		if (!m_towerSegmentToBeConstructed.IsFinalSegment()) {
+			m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
+		}
 	}
 
 	public override void OnProgressAction(float secondsRemaining) {

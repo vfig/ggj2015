@@ -19,10 +19,6 @@ public class BaseTowerSegment : TowerSegment {
 		return 1.0f;
 	}
 
-	public override int OnGetMinimumTribeSize() {
-		return 0;
-	}
-
 	public override void OnBeginAction (float secondsRemaining) {
 		m_inUSe = true;
 		AudioSource.PlayClipAtPoint(recruitClip, Vector3.zero);

@@ -18,12 +18,14 @@ public class PrefabSelector : MonoBehaviour {
 	public void Show() {
 		if (m_selectedSprite) {
 			m_selectedSprite.GetComponent<SpriteRenderer>().enabled = true;
+			GetComponent<Canvas>().enabled = true;
 		}
 	}
 
 	public void Hide() {
 		if (m_selectedSprite) {
 			m_selectedSprite.GetComponent<SpriteRenderer>().enabled = false;
+			GetComponent<Canvas>().enabled = false;
 		}
 	}
 
@@ -36,9 +38,9 @@ public class PrefabSelector : MonoBehaviour {
 		obj.transform.parent = transform;
 		obj.transform.localPosition = Vector3.zero;
 		m_selectedSprite = obj.transform;
-
-		// Not using this label for now.
-		buildingCost.gameObject.SetActive(false);
+		if (m_selectedSprite == null) {
+			Debug.Log("m_selectedSprite is null: " + m_selectedSprite);
+		}
 	}
 
 	public void AddSelection(TowerSegment segment) {
@@ -54,6 +56,11 @@ public class PrefabSelector : MonoBehaviour {
 
 	public void Update () {
 		TowerSegment segment = m_towerSegments[m_selectedIndex];
-		buildingCost.text = segment.OnGetTribeCost().ToString() + " workers";
+		int size = segment.OnGetMinimumTribeSize();
+		if (size == 0) {
+			buildingCost.text = "";
+		} else {
+			buildingCost.text = size.ToString() + " workers from each tribe needed";
+		}
 	}
 }

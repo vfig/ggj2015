@@ -27,6 +27,8 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment m_wizardtowerTowerSegmentPrefab;
 	public TowerSegment m_laboratoryTowerSegmentPrefab;
 	public TowerSegment m_murderholesTowerSegmentPrefab;
+	public TowerSegment m_winTowerSegmentPrefabPlayer0;
+	public TowerSegment m_winTowerSegmentPrefabPlayer1;
 	
 	public GameObject m_tribeXSignPrefab;
 	public GameObject m_tribeYSignPrefab;
@@ -54,6 +56,12 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 
 	void Start() {
+		if (m_owningPlayer.playerNumber == 0) {
+			m_constructableTowerSegments.Add(m_winTowerSegmentPrefabPlayer0);
+		} else {
+			m_constructableTowerSegments.Add(m_winTowerSegmentPrefabPlayer1);
+		}
+
 		m_prefabSelector = GetComponentInChildren<PrefabSelector>();
 		foreach (TowerSegment segment in m_constructableTowerSegments) {
 			m_prefabSelector.AddSelection(segment);
@@ -155,15 +163,30 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count == 0 || tribe.Count < segment.OnGetTribeCost()) {
 			AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
-			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
-			emptySegment.PerformAction(tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
+			TowerSegment segmentToConstruct = m_constructableTowerSegments[m_selectedPrefabIndex];
+
+			int minimumPerTribeSize = segmentToConstruct.OnGetMinimumTribeSize();
+			bool enoughTribes = true;
+			for (int i = 0; i < 4; ++i) {
+				if (m_owningPlayer.tribes[i].Count < minimumPerTribeSize) {
+					enoughTribes = false;
+				}
+			}
+			if (enoughTribes) {
+				for (int i = 0; i < 4; ++i) {
+					m_owningPlayer.tribes[i].Count -= minimumPerTribeSize;
+				}
+				emptySegment.PerformAction(tribe, segmentToConstruct);
+			} else {
+				AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
+			}
 		} else {
 			segment.PerformAction(tribe);
 		}
@@ -219,7 +242,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
-		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero, 0.6f);
 
 		if (m_selectedPrefabIndex > 0) {
 			--m_selectedPrefabIndex;
@@ -235,7 +258,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
-		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero, 0.6f);
 		
 		if (m_selectedPrefabIndex < (m_constructableTowerSegments.Count - 1)) {
 			++m_selectedPrefabIndex;
@@ -257,16 +280,15 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		}
 	}
 
-	public int GetCompletedSegmentCount()
-	{
-		int completedSegmentCount = 0;
+	public bool GetCompletedWinSegment() {
 		for(int i=0; i<segments.Count; i++)
 		{
-			if(segments[i].IsComplete()) {
-				completedSegmentCount++;
+			WinTowerSegment segment = segments[i] as WinTowerSegment;
+			if (segment != null && segment.IsComplete()) {
+				return true;
 			}
 		}
-		return completedSegmentCount;
+		return false;
 	}
 	
 	public void SetOwningPlayer(Player owningPlayer) {

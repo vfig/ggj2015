@@ -40,7 +40,7 @@ public abstract class TowerSegment : MonoBehaviour
 		m_listenerList = new List<ITowerSegmentCallback>();
 		m_currentTribe = null;
 		m_actionActive = false;
-		m_workerCount = 0.0f;
+		m_workerCount = 1.0f;
 	}
 
 	public void Start() {
@@ -109,9 +109,8 @@ public abstract class TowerSegment : MonoBehaviour
 		m_currentTribe = tribe;
 		m_actionActive = true;
 		m_completion = 0.0f;
-		m_workerCount = tribe.Count;
+		m_workerCount = Mathf.Max(1, tribe.Count);
 		float secondsRemaining = GetEffectiveActionDuration();
-		Debug.Log(this + " duration: " + secondsRemaining + " at work rate: " + OnGetActionWorkRate());
 		if (ShowsWorkingArea()) {
 			m_workingArea = CreateWorkingArea(tribe, secondsRemaining);
 		}
@@ -182,9 +181,10 @@ public abstract class TowerSegment : MonoBehaviour
 	public virtual float OnGetConstructionDuration() {
 		return 0.0f;
 	}
-	
+
+	/* Total tribe population (evenly divided) required to build */
 	public virtual int OnGetMinimumTribeSize() {
-		return 1;
+		return 0;
 	}
 	
 	public virtual int OnGetTribeCost() {
@@ -213,5 +213,9 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual void OnCancelAction() {	
+	}
+
+	public virtual bool IsFinalSegment() {
+		return false;
 	}
 }
