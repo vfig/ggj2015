@@ -9,7 +9,8 @@ public class GameSession : MonoBehaviour {
 		LoadGameplayScene,
 		Pregame,
 		InProgress,
-		Roundup
+		Roundup,
+		Restart,
 	}
 
 	public GUIStyle guiStyle;
@@ -134,6 +135,9 @@ public class GameSession : MonoBehaviour {
 		case GameplayState.Roundup:
 			Setup_Roundup(data);
 			break;
+		case GameplayState.Restart:
+			Application.LoadLevel("StartScene");
+			break;
 		}
 	}
 
@@ -202,7 +206,7 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Update_Roundup() {
-		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
+		if(GameInput.GetAnyButtonDown()) {
 			Application.LoadLevel("EndScene");
 		}
 	}
