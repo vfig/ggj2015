@@ -43,16 +43,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 
-		m_baseTowerSegmentPrefab.OwningTower = this;
-		m_emptyTowerSegmentPrefab.OwningTower = this;
-		m_constructionTowerSegmentPrefab.OwningTower = this;
-		m_bedchambersTowerSegmentPrefab.OwningTower = this;
-		m_cannonTowerSegmentPrefab.OwningTower = this;
-		m_ballistaTowerSegmentPrefab.OwningTower = this;
-		m_wizardtowerTowerSegmentPrefab.OwningTower = this;
-		m_laboratoryTowerSegmentPrefab.OwningTower = this;
-		m_murderholesTowerSegmentPrefab.OwningTower = this;
-
 		m_constructableTowerSegments = new List<TowerSegment>();
 		m_constructableTowerSegments.Add(m_ballistaTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_bedchambersTowerSegmentPrefab);
@@ -256,9 +246,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		// Ensure the empty segment is selected
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) {
-			m_prefabSelector.gameObject.SetActive(false);
+			m_prefabSelector.Hide();
 		} else {
-			m_prefabSelector.gameObject.SetActive(true);
+			m_prefabSelector.Show();
 			m_prefabSelector.transform.position = segment.transform.position;
 			m_prefabSelector.SetSelectedIndex(m_selectedPrefabIndex);
 		}
