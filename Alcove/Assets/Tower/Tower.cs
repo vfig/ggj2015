@@ -132,6 +132,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public TowerSegment GetPlayersTowerSegmentPrefab(int segmentIndex) {
+		if (segmentIndex >= segments.Count) return null;
 		return segments[segmentIndex].TowerSegmentPrefab;
 	}
 
