@@ -163,7 +163,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count == 0 || tribe.Count < segment.OnGetTribeCost()) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
 			AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
 			return;
 		}
