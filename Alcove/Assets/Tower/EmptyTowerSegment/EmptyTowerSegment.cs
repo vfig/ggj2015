@@ -9,9 +9,9 @@ public class EmptyTowerSegment : TowerSegment {
 		return m_towerSegmentToBeConstructed;
 	}
 
-	public void PerformAction(Tower owningTower, Tribe tribe, TowerSegment prefab) {
+	public void PerformAction(Tribe tribe, TowerSegment prefab) {
 		m_towerSegmentToBeConstructed = prefab;
-		PerformAction(owningTower, tribe);
+		PerformAction(tribe);
 	}
 
 	public override bool OnIsActionable () {
@@ -28,7 +28,7 @@ public class EmptyTowerSegment : TowerSegment {
 			(m_owningTower.SwapSegment(this, m_owningTower.m_constructionTowerSegmentPrefab)
 			as ConstructionTowerSegment);
 		newSegment.SetTowerSegmentToBeConstructed(GetTowerSegmentToBeConstructed());
-		newSegment.PerformAction(this.OwningTower, this.CurrentTribe);
+		newSegment.PerformAction(this.CurrentTribe);
 	}
 
 	public override bool ShowsWorkingArea() {
