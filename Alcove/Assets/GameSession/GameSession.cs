@@ -143,7 +143,7 @@ public class GameSession : MonoBehaviour {
 		// and SetupPregameState can be used to introduce the game
 		// (panning of camera or whatever).
 
-		Player.canUpdate = false;
+		SetCanUpdates(false);
 		pregamePanel.SetActive(false);
 		roundupPanel.SetActive(false);
 		goPanel.SetActive(false);
@@ -164,14 +164,14 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void Setup_InProgress(Object data=null) {
-		Player.canUpdate = true;
+		SetCanUpdates(true);
 		goPanel.SetActive(true);
 		CanvasRenderer canvas = goPanel.GetComponent<CanvasRenderer>();
 		canvas.SetAlpha(1.0f);
 	}
 
 	void Setup_Roundup(Object data=null) {
-		Player.canUpdate = false;
+		SetCanUpdates(false);
 		roundupPanel.SetActive(true);
 		RoundupInfo info = data as RoundupInfo;
 		winningPlayerNameText.text = info.winningPlayerText;
@@ -216,6 +216,11 @@ public class GameSession : MonoBehaviour {
 
 	void Stop_Roundup() {
 		roundupPanel.SetActive(false);
+	}
+
+	void SetCanUpdates(bool toggle) {
+		Player.canUpdate = toggle;
+		RecruitmentArea.canUpdate = toggle;
 	}
 
 
