@@ -23,6 +23,7 @@ public class GameSession : MonoBehaviour {
 	private AudioSource musicSource;
 
 	public AudioClip introClip;
+	public AudioClip victoryClip;
 	
 	GameplayManager gameplayManager;
 	GameplayState state;
