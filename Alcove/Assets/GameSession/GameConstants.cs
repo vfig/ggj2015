@@ -27,7 +27,9 @@ public class GameConstants {
 
 	/* Balancing */
 	
-	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 20.0f;
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 15.0f;
+	
+	public const int CONSTRUCTION_TOWER_SEGMENT_TRIBE_COST = 0;
 	
 	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	
