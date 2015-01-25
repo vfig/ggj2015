@@ -108,4 +108,21 @@ public class GameplayManager : MonoBehaviour {
 			players[0].DestroyPlayersSegment(segmentIndex);
 		}
 	}
+	
+	public void DestroyAllRecruits() {
+		recruitmentArea.DestroyAllUnits();
+	}
+	
+	public void CollectRecruits(Tribe tribe) {
+		tribe.Recruit (recruitmentArea.DestroyAllUnitsOfColour(tribe.m_unitColour));
+	}
+	
+	public TowerSegment GetOpponentTowerSegmentPrefab(int playerIndex, int segmentIndex) {
+		if (playerIndex == 0) {
+			return players[1].GetPlayersTowerSegmentPrefab(segmentIndex);
+		} else if (playerIndex == 1) {
+			return players[0].GetPlayersTowerSegmentPrefab(segmentIndex);
+		}
+		return null;
+	}
 }

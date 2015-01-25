@@ -9,7 +9,7 @@ public class GameConstants {
 	public const int NUM_TRIBES_PER_PLAYER = 4;
 	public const int TRIBE_STARTING_UNIT_COUNT = 8;
 
-	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 0.3f;
+	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 1.5f;
 	public const float RECRUITMENT_AREA_GROUND_WIDTH = 4.5f;
 	public const float RECRUITMENT_AREA_GROUND_Y = -0.54f;
 	public const float RECRUITMENT_UNIT_WALK_SPEED = 0.8f;

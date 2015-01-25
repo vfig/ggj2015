@@ -65,4 +65,20 @@ public class Player : MonoBehaviour {
 	public void DestroyPlayersSegment(int segmentIndex) {
 		tower.DestroyPlayersSegment(segmentIndex);
 	}
+	
+	public void DestroyAllRecruits() {
+		m_owningGameplayManager.DestroyAllRecruits();
+	}
+	
+	public void CollectRecruits(Tribe tribe) {
+		m_owningGameplayManager.CollectRecruits(tribe);
+	}
+	
+	public TowerSegment GetOpponentTowerSegmentPrefab(int segmentIndex) {
+		return m_owningGameplayManager.GetOpponentTowerSegmentPrefab(playerNumber, segmentIndex);
+	}
+	
+	public TowerSegment GetPlayersTowerSegmentPrefab(int segmentIndex) {
+		return tower.GetPlayersTowerSegmentPrefab(segmentIndex);
+	}
 }

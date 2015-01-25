@@ -7,6 +7,8 @@ public class Tribe : MonoBehaviour, ITowerSegmentCallback {
 	private float busyFraction;
 	private float busyRemaining;
 
+	public UnitColour m_unitColour;
+
 	// Return true if the tribe is busy
 	public bool IsBusy {
 		get {
@@ -47,5 +49,9 @@ public class Tribe : MonoBehaviour, ITowerSegmentCallback {
 
 	public void OnCompleteAction(TowerSegment segment) {
 		busy = false;
+	}
+	
+	public void Recruit(int delta) {
+		count += delta;
 	}
 }

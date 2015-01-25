@@ -18,9 +18,11 @@ public abstract class TowerSegment : MonoBehaviour
 	private bool m_actionActive;
 	
 	/* The tribe that is currently in the segment */
-	private Tribe m_currentTribe;
+	protected Tribe m_currentTribe;
 
 	protected Tower m_owningTower;
+
+	private TowerSegment m_towerSegmentPrefab;
 
 	/* Called on initialisation */
 	public void Awake() {
@@ -41,6 +43,14 @@ public abstract class TowerSegment : MonoBehaviour
 	public Tribe GetOwningTribe() {
 		return m_currentTribe;
 	}
+	
+	public void SetTowerSegmentPrefab(TowerSegment towerSegmentPrefab) {
+		m_towerSegmentPrefab = towerSegmentPrefab;
+	}
+	
+	public TowerSegment GetTowerSegmentPrefab() {
+		return m_towerSegmentPrefab;
+	}
 
 	/* Is the tower segment finished construction */
 	public bool IsComplete() {
@@ -50,6 +60,11 @@ public abstract class TowerSegment : MonoBehaviour
 	/* Can an action be taken on this segment? */
 	public bool IsActionable() {
 		return this.OnIsActionable();
+	}
+	
+	public void Reset() {
+		this.m_completion = 0.0f;
+		this.m_actionActive = false;
 	}
 
 	public void PerformAction(Tower owningTower, Tribe tribe) {

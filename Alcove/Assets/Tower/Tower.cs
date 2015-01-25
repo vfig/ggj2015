@@ -11,11 +11,11 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	public TowerSegment m_baseTowerSegmentPrefab;
 	public TowerSegment m_emptyTowerSegmentPrefab;
 	public TowerSegment m_constructionTowerSegmentPrefab;
 	public TowerSegment m_bedchambersTowerSegmentPrefab;
 	public TowerSegment m_cannonTowerSegmentPrefab;
-	public TowerSegment m_baseTowerSegmentPrefab;
 	public TowerSegment m_workshopTowerSegmentPrefab;
 	public TowerSegment m_archersTowerSegmentPrefab;
 	public TowerSegment m_wizardtowerTowerSegmentPrefab;
@@ -33,6 +33,11 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		m_constructableTowerSegments = new List<TowerSegment>();
 		m_constructableTowerSegments.Add(m_bedchambersTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_cannonTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_workshopTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_archersTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_wizardtowerTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_laboratoryTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_murderholesTowerSegmentPrefab);
 	}
 
 	void Start() {
@@ -51,6 +56,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment newSegment = (TowerSegment)Instantiate(towerSegmentPrefab);
 		newSegment.transform.parent = transform;
 		newSegment.transform.localPosition = Vector3.up * (float)segments.Count * TowerSegment.HEIGHT;
+		newSegment.SetTowerSegmentPrefab(towerSegmentPrefab);
 		segments.Add(newSegment);
 		return newSegment;
 	}
@@ -60,6 +66,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment newSegment = (TowerSegment)Instantiate(prefab);
 		newSegment.transform.parent = oldSegment.transform.parent;
 		newSegment.transform.localPosition = oldSegment.transform.localPosition;
+		newSegment.SetTowerSegmentPrefab(prefab);
 		segments[index] = newSegment;
 		Destroy(oldSegment.gameObject);
 		return newSegment;
@@ -84,6 +91,23 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		else {
 			SwapSegment(segment, m_emptyTowerSegmentPrefab);
 		}
+	}
+	
+	public void DestroyAllRecruits() {
+		m_owningPlayer.DestroyAllRecruits();
+	}
+	
+	public void CollectRecruits(Tribe tribe) {
+		m_owningPlayer.CollectRecruits(tribe);
+	}
+
+	public TowerSegment GetOpponentTowerSegmentPrefab(TowerSegment segment) {
+		int index = segments.IndexOf(segment);
+		return m_owningPlayer.GetOpponentTowerSegmentPrefab(index);
+	}
+	
+	public TowerSegment GetPlayersTowerSegmentPrefab(int segmentIndex) {
+		return segments[segmentIndex].GetTowerSegmentPrefab();
 	}
 
 	public void PerformAction(Tribe tribe)

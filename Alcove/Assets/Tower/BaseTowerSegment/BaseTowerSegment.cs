@@ -7,7 +7,7 @@ public class BaseTowerSegment : TowerSegment {
 	}
 	
 	public override float NominalActionDurationSeconds() {
-		return 10.0f;
+		return 100.0f;
 	}
 	
 	public override void OnBeginAction () {
@@ -17,5 +17,7 @@ public class BaseTowerSegment : TowerSegment {
 	}
 	
 	public override void OnCompleteAction () {
+		m_owningTower.CollectRecruits(m_currentTribe);
+		this.Reset ();
 	}
 }

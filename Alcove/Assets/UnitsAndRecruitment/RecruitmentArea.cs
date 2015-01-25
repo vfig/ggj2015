@@ -56,6 +56,7 @@ public class RecruitmentArea : MonoBehaviour {
 			if(unit.GetColour() == colour) {
 				DestroyObject(unit.gameObject);
 				units.RemoveAt(i);
+				numRemoved++;
 			}
 		}
 		return numRemoved;

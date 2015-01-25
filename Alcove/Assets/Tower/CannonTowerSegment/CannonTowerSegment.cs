@@ -5,11 +5,11 @@ public class CannonTowerSegment : TowerSegment {
 	private bool m_fired = false;
 
 	public override float NominalConstructionDurationSeconds() {
-		return 30;
+		return 200.0f;
 	}
 
 	public override float NominalActionDurationSeconds() {
-		return 30;
+		return 500.0f;
 	}
 
 	public override bool OnIsActionable () {
@@ -30,5 +30,6 @@ public class CannonTowerSegment : TowerSegment {
 	
 	public override void OnCompleteAction () {
 		m_owningTower.DestroyOpponentsSegment(this);
+		this.Reset ();
 	}
 }
