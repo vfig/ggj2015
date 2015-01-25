@@ -219,7 +219,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
-		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero, 0.6f);
 
 		if (m_selectedPrefabIndex > 0) {
 			--m_selectedPrefabIndex;
@@ -235,7 +235,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		EmptyTowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as EmptyTowerSegment;
 		if (segment == null) return;
 
-		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero);
+		AudioSource.PlayClipAtPoint(selectionClip, Vector3.zero, 0.6f);
 		
 		if (m_selectedPrefabIndex < (m_constructableTowerSegments.Count - 1)) {
 			++m_selectedPrefabIndex;
