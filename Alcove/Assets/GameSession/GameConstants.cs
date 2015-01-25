@@ -48,7 +48,7 @@ public class GameConstants {
 
 	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	public const float WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME = 50.0f;
-	public const int WIZARDTOWER_TOWER_SEGMENT_TRIBE_COST = 8;
+	public const int WIZARDTOWER_TOWER_SEGMENT_TRIBE_COST = 1;
 
 	public const float MURDERHOLES_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	public const float MURDERHOLES_TOWER_SEGMENT_ACTION_TIME = 50.0f;
