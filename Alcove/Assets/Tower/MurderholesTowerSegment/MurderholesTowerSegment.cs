@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class MurderholesTowerSegment : TowerSegment {
-	public override float NominalConstructionDurationSeconds() {
+	public override float OnGetConstructionDuration() {
 		return GameConstants.MURDERHOLES_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
-	public override float NominalActionDurationSeconds() {
+	public override float OnGetActionDuration() {
 		return GameConstants.MURDERHOLES_TOWER_SEGMENT_ACTION_TIME;
 	}
 	

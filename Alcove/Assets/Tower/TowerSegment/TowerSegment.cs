@@ -7,7 +7,6 @@ public abstract class TowerSegment : MonoBehaviour
 	/* Segment height */
 	public const float HEIGHT = 2.0f;
 	
-	public bool hasAction;
 	protected float m_workRate;
 	protected float m_completion;
 
@@ -26,32 +25,23 @@ public abstract class TowerSegment : MonoBehaviour
 
 	private GameObject m_tribeSign;
 
+	public Tower OwningTower { get { return m_owningTower; } }
+
+	public Tribe CurrentTribe { get { return m_currentTribe; } }
+
+	public TowerSegment TowerSegmentPrefab { get { return m_towerSegmentPrefab; } set { m_towerSegmentPrefab = value; } }
+
 	/* Called on initialisation */
 	public void Awake() {
 		m_listenerList = new List<ITowerSegmentCallback>();
 		m_currentTribe = null;
 		m_actionActive = false;
+		m_workRate = 0.0f;
 	}
 	
 	/* Add a listener for the tower segment events */
 	public void AddListener(ITowerSegmentCallback listener) {
 		m_listenerList.Add(listener);
-	}
-
-	public Tower GetOwningTower() {
-		return m_owningTower;
-	}
-	
-	public Tribe GetOwningTribe() {
-		return m_currentTribe;
-	}
-	
-	public void SetTowerSegmentPrefab(TowerSegment towerSegmentPrefab) {
-		m_towerSegmentPrefab = towerSegmentPrefab;
-	}
-	
-	public TowerSegment GetTowerSegmentPrefab() {
-		return m_towerSegmentPrefab;
 	}
 
 	/* Is the tower segment finished construction */
@@ -69,20 +59,29 @@ public abstract class TowerSegment : MonoBehaviour
 		this.m_actionActive = false;
 	}
 
-	public GameObject CreateTribeSign(Tribe tribe) {
-		if (tribe.m_unitColour == UnitColour.Blue) {
-			return Instantiate(m_owningTower.m_tribeXSignPrefab) as GameObject;
+	public void Update () {
+		if (m_actionActive) {
+			m_completion = Mathf.Clamp01(m_completion + (float)(m_workRate * (m_owningTower.ActiveWorkshops + 1)) / OnGetActionDuration() * Time.deltaTime);
+			float secondsRemaining = (1.0f - m_completion) * Duration(m_workRate);
+			
+			this.OnProgressAction(secondsRemaining);
+			foreach (ITowerSegmentCallback listener in m_listenerList) {
+				listener.OnProgressAction(this, m_completion, secondsRemaining);
+			}
+			
+			if (m_completion == 1.0f) {
+				foreach (ITowerSegmentCallback notify in m_listenerList) {
+					notify.OnCompleteAction(this);
+				}
+				m_listenerList = new List<ITowerSegmentCallback>();
+				
+				m_currentTribe.Count -= OnGetTribeCost();
+				
+				this.OnCompleteAction();
+				
+				Destroy(m_tribeSign.gameObject);
+			}
 		}
-		else if (tribe.m_unitColour == UnitColour.Red) {
-			return Instantiate(m_owningTower.m_tribeBSignPrefab) as GameObject;
-		}
-		else if (tribe.m_unitColour == UnitColour.Yellow) {
-			return Instantiate(m_owningTower.m_tribeYSignPrefab) as GameObject;
-		}
-		else if (tribe.m_unitColour == UnitColour.Green) {
-			return Instantiate(m_owningTower.m_tribeASignPrefab) as GameObject;
-		}
-		else return null;
 	}
 
 	public void PerformAction(Tower owningTower, Tribe tribe) {
@@ -107,41 +106,32 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public float Duration(float workRate) {
-		return NominalActionDurationSeconds() / workRate;
+		return OnGetActionDuration() / workRate;
 	}
-
-	public void Update () {
-		if (m_actionActive) {
-			m_completion = Mathf.Clamp01(m_completion + (float)(m_workRate * (m_owningTower.ActiveWorkshops + 1)) / NominalActionDurationSeconds() * Time.deltaTime);
-			float secondsRemaining = (1.0f - m_completion) * Duration(m_workRate);
-
-			this.OnProgressAction(secondsRemaining);
-			foreach (ITowerSegmentCallback listener in m_listenerList) {
-				listener.OnProgressAction(this, m_completion, secondsRemaining);
-			}
-
-			if (m_completion == 1.0f) {
-				foreach (ITowerSegmentCallback notify in m_listenerList) {
-					notify.OnCompleteAction(this);
-				}
-				m_listenerList = new List<ITowerSegmentCallback>();
-				
-				m_currentTribe.Count -= OnGetTribeCost();
-				
-				this.OnCompleteAction();
-				
-				Destroy(m_tribeSign.gameObject);
-			}
+	
+	public GameObject CreateTribeSign(Tribe tribe) {
+		if (tribe.m_unitColour == UnitColour.Blue) {
+			return Instantiate(m_owningTower.m_tribeXSignPrefab) as GameObject;
 		}
+		else if (tribe.m_unitColour == UnitColour.Red) {
+			return Instantiate(m_owningTower.m_tribeBSignPrefab) as GameObject;
+		}
+		else if (tribe.m_unitColour == UnitColour.Yellow) {
+			return Instantiate(m_owningTower.m_tribeYSignPrefab) as GameObject;
+		}
+		else if (tribe.m_unitColour == UnitColour.Green) {
+			return Instantiate(m_owningTower.m_tribeASignPrefab) as GameObject;
+		}
+		else return null;
 	}
 	
 	/* Virtual Methods */
 
-	public virtual float NominalActionDurationSeconds() {
+	public virtual float OnGetActionDuration() {
 		return 0.0f;
 	}
 
-	public virtual float NominalConstructionDurationSeconds() {
+	public virtual float OnGetConstructionDuration() {
 		return 0.0f;
 	}
 	
@@ -150,7 +140,7 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual int OnGetTribeCost() {
-		return 1;
+		return 0;
 	}
 	
 	public virtual bool OnIsActionable() {
@@ -161,9 +151,12 @@ public abstract class TowerSegment : MonoBehaviour
 		return true;
 	}
 	
-	public virtual void OnBeginAction() {}
+	public virtual void OnBeginAction(){
+	}
 	
-	public virtual void OnProgressAction(float secondsRemaining) {}
+	public virtual void OnProgressAction(float secondsRemaining) {
+	}
 	
-	public virtual void OnCompleteAction() {}
+	public virtual void OnCompleteAction() {
+	}
 }

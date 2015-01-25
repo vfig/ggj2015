@@ -8,11 +8,11 @@ public class WorkshopTowerSegment : TowerSegment {
 		return (m_inUSe == false);
 	}
 	
-	public override float NominalConstructionDurationSeconds() {
+	public override float OnGetConstructionDuration() {
 		return GameConstants.WORKSHOP_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
-	public override float NominalActionDurationSeconds() {
+	public override float OnGetActionDuration() {
 		return GameConstants.WORKSHOP_TOWER_SEGMENT_ACTION_TIME;
 	}
 	

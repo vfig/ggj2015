@@ -77,7 +77,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment newSegment = (TowerSegment)Instantiate(towerSegmentPrefab);
 		newSegment.transform.parent = transform;
 		newSegment.transform.localPosition = Vector3.up * (float)segments.Count * TowerSegment.HEIGHT;
-		newSegment.SetTowerSegmentPrefab(towerSegmentPrefab);
+		newSegment.TowerSegmentPrefab = towerSegmentPrefab;
 		segments.Add(newSegment);
 		return newSegment;
 	}
@@ -87,7 +87,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment newSegment = (TowerSegment)Instantiate(prefab);
 		newSegment.transform.parent = oldSegment.transform.parent;
 		newSegment.transform.localPosition = oldSegment.transform.localPosition;
-		newSegment.SetTowerSegmentPrefab(prefab);
+		newSegment.TowerSegmentPrefab = prefab;
 		segments[index] = newSegment;
 		Destroy(oldSegment.gameObject);
 		return newSegment;
@@ -128,14 +128,14 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public TowerSegment GetPlayersTowerSegmentPrefab(int segmentIndex) {
-		return segments[segmentIndex].GetTowerSegmentPrefab();
+		return segments[segmentIndex].TowerSegmentPrefab;
 	}
 
 	public void PerformAction(Tribe tribe)
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetMinimumTribeSize()) {
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}

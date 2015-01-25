@@ -28,6 +28,6 @@ public class EmptyTowerSegment : TowerSegment {
 			(m_owningTower.SwapSegment(this, m_owningTower.m_constructionTowerSegmentPrefab)
 			as ConstructionTowerSegment);
 		newSegment.SetTowerSegmentToBeConstructed(GetTowerSegmentToBeConstructed());
-		newSegment.PerformAction(GetOwningTower(), GetOwningTribe());
+		newSegment.PerformAction(this.OwningTower, this.CurrentTribe);
 	}
 }

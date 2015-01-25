@@ -4,11 +4,11 @@ using System.Collections;
 public class CannonTowerSegment : TowerSegment {
 	private bool m_fired = false;
 
-	public override float NominalConstructionDurationSeconds() {
+	public override float OnGetConstructionDuration() {
 		return GameConstants.CANNONS_TOWER_SEGMENT_BUILD_TIME;
 	}
 
-	public override float NominalActionDurationSeconds() {
+	public override float OnGetActionDuration() {
 		return GameConstants.CANNONS_TOWER_SEGMENT_ACTION_TIME;
 	}
 	

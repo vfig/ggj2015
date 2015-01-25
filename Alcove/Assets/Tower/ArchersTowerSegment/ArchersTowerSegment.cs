@@ -5,11 +5,11 @@ public class ArchersTowerSegment : TowerSegment {
 
 	private bool m_inUse;
 	
-	public override float NominalConstructionDurationSeconds() {
+	public override float OnGetConstructionDuration() {
 		return GameConstants.ARCHERS_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
-	public override float NominalActionDurationSeconds() {
+	public override float OnGetActionDuration() {
 		return GameConstants.ARCHERS_TOWER_SEGMENT_ACTION_TIME;
 	}
 	

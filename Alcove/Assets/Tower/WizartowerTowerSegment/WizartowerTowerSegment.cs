@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class WizartowerTowerSegment : TowerSegment {
-	public override float NominalConstructionDurationSeconds() {
+	public override float OnGetConstructionDuration() {
 		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
-	public override float NominalActionDurationSeconds() {
+	public override float OnGetActionDuration() {
 		return GameConstants.WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME;
 	}
 	

@@ -10,8 +10,8 @@ public class ConstructionTowerSegment : TowerSegment {
 		m_towerSegmentToBeConstructed = prefab;
 	}
 
-	public override float NominalActionDurationSeconds() {
-		return m_towerSegmentToBeConstructed.NominalConstructionDurationSeconds();
+	public override float OnGetActionDuration() {
+		return m_towerSegmentToBeConstructed.OnGetConstructionDuration();
 	}
 
 	public override bool OnIsComplete () {
