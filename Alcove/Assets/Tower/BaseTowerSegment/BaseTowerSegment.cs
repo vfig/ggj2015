@@ -4,6 +4,7 @@ using System.Collections;
 public class BaseTowerSegment : TowerSegment {
 
 	private bool m_inUSe;
+	public AudioClip recruitClip;
 
 	public override bool OnIsActionable () {
 		return (m_inUSe == false);
@@ -24,6 +25,7 @@ public class BaseTowerSegment : TowerSegment {
 
 	public override void OnBeginAction (float secondsRemaining) {
 		m_inUSe = true;
+		AudioSource.PlayClipAtPoint(recruitClip, Vector3.zero);
 		m_owningTower.BeginCollectRecruits(m_currentTribe, secondsRemaining);
 	}
 

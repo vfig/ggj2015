@@ -12,6 +12,7 @@ public class ConstructionTowerSegment : TowerSegment {
 	public AudioClip buildingLoopClip1;
 	public AudioClip buildingLoopClip2;
 	public AudioClip buildingCompleteClip;
+	public AudioClip startBuildingClip;
 
 	public void SetTowerSegmentToBeConstructed(TowerSegment prefab) {
 		m_towerSegmentToBeConstructed = prefab;
@@ -34,6 +35,8 @@ public class ConstructionTowerSegment : TowerSegment {
 		buildingLoop = GetComponent<AudioSource>();
 		buildingLoop.clip = Random.Range(0, 2) == 1 ? buildingLoopClip1 : buildingLoopClip2;
 		buildingLoop.Play();
+
+		AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
 
 		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
 		m_constructionImage = GetComponentInChildren<Image>();

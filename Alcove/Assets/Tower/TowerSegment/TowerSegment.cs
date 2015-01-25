@@ -26,7 +26,10 @@ public abstract class TowerSegment : MonoBehaviour
 	private GameObject m_tribeSign;
 	private GameObject m_workingArea;
 
-	public Tower OwningTower { get { return m_owningTower; } }
+	public Tower OwningTower {
+		get { return m_owningTower; }
+		set { m_owningTower = value; }
+	}
 
 	public Tribe CurrentTribe { get { return m_currentTribe; } }
 
@@ -40,6 +43,10 @@ public abstract class TowerSegment : MonoBehaviour
 		m_currentTribe = null;
 		m_actionActive = false;
 		m_workerCount = 0.0f;
+	}
+
+	public void Start() {
+		m_owningTower = GetComponentsInParent<Tower>()[0];
 	}
 	
 	/* Add a listener for the tower segment events */
@@ -64,8 +71,8 @@ public abstract class TowerSegment : MonoBehaviour
 
 	public void Update () {
 		if (m_actionActive) {
-			m_completion = Mathf.Clamp01(m_completion + (1.0f / Duration()) * Time.deltaTime);
-			float secondsRemaining = (1.0f - m_completion) * Duration();
+			m_completion = Mathf.Clamp01(m_completion + (1.0f / GetEffectiveActionDuration()) * Time.deltaTime);
+			float secondsRemaining = (1.0f - m_completion) * GetEffectiveActionDuration();
 			
 			this.OnProgressAction(secondsRemaining);
 			foreach (ITowerSegmentCallback listener in m_listenerList) {
@@ -92,15 +99,14 @@ public abstract class TowerSegment : MonoBehaviour
 		}
 	}
 
-	public void PerformAction(Tower owningTower, Tribe tribe) {
-		AddListener(owningTower);
+	public void PerformAction(Tribe tribe) {
+		AddListener(m_owningTower);
 		AddListener(tribe);
-		m_owningTower = owningTower;
 		m_currentTribe = tribe;
 		m_actionActive = true;
 		m_completion = 0.0f;
 		m_workerCount = tribe.Count;
-		float secondsRemaining = Duration();
+		float secondsRemaining = GetEffectiveActionDuration();
 		Debug.Log(this + " duration: " + secondsRemaining + " at work rate: " + OnGetActionWorkRate());
 		if (ShowsWorkingArea()) {
 			m_workingArea = CreateWorkingArea(tribe, secondsRemaining);
@@ -133,10 +139,10 @@ public abstract class TowerSegment : MonoBehaviour
 		return obj;
 	}
 	
-	private float Duration() {
+	public float GetEffectiveActionDuration() {
 		return OnGetActionDuration() / OnGetActionWorkRate();
 	}
-	
+
 	public GameObject CreateTribeSign(Tribe tribe) {
 		GameObject obj;
 		if (tribe.m_unitColour == UnitColour.Blue) {

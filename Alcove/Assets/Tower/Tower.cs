@@ -12,7 +12,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public PrefabSelector m_prefabSelector;
 
 	public AudioClip selectionClip;
-	public AudioClip startBuildingClip;
 	public AudioClip demolitionClip;
 
 	private int m_activeWorkshops;
@@ -44,6 +43,16 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 
+		m_baseTowerSegmentPrefab.OwningTower = this;
+		m_emptyTowerSegmentPrefab.OwningTower = this;
+		m_constructionTowerSegmentPrefab.OwningTower = this;
+		m_bedchambersTowerSegmentPrefab.OwningTower = this;
+		m_cannonTowerSegmentPrefab.OwningTower = this;
+		m_ballistaTowerSegmentPrefab.OwningTower = this;
+		m_wizardtowerTowerSegmentPrefab.OwningTower = this;
+		m_laboratoryTowerSegmentPrefab.OwningTower = this;
+		m_murderholesTowerSegmentPrefab.OwningTower = this;
+
 		m_constructableTowerSegments = new List<TowerSegment>();
 		m_constructableTowerSegments.Add(m_ballistaTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_bedchambersTowerSegmentPrefab);
@@ -56,8 +65,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	void Start() {
 		m_prefabSelector = GetComponentInChildren<PrefabSelector>();
 		foreach (TowerSegment segment in m_constructableTowerSegments) {
-			SpriteRenderer spriteRenderer = segment.GetComponent<SpriteRenderer>();
-			m_prefabSelector.AddSelection(spriteRenderer.sprite);
+			m_prefabSelector.AddSelection(segment);
 		}
 	}
 
@@ -78,6 +86,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public TowerSegment AddTowerSegment(TowerSegment towerSegmentPrefab) {
 		TowerSegment newSegment = (TowerSegment)Instantiate(towerSegmentPrefab);
+		newSegment.OwningTower = this;
 		newSegment.transform.parent = transform;
 		newSegment.transform.localPosition = Vector3.up * (float)segments.Count * TowerSegment.HEIGHT;
 		newSegment.TowerSegmentPrefab = towerSegmentPrefab;
@@ -88,6 +97,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment SwapSegment(TowerSegment oldSegment, TowerSegment prefab) {
 		int index = segments.IndexOf(oldSegment);
 		TowerSegment newSegment = (TowerSegment)Instantiate(prefab);
+		newSegment.OwningTower = this;
 		newSegment.transform.parent = oldSegment.transform.parent;
 		newSegment.transform.localPosition = oldSegment.transform.localPosition;
 		newSegment.TowerSegmentPrefab = prefab;
@@ -156,11 +166,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
-			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
-			emptySegment.PerformAction(this, tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
+			emptySegment.PerformAction(tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
 		} else {
-			AudioSource.PlayClipAtPoint(startBuildingClip, Vector3.zero);
-			segment.PerformAction(this, tribe);
+			segment.PerformAction(tribe);
 		}
 	}
 
@@ -176,11 +184,24 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public void OnCancelAction(TowerSegment segment) {
 	}
 
+	public void UpdateBuildingCost() {
+		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>() as TowerSegment;
+		string label;
+		int cost = segment.OnGetTribeCost();
+		if (segment.OnIsActionable() && cost > 0) {
+			label = cost.ToString() + " workers to activate";
+		} else {
+			label = "";
+		}
+		m_selector.GetComponent<Selector>().buildingCostLabel = label;
+	}
+
 	public void MoveUp()
 	{
 		if (m_cursorPosition < (segments.Count - 1))
 		{
 			m_cursorPosition++;
+			UpdateBuildingCost();
 		}
 		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
@@ -190,6 +211,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		if (m_cursorPosition > 0)
 		{
 			m_cursorPosition--;
+			UpdateBuildingCost();
 		}
 		m_selector.transform.localPosition = Vector3.up * (float)m_cursorPosition * TowerSegment.HEIGHT;
 	}
