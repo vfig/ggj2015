@@ -71,11 +71,6 @@ public class GameSession : MonoBehaviour {
 	}
 
 	void DrawInProgressUi() {
-		int yPosition = 10;
-		int p1Segments = gameplayManager.GetPlayer(0).tower.GetCompletedSegmentCount();
-		int p2Segments = gameplayManager.GetPlayer(1).tower.GetCompletedSegmentCount();
-		QuickTopLeftText("P1 Tower: " +  p1Segments, ref yPosition);
-		QuickTopLeftText("P2 Tower: " +  p2Segments, ref yPosition);
 	}
 
 	void DrawRoundupUi() {
@@ -102,7 +97,7 @@ public class GameSession : MonoBehaviour {
 		return pressed;
 	}
 
-	string QuickTextField(string text, int xPosition, ref int yPosition) {
+	string xtField(string text, int xPosition, ref int yPosition) {
 		string textFieldValue = GUI.TextField(new Rect(xPosition, yPosition, 200, 40), text);
 		yPosition += 45;
 		return textFieldValue;
