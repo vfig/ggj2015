@@ -97,8 +97,12 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public void DestroyOpponentsSegment(TowerSegment segment) {
-		int index = segments.IndexOf(segment);
-		m_owningPlayer.DestroyOpponentsSegment(index);
+		int segmentIndex = segments.IndexOf(segment);
+		m_owningPlayer.DestroyOpponentsSegment(segmentIndex);
+	}
+	
+	public void DestroyOpponentsSegment(int segmentIndex) {
+		m_owningPlayer.DestroyOpponentsSegment(segmentIndex);
 	}
 	
 	public void DestroyPlayersSegment(int segmentIndex) {
