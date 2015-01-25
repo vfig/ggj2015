@@ -28,7 +28,7 @@ public class GameConstants {
 	public const int TRIBE_STARTING_UNIT_COUNT = 1;
 	public const int TRIBE_UNITS_PER_BEDCHAMBER = 1;
 	
-	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 15.0f;
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 10.0f;
 	
 	public const int CONSTRUCTION_TOWER_SEGMENT_TRIBE_COST = 0;
 	
