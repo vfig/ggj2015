@@ -11,6 +11,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
+	public AudioClip wrongClip;
 	public AudioClip selectionClip;
 	public AudioClip demolitionClip;
 
@@ -151,6 +152,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
 		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count < segment.OnGetTribeCost()) {
+			AudioSource.PlayClipAtPoint(wrongClip, Vector3.zero);
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
