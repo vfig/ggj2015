@@ -11,15 +11,14 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public GameObject m_selector;
 	public PrefabSelector m_prefabSelector;
 
-	private int m_activeWorkshops;
+	private int m_activeLaboratories;
 
 	public TowerSegment m_baseTowerSegmentPrefab;
 	public TowerSegment m_emptyTowerSegmentPrefab;
 	public TowerSegment m_constructionTowerSegmentPrefab;
 	public TowerSegment m_bedchambersTowerSegmentPrefab;
 	public TowerSegment m_cannonTowerSegmentPrefab;
-	public TowerSegment m_workshopTowerSegmentPrefab;
-	public TowerSegment m_archersTowerSegmentPrefab;
+	public TowerSegment m_ballistaTowerSegmentPrefab;
 	public TowerSegment m_wizardtowerTowerSegmentPrefab;
 	public TowerSegment m_laboratoryTowerSegmentPrefab;
 	public TowerSegment m_murderholesTowerSegmentPrefab;
@@ -31,23 +30,22 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 
 	public List<TowerSegment> m_constructableTowerSegments;
 	
-	public int ActiveWorkshops { get { return m_activeWorkshops; } }
+	public int ActiveLaboratories { get { return m_activeLaboratories; } }
 	
 	void Awake () {
 		segments = new List<TowerSegment> ();
 		m_cursorPosition = 0;
-		m_activeWorkshops = 0;
+		m_activeLaboratories = 0;
 		AddTowerSegment(m_baseTowerSegmentPrefab);
 		AddTowerSegment(m_emptyTowerSegmentPrefab);
 
 		m_constructableTowerSegments = new List<TowerSegment>();
+		m_constructableTowerSegments.Add(m_ballistaTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_bedchambersTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_cannonTowerSegmentPrefab);
-		m_constructableTowerSegments.Add(m_workshopTowerSegmentPrefab);
-		m_constructableTowerSegments.Add(m_archersTowerSegmentPrefab);
-		m_constructableTowerSegments.Add(m_wizardtowerTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_laboratoryTowerSegmentPrefab);
 		m_constructableTowerSegments.Add(m_murderholesTowerSegmentPrefab);
+		m_constructableTowerSegments.Add(m_wizardtowerTowerSegmentPrefab);
 	}
 
 	void Start() {
@@ -237,17 +235,17 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		m_owningPlayer = owningPlayer;
 	}
 	
-	public void RegisterWorkshop() {
-		this.m_activeWorkshops++;
-		if (m_activeWorkshops > GameConstants.MAX_NUMBER_OF_ACTIVE_WORKSHOPS) {
-			m_activeWorkshops = GameConstants.MAX_NUMBER_OF_ACTIVE_WORKSHOPS;
+	public void RegisterLaboratory() {
+		this.m_activeLaboratories++;
+		if (m_activeLaboratories > GameConstants.MAX_NUMBER_OF_ACTIVE_LABORATORIES) {
+			m_activeLaboratories = GameConstants.MAX_NUMBER_OF_ACTIVE_LABORATORIES;
 		}
 	}
 	
-	public void UnRegisterWorkshop() {
-		this.m_activeWorkshops--;
-		if (m_activeWorkshops < 0) {
-			m_activeWorkshops = 0;
+	public void UnRegisterLaboratory() {
+		this.m_activeLaboratories--;
+		if (m_activeLaboratories < 0) {
+			m_activeLaboratories = 0;
 		}
 	}
 }

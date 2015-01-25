@@ -151,7 +151,7 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 
 	public virtual float OnGetActionWorkRate() {
-		return m_workerCount * (m_owningTower.ActiveWorkshops + 1);
+		return m_workerCount * (m_owningTower.ActiveLaboratories + 1);
 	}
 
 	public virtual float OnGetConstructionDuration() {

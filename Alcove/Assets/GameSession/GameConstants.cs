@@ -23,7 +23,7 @@ public class GameConstants {
 	public const int PREGAME_DISPLAY_TIME = 90;
 	public const int GO_MESSAGE_DISPLAY_TIME = 40;
 	
-	public const int MAX_NUMBER_OF_ACTIVE_WORKSHOPS = 1;
+	public const int MAX_NUMBER_OF_ACTIVE_LABORATORIES = 1;
 
 	/* Balancing */
 	
@@ -33,17 +33,17 @@ public class GameConstants {
 	
 	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	
-	public const float ARCHERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
-	public const float ARCHERS_TOWER_SEGMENT_ACTION_TIME = 100.0f;
-	public const int ARCHERS_TOWER_SEGMENT_TRIBE_COST = 8;
+	public const float BALLISTA_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float BALLISTA_TOWER_SEGMENT_ACTION_TIME = 100.0f;
+	public const int BALLISTA_TOWER_SEGMENT_TRIBE_COST = 8;
 	
 	public const float CANNONS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	public const float CANNONS_TOWER_SEGMENT_ACTION_TIME = 100.0f;
 	public const int CANNONS_TOWER_SEGMENT_TRIBE_COST = 4;
 	
-	public const float WORKSHOP_TOWER_SEGMENT_BUILD_TIME = 30.0f;
-	public const float WORKSHOP_TOWER_SEGMENT_ACTION_TIME = 1.0f;
-	public const int WORKSHOP_TOWER_SEGMENT_TRIBE_COST = 2;
+	public const float LABORATORY_TOWER_SEGMENT_BUILD_TIME = 30.0f;
+	public const float LABORATORY_TOWER_SEGMENT_ACTION_TIME = 1.0f;
+	public const int LABORATORY_TOWER_SEGMENT_TRIBE_COST = 2;
 
 	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	public const float WIZARDTOWER_TOWER_SEGMENT_ACTION_TIME = 100.0f;

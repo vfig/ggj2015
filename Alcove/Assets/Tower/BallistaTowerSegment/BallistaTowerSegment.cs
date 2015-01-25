@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArchersTowerSegment : TowerSegment {
+public class BallistaTowerSegment : TowerSegment {
 
 	private bool m_inUse;
 	
 	public override float OnGetConstructionDuration() {
-		return GameConstants.ARCHERS_TOWER_SEGMENT_BUILD_TIME;
+		return GameConstants.BALLISTA_TOWER_SEGMENT_BUILD_TIME;
 	}
 	
 	public override float OnGetActionDuration() {
-		return GameConstants.ARCHERS_TOWER_SEGMENT_ACTION_TIME;
+		return GameConstants.BALLISTA_TOWER_SEGMENT_ACTION_TIME;
 	}
 	
 	public override int OnGetTribeCost() {
-		return GameConstants.ARCHERS_TOWER_SEGMENT_TRIBE_COST;
+		return GameConstants.BALLISTA_TOWER_SEGMENT_TRIBE_COST;
 	}
 	
 	public override bool OnIsActionable () {
