@@ -8,7 +8,7 @@ public class EndScene : MonoBehaviour {
 	}
 
 	void Update() {
-		if(GameInput.GetAnyTribeButtonDownForAnyPlayer()) {
+		if(GameInput.GetAnyButtonDown()) {
 			Application.LoadLevel("StartScene");
 		}
 	}

@@ -13,6 +13,10 @@ public class ConstructionTowerSegment : TowerSegment {
 	public override float OnGetActionDuration() {
 		return m_towerSegmentToBeConstructed.OnGetConstructionDuration();
 	}
+	
+	public override int OnGetTribeCost() {
+		return GameConstants.CONSTRUCTION_TOWER_SEGMENT_TRIBE_COST;
+	}
 
 	public override bool OnIsComplete () {
 		return false;

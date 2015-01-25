@@ -8,12 +8,12 @@ public class StartScene : MonoBehaviour {
 	}
 
 	void Update() {
-		GameInput.Update ();
-		/*if(GameInput.GetStartButtonDownAnyPlayer()) {
+		GameInput.Update();
+
+		if(GameInput.GetAnyStartButtonDown()) {
 			Application.LoadLevel("GameScene");
-		}
-		if(GameInput.GetBackButtonDownAnyPlayer()) {
+		} else if(GameInput.GetAnyCancelButtonDown()) {
 			Application.LoadLevel("EndScene");
-		}*/
+		}
 	}
 }

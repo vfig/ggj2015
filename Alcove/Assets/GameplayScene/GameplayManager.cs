@@ -74,6 +74,15 @@ public class GameplayManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		CheckForWinner();
+		CheckForRestart();
+	}
+
+	public void CheckForRestart() {
+		if (gameSession == null) return;
+
+		if (GameInput.GetAnyCancelButtonDown()) {
+			gameSession.SetState(GameSession.GameplayState.Restart);
+		}
 	}
 
 	public void CheckForWinner() {

@@ -254,17 +254,36 @@ public class GameInput {
 		return false;
 	}
 
-	public static bool GetAnyTribeButtonDownForAnyPlayer() {
+	public static bool GetAnyButtonDown() {
 		for(int i=0; i<4; i++) {
-			if(GetTribeButtonUp(i, 0)) {
-				return true;
+			for (int j = 0; j < 2; ++j) {
+				if(GetTribeButtonUp(i, j)) {
+					return true;
+				}
 			}
 		}
-		for(int i=0; i<4; i++) {
-			if(GetTribeButtonUp(i, 1)) {
-				return true;
+		return GetAnyStartButtonDown();
+	}
+
+	public static bool GetAnyStartButtonDown() {
+		if (XCI.GetNumPluggedCtrlrs() > 0) {
+			for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i) {
+				if (XCI.GetButtonDown(XboxButton.Start, i + 1)) {
+					return true;
+				}
 			}
 		}
-		return false;
+		return Input.GetKeyDown("space") || Input.GetKeyDown("enter");
+	}
+
+	public static bool GetAnyCancelButtonDown() {
+		if (XCI.GetNumPluggedCtrlrs() > 0) {
+			for (int i = 0; i < XCI.GetNumPluggedCtrlrs(); ++i) {
+				if (XCI.GetButtonDown(XboxButton.Back, i + 1)) {
+					return true;
+				}
+			}
+		}
+		return Input.GetKeyDown("escape");
 	}
 }
