@@ -9,8 +9,11 @@ public class StartScene : MonoBehaviour {
 
 	void Update() {
 		GameInput.Update();
-		if(GameInput.GetAnyButtonDown()) {
+
+		if(GameInput.GetAnyStartButtonDown()) {
 			Application.LoadLevel("GameScene");
+		} else if(GameInput.GetAnyCancelButtonDown()) {
+			Application.LoadLevel("EndScene");
 		}
 	}
 }

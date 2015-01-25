@@ -18,7 +18,7 @@ public class GameConstants {
 	public const float WORKING_AREA_GROUND_WIDTH = 5.0f;
 	public const float WORKING_AREA_GROUND_Y = -0.54f;
 
-	public const int PREGAME_DISPLAY_TIME = 90;
+	public const int PREGAME_DISPLAY_TIME = 110;
 	public const int GO_MESSAGE_DISPLAY_TIME = 40;
 	
 	public const int MAX_NUMBER_OF_ACTIVE_LABORATORIES = 1;
