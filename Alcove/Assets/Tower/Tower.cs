@@ -16,6 +16,11 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	public TowerSegment m_bedchambersTowerSegmentPrefab;
 	public TowerSegment m_cannonTowerSegmentPrefab;
 	public TowerSegment m_baseTowerSegmentPrefab;
+	public TowerSegment m_workshopTowerSegmentPrefab;
+	public TowerSegment m_archersTowerSegmentPrefab;
+	public TowerSegment m_wizardtowerTowerSegmentPrefab;
+	public TowerSegment m_laboratoryTowerSegmentPrefab;
+	public TowerSegment m_murderholesTowerSegmentPrefab;
 
 	public List<TowerSegment> m_constructableTowerSegments;
 	
