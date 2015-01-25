@@ -178,7 +178,8 @@ public class GameSession : MonoBehaviour {
 	}
 	
 	void Update_LoadGameplayScene() {
-		if(GrabGameplayManagerReference()) {
+		gameplayManager = GrabGameplayManagerReference();
+		if(gameplayManager) {
 			SetState(GameplayState.Pregame);
 		}
 	}
@@ -228,12 +229,12 @@ public class GameSession : MonoBehaviour {
 
 	// MISC HELPER METHODS ///////////////
 
-	bool GrabGameplayManagerReference() {
+	public static GameplayManager GrabGameplayManagerReference() {
 		GameObject gameplayManagerObject = GameObject.Find("GameplayManager") as GameObject;
 		if(gameplayManagerObject) {
-			gameplayManager = gameplayManagerObject.GetComponent<GameplayManager>();
-			return true;
+			return gameplayManagerObject.GetComponent<GameplayManager>();
+		} else {
+			return null;
 		}
-		return false;
 	}
 }

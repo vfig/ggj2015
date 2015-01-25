@@ -20,14 +20,17 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 	public AnimationChannel redChannel;
 	public AnimationChannel yellowChannel;
 
-	public RecruitmentArea recruitmentArea;
+	public float minX;
+	public float maxX;
 
 	void Awake() {
+		colour = GetRandomColour();
+		direction = UnitDirection.Left;
+		minX = 0;
+		maxX = 0;
 	}
 
 	void Start() {
-		direction = UnitDirection.Left;
-
 		animator = GetComponent<SpriteAnimator>();
 		animator.animationSpeed = GameConstants.RECRUITMENT_UNIT_ANIMATION_SPEED;
 		animator.AddChannel(redChannel, "red");
@@ -35,7 +38,7 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 		animator.AddChannel(greenChannel, "green");
 		animator.AddChannel(yellowChannel, "yellow");
 
-		SetColour(GetRandomColour());
+		ApplyColour();
 	}
 
 	void Update() {
@@ -59,16 +62,16 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 		case UnitDirection.Left:
 			SetDeltaX(-GameConstants.RECRUITMENT_UNIT_WALK_SPEED * Time.deltaTime);
 			SetScaleXSign(-1);
-			if(GetX() <= 0.0f) {
-				SetX(0.0f);
+			if(GetX() <= minX) {
+				SetX(minX);
 				direction = UnitDirection.Right;
 			}
 			break;
 		case UnitDirection.Right:
 			SetDeltaX(GameConstants.RECRUITMENT_UNIT_WALK_SPEED * Time.deltaTime);
 			SetScaleXSign(1);
-			if(GetX() >= GameConstants.RECRUITMENT_AREA_GROUND_WIDTH) {
-				SetX(GameConstants.RECRUITMENT_AREA_GROUND_WIDTH);
+			if(GetX() >= maxX) {
+				SetX(maxX);
 				direction = UnitDirection.Left;
 			}
 			break;
@@ -98,10 +101,11 @@ public class RecruitmentAreaUnit : MonoBehaviour {
 	}
 
 	public void SetColour(UnitColour colour) {
-
 		this.colour = colour;
+	}
 
-		switch(colour) {
+	public void ApplyColour() {
+		switch(this.colour) {
 		case UnitColour.Blue:
 			animator.SelectChannel("blue");
 			break;

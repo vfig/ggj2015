@@ -14,16 +14,12 @@ public class UnitColourHelper {
 		switch (index) {
 		case 0:
 			return UnitColour.Blue;
-			break;
 		case 1:
 			return UnitColour.Green;
-			break;
 		case 2:
 			return UnitColour.Red;
-			break;
 		case 3:
 			return UnitColour.Yellow;
-			break;
 		}
 
 		return UnitColour.Blue;

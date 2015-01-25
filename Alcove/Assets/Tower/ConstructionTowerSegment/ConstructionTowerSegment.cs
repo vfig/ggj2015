@@ -34,4 +34,8 @@ public class ConstructionTowerSegment : TowerSegment {
 		// Add a new empty one ready to build
 		m_owningTower.AddTowerSegment(m_owningTower.m_emptyTowerSegmentPrefab);
 	}
+
+	public override bool ShowsWorkingArea() {
+		return false;
+	}
 }

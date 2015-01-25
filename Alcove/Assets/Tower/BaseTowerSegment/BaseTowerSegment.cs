@@ -25,4 +25,8 @@ public class BaseTowerSegment : TowerSegment {
 		this.Reset ();
 		m_inUSe = false;
 	}
+
+	public override bool ShowsWorkingArea() {
+		return false;
+	}
 }

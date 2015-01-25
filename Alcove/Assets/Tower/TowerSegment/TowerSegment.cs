@@ -24,6 +24,7 @@ public abstract class TowerSegment : MonoBehaviour
 	private TowerSegment m_towerSegmentPrefab;
 
 	private GameObject m_tribeSign;
+	private GameObject m_workingArea;
 
 	public Tower OwningTower { get { return m_owningTower; } }
 
@@ -79,7 +80,12 @@ public abstract class TowerSegment : MonoBehaviour
 				
 				this.OnCompleteAction();
 				
-				Destroy(m_tribeSign.gameObject);
+				if (m_tribeSign) {
+					Destroy(m_tribeSign.gameObject);
+				}
+				if (m_workingArea) {
+					Destroy(m_workingArea.gameObject);
+				}
 			}
 		}
 	}
@@ -93,6 +99,9 @@ public abstract class TowerSegment : MonoBehaviour
 		m_completion = 0.0f;
 		m_workRate = tribe.Count;
 		float secondsRemaining = Duration(m_workRate);
+		if (ShowsWorkingArea()) {
+			m_workingArea = CreateWorkingArea(tribe, secondsRemaining);
+		}
 		m_tribeSign = CreateTribeSign(tribe);
 		m_tribeSign.transform.position = transform.position + new Vector3(2.0f, 0.5f, 0.0f);
 		this.OnBeginAction();
@@ -103,6 +112,15 @@ public abstract class TowerSegment : MonoBehaviour
 		foreach (ITowerSegmentCallback listener in m_listenerList) {
 			listener.OnProgressAction(this, m_completion, secondsRemaining);
 		}
+	}
+
+	public GameObject CreateWorkingArea(Tribe tribe, float seconds) {
+		GameObject obj = Instantiate(GameSession.GrabGameplayManagerReference().workingAreaPrefab) as GameObject;
+		WorkingArea workingArea = obj.GetComponent<WorkingArea>();
+		obj.transform.parent = transform;
+		obj.transform.position = transform.position + Vector3.up * GameConstants.WORKING_AREA_GROUND_Y;
+		workingArea.SetCountTimeAndColor(tribe.Count, seconds, tribe.m_unitColour);
+		return obj;
 	}
 	
 	public float Duration(float workRate) {
@@ -148,6 +166,10 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual bool OnIsComplete() {
+		return true;
+	}
+
+	public virtual bool ShowsWorkingArea() {
 		return true;
 	}
 	

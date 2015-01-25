@@ -16,6 +16,9 @@ public class GameConstants {
 	public const float RECRUITMENT_UNIT_WALK_SPEED = 0.8f;
 	public const float RECRUITMENT_UNIT_ANIMATION_SPEED = 8.5f;
 
+	public const float WORKING_AREA_GROUND_WIDTH = 5.0f;
+	public const float WORKING_AREA_GROUND_Y = -0.54f;
+
 	public const int PREGAME_DISPLAY_TIME = 90;
 	public const int GO_MESSAGE_DISPLAY_TIME = 40;
 	

@@ -6,6 +6,7 @@ public class GameplayManager : MonoBehaviour {
 
 	public GameObject playerPrefab;
 	public GameObject recruitmentAreaPrefab;
+	public GameObject workingAreaPrefab;
 
 	private GameSession gameSession;
 	private GameObject minimap;

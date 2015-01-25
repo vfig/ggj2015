@@ -30,4 +30,8 @@ public class EmptyTowerSegment : TowerSegment {
 		newSegment.SetTowerSegmentToBeConstructed(GetTowerSegmentToBeConstructed());
 		newSegment.PerformAction(this.OwningTower, this.CurrentTribe);
 	}
+
+	public override bool ShowsWorkingArea() {
+		return false;
+	}
 }

@@ -67,16 +67,19 @@ public class RecruitmentArea : MonoBehaviour {
 		unitGameObject.transform.position = Vector3.zero;
 		RecruitmentAreaUnit unit = unitGameObject.GetComponent<RecruitmentAreaUnit>();
 		unit.transform.parent = transform;
-		unit.recruitmentArea = this;
+		unit.minX = 0.0f;
+		unit.maxX = GameConstants.RECRUITMENT_AREA_GROUND_WIDTH;
 
 		float startingXPosition;
+		RecruitmentAreaUnit.UnitDirection direction;
 		if(Random.Range (0, 2) == 1) {
 			startingXPosition = 0;
-			// Direction should be is rightward
+			direction = RecruitmentAreaUnit.UnitDirection.Right;
 		} else {
 			startingXPosition = groundWidth;
-			// Direction should be leftward
+			direction = RecruitmentAreaUnit.UnitDirection.Left;
 		}
+		unit.direction = direction;
 
 		unit.transform.position = Vector3.zero;
 		unit.transform.localPosition = new Vector3(startingXPosition, 0.0f, 0.0f);
