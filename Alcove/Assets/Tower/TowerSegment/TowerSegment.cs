@@ -7,7 +7,7 @@ public abstract class TowerSegment : MonoBehaviour
 	/* Segment height */
 	public const float HEIGHT = 2.0f;
 	
-	protected float m_workRate;
+	protected float m_workerCount;
 	protected float m_completion;
 
 	/* Event listener list */
@@ -37,7 +37,7 @@ public abstract class TowerSegment : MonoBehaviour
 		m_listenerList = new List<ITowerSegmentCallback>();
 		m_currentTribe = null;
 		m_actionActive = false;
-		m_workRate = 0.0f;
+		m_workerCount = 0.0f;
 	}
 	
 	/* Add a listener for the tower segment events */
@@ -62,8 +62,8 @@ public abstract class TowerSegment : MonoBehaviour
 
 	public void Update () {
 		if (m_actionActive) {
-			m_completion = Mathf.Clamp01(m_completion + (float)(m_workRate * (m_owningTower.ActiveWorkshops + 1)) / OnGetActionDuration() * Time.deltaTime);
-			float secondsRemaining = (1.0f - m_completion) * Duration(m_workRate);
+			m_completion = Mathf.Clamp01(m_completion + (1.0f / Duration()) * Time.deltaTime);
+			float secondsRemaining = (1.0f - m_completion) * Duration();
 			
 			this.OnProgressAction(secondsRemaining);
 			foreach (ITowerSegmentCallback listener in m_listenerList) {
@@ -97,8 +97,9 @@ public abstract class TowerSegment : MonoBehaviour
 		m_currentTribe = tribe;
 		m_actionActive = true;
 		m_completion = 0.0f;
-		m_workRate = tribe.Count;
-		float secondsRemaining = Duration(m_workRate);
+		m_workerCount = tribe.Count;
+		float secondsRemaining = Duration();
+		Debug.Log(this + " duration: " + secondsRemaining + " at work rate: " + OnGetActionWorkRate());
 		if (ShowsWorkingArea()) {
 			m_workingArea = CreateWorkingArea(tribe, secondsRemaining);
 		}
@@ -123,8 +124,8 @@ public abstract class TowerSegment : MonoBehaviour
 		return obj;
 	}
 	
-	public float Duration(float workRate) {
-		return OnGetActionDuration() / workRate;
+	private float Duration() {
+		return OnGetActionDuration() / OnGetActionWorkRate();
 	}
 	
 	public GameObject CreateTribeSign(Tribe tribe) {
@@ -142,11 +143,15 @@ public abstract class TowerSegment : MonoBehaviour
 		}
 		else return null;
 	}
-	
+
 	/* Virtual Methods */
 
 	public virtual float OnGetActionDuration() {
 		return 0.0f;
+	}
+
+	public virtual float OnGetActionWorkRate() {
+		return m_workerCount * (m_owningTower.ActiveWorkshops + 1);
 	}
 
 	public virtual float OnGetConstructionDuration() {
