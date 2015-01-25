@@ -32,6 +32,8 @@ public abstract class TowerSegment : MonoBehaviour
 
 	public TowerSegment TowerSegmentPrefab { get { return m_towerSegmentPrefab; } set { m_towerSegmentPrefab = value; } }
 
+	public GameObject TribeSign { get { return m_tribeSign; } set { m_tribeSign = value; } }
+
 	/* Called on initialisation */
 	public void Awake() {
 		m_listenerList = new List<ITowerSegmentCallback>();
@@ -114,6 +116,13 @@ public abstract class TowerSegment : MonoBehaviour
 			listener.OnProgressAction(this, m_completion, secondsRemaining);
 		}
 	}
+	
+	public void CancelAction() {
+		this.OnCancelAction ();
+		foreach (ITowerSegmentCallback listener in m_listenerList) {
+			listener.OnCancelAction(this);
+		}
+	}
 
 	public GameObject CreateWorkingArea(Tribe tribe, float seconds) {
 		GameObject obj = Instantiate(GameSession.GrabGameplayManagerReference().workingAreaPrefab) as GameObject;
@@ -191,5 +200,8 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public virtual void OnCompleteAction() {
+	}
+	
+	public virtual void OnCancelAction() {	
 	}
 }

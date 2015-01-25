@@ -55,6 +55,10 @@ public class Tribe : MonoBehaviour, ITowerSegmentCallback {
 		busy = false;
 	}
 	
+	public void OnCancelAction(TowerSegment segment) {
+		busy = false;
+	}
+	
 	public void UpdateUnitLimit(int unitLimit) {
 		m_unitLimit = unitLimit;
 		if (m_count > m_unitLimit) {

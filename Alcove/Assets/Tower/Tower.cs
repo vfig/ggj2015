@@ -97,18 +97,22 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 	
 	public void DestroyPlayersSegment(int segmentIndex) {
-		if (segmentIndex >= segments.Count) return;
-		TowerSegment segment = segments[segmentIndex];
-		if (segment.OnIsComplete()) {
-			Destroy(segment.gameObject);
-			segments.RemoveAt(segmentIndex);
-			for (int i = segmentIndex; i < (segments.Count); i++) {
-				segments[i].transform.position += new Vector3(0.0f, -2.0f, 0.0f);
-				MoveDown();
-			}
+		if (segmentIndex >= segments.Count) {
+		/* TODO: Add sound effect. */
+			return;
 		}
-		else {
-			SwapSegment(segment, m_emptyTowerSegmentPrefab);
+		TowerSegment segment = segments[segmentIndex];
+		if (!segment.IsComplete()) {
+			if (segment.TribeSign.gameObject) {
+				Destroy (segments[segmentIndex].TribeSign.gameObject);
+			}
+			segment.CancelAction();
+		}
+		Destroy(segment.gameObject);
+		segments.RemoveAt(segmentIndex);
+		for (int i = segmentIndex; i < (segments.Count); i++) {
+			segments[i].transform.position += new Vector3(0.0f, -2.0f, 0.0f);
+			MoveDown();
 		}
 	}
 	
@@ -159,6 +163,9 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 
 	public void OnCompleteAction(TowerSegment segment) {
+	}
+	
+	public void OnCancelAction(TowerSegment segment) {
 	}
 
 	public void MoveUp()
