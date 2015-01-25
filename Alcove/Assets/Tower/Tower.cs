@@ -157,7 +157,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			return;
 		}
 
-
 		EmptyTowerSegment emptySegment = segment as EmptyTowerSegment;
 		if (emptySegment != null) {
 			emptySegment.PerformAction(tribe, m_constructableTowerSegments[m_selectedPrefabIndex]);
