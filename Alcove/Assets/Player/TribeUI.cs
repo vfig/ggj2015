@@ -15,7 +15,7 @@ public class TribeUI : MonoBehaviour {
 	}
 
 	public void Update() {
-		text.text = tribe.count.ToString();
+		text.text = tribe.Count.ToString() + " / " + tribe.UnitLimit.ToString();
 		if (tribe.IsBusy) {
 			group.alpha = 0.25f + (0.5f * tribe.BusyFraction);
 			image.fillAmount = tribe.BusyFraction;

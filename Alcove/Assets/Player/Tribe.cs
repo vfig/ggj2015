@@ -2,12 +2,16 @@
 using System.Collections;
 
 public class Tribe : MonoBehaviour, ITowerSegmentCallback {
-	public int count;
+	private int m_count;
+	private int m_unitLimit;
 	private bool busy;
 	private float busyFraction;
 	private float busyRemaining;
 
 	public UnitColour m_unitColour;
+
+	public int Count { get { return m_count; } set { m_count = value; } }
+	public int UnitLimit { get { return m_unitLimit; } }
 
 	// Return true if the tribe is busy
 	public bool IsBusy {
@@ -51,7 +55,17 @@ public class Tribe : MonoBehaviour, ITowerSegmentCallback {
 		busy = false;
 	}
 	
+	public void UpdateUnitLimit(int unitLimit) {
+		m_unitLimit = unitLimit;
+		if (m_count > m_unitLimit) {
+			m_count = m_unitLimit;
+		}
+	}
+	
 	public void Recruit(int delta) {
-		count += delta;
+		m_count += delta;
+		if (m_count > m_unitLimit) {
+			m_count = m_unitLimit;
+		}
 	}
 }

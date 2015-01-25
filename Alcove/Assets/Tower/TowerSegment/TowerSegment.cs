@@ -74,7 +74,7 @@ public abstract class TowerSegment : MonoBehaviour
 		m_currentTribe = tribe;
 		m_actionActive = true;
 		m_completion = 0.0f;
-		m_workRate = tribe.count;
+		m_workRate = tribe.Count;
 		float secondsRemaining = Duration(m_workRate);
 		this.OnBeginAction();
 		foreach (ITowerSegmentCallback listener in m_listenerList) {

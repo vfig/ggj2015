@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
 	public void Start() {
 		// Set initial tribe counts
 		foreach (Tribe tribe in tribes) {
-			tribe.count = GameConstants.TRIBE_STARTING_UNIT_COUNT;
+			tribe.Count = GameConstants.TRIBE_STARTING_UNIT_COUNT;
 		}
 	}
 
@@ -51,6 +51,16 @@ public class Player : MonoBehaviour {
 			if (GameInput.GetTribeButtonDown(i, playerNumber)) {
 				tower.PerformAction(tribes[i]);
 			}
+		}
+		
+		CheckTribeUnitLimits();
+	}
+	
+	public void CheckTribeUnitLimits() {
+		int tribeUnitLimit = tower.GetTribeUnitAllowance();
+		
+		foreach (Tribe tribe in tribes) {
+			tribe.UpdateUnitLimit(tribeUnitLimit);
 		}
 	}
 	

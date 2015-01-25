@@ -52,6 +52,17 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 		ShowOrHidePrefabSelector();
 	}
 
+	public int GetTribeUnitAllowance() {
+		int tribeUnitAllowance = GameConstants.TRIBE_STARTING_UNIT_COUNT;
+		foreach (TowerSegment towerSegment in segments) {
+			BedchambersTowerSegment bedChambersTowerSegment = towerSegment as BedchambersTowerSegment;
+			if (bedChambersTowerSegment != null) {
+				tribeUnitAllowance += GameConstants.TRIBE_UNITS_PER_BEDCHAMBER;
+			}
+		}
+		return tribeUnitAllowance;
+	}
+
 	public TowerSegment AddTowerSegment(TowerSegment towerSegmentPrefab) {
 		TowerSegment newSegment = (TowerSegment)Instantiate(towerSegmentPrefab);
 		newSegment.transform.parent = transform;
@@ -114,7 +125,7 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	{
 		TowerSegment segment = segments[m_cursorPosition].GetComponent<TowerSegment>();
 
-		if (!segment.IsActionable() || tribe.IsBusy || tribe.count == 0) {
+		if (!segment.IsActionable() || tribe.IsBusy || tribe.Count == 0) {
 			/* TODO: Add some kind of notification that the segment cannot be actioned on */
 			return;
 		}
