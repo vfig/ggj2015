@@ -4,7 +4,7 @@ using System.Collections;
 public class RecruitmentArea : MonoBehaviour {
 
 	[HideInInspector]
-	public bool shouldUpdate = true;
+	public static bool canUpdate = true;
 
 	ArrayList units;
 	float spawnMaxTime;
@@ -25,7 +25,7 @@ public class RecruitmentArea : MonoBehaviour {
 	}
 
 	void Update() {
-		if(!shouldUpdate) {
+		if(!canUpdate) {
 			return;
 		}
 		UpdateSpawning();
