@@ -10,7 +10,7 @@ public class GameConstants {
 	public const int TRIBE_STARTING_UNIT_COUNT = 4;
 	public const int TRIBE_UNITS_PER_BEDCHAMBER = 4;
 
-	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 0.25f; // FIXME: 4.0f;
+	public const float RECRUITMENT_AREA_DEFAULT_SPAWN_TIME = 4.0f;
 	public const float RECRUITMENT_AREA_GROUND_WIDTH = 15.0f;
 	public const float RECRUITMENT_AREA_GROUND_Y = -0.54f;
 	public const float RECRUITMENT_UNIT_WALK_SPEED = 0.8f;
@@ -26,7 +26,7 @@ public class GameConstants {
 
 	/* Balancing */
 	
-	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 50.0f;
+	public const float BASE_TOWER_SEGMENT_ACTION_TIME = 20.0f;
 	
 	public const float BEDCHAMBERS_TOWER_SEGMENT_BUILD_TIME = 30.0f;
 	
