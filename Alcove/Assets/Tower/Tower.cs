@@ -138,8 +138,12 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 	}
 
 	public TowerSegment GetOpponentTowerSegmentPrefab(TowerSegment segment) {
-		int index = segments.IndexOf(segment);
-		return m_owningPlayer.GetOpponentTowerSegmentPrefab(index);
+		int segmentIndex = segments.IndexOf(segment);
+		return m_owningPlayer.GetOpponentTowerSegmentPrefab(segmentIndex);
+	}
+
+	public TowerSegment GetOpponentTowerSegmentPrefab(int segmentIndex) {
+		return m_owningPlayer.GetOpponentTowerSegmentPrefab(segmentIndex);
 	}
 	
 	public TowerSegment GetPlayersTowerSegmentPrefab(int segmentIndex) {

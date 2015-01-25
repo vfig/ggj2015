@@ -26,10 +26,10 @@ public class WizartowerTowerSegment : TowerSegment {
 	}
 	
 	public override void OnCompleteAction () {
-		TowerSegment opponentTowerSegment = m_owningTower.GetOpponentTowerSegmentPrefab(this);
+		TowerSegment opponentTowerSegment = m_owningTower.GetOpponentTowerSegmentPrefab(1);
 		if (opponentTowerSegment != null) {
 			AudioSource.PlayClipAtPoint(wizardTowerClip, Vector3.zero);
-			m_owningTower.DestroyOpponentsSegment(this);
+			m_owningTower.DestroyOpponentsSegment(1);
 			m_owningTower.SwapSegment(this, opponentTowerSegment);
 		}
 		this.Reset ();
