@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StaticTowerSegment : TowerSegment {
+public class BedchambersTowerSegment : TowerSegment {
 	public override float NominalConstructionDurationSeconds() {
 		return 5;
 	}
