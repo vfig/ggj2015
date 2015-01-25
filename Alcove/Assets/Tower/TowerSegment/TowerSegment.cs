@@ -10,8 +10,6 @@ public abstract class TowerSegment : MonoBehaviour
 	protected float m_workerCount;
 	protected float m_completion;
 
-	public AudioSource buildingLoop;
-
 	/* Event listener list */
 	private List<ITowerSegmentCallback> m_listenerList;
 	

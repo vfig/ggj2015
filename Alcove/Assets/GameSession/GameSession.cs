@@ -170,7 +170,7 @@ public class GameSession : MonoBehaviour {
 	void Setup_Pregame(Object data=null) {
 		// This state's not for initialisation,
 		// it's for any sort of intro we have.
-		AudioSource.PlayClipAtPoint(introClip, Vector3.zero);
+		AudioSource.PlayClipAtPoint(introClip, Vector3.zero, 0.4f);
 		pregamePanel.SetActive(true);
 	}
 

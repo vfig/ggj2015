@@ -6,6 +6,13 @@ public class ConstructionTowerSegment : TowerSegment {
 	private TowerSegment m_towerSegmentToBeConstructed;
 	private Image m_constructionImage;
 
+	[HideInInspector]
+	public AudioSource buildingLoop;
+	
+	public AudioClip buildingLoopClip1;
+	public AudioClip buildingLoopClip2;
+	public AudioClip buildingCompleteClip;
+
 	public void SetTowerSegmentToBeConstructed(TowerSegment prefab) {
 		m_towerSegmentToBeConstructed = prefab;
 	}
@@ -23,6 +30,11 @@ public class ConstructionTowerSegment : TowerSegment {
 	}
 
 	public override void OnBeginAction(float secondsRemaining) {
+
+		buildingLoop = GetComponent<AudioSource>();
+		buildingLoop.clip = Random.Range(0, 2) == 1 ? buildingLoopClip1 : buildingLoopClip2;
+		buildingLoop.Play();
+
 		SpriteRenderer spriteRenderer = m_towerSegmentToBeConstructed.gameObject.GetComponent<SpriteRenderer>();
 		m_constructionImage = GetComponentInChildren<Image>();
 		m_constructionImage.sprite = spriteRenderer.sprite;
@@ -37,6 +49,8 @@ public class ConstructionTowerSegment : TowerSegment {
 
 	public override void OnCompleteAction () {
 		// Swap the segment with a new one
+		buildingLoop.Stop();
+		AudioSource.PlayClipAtPoint(buildingCompleteClip, Vector3.zero);
 		m_owningTower.SwapSegment(this, m_towerSegmentToBeConstructed);
 	}
 
