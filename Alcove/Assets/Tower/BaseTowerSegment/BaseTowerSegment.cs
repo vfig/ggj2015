@@ -12,7 +12,12 @@ public class BaseTowerSegment : TowerSegment {
 	public override float OnGetActionDuration() {
 		return GameConstants.BASE_TOWER_SEGMENT_ACTION_TIME;
 	}
-	
+
+	public override float OnGetActionWorkRate() {
+		// No speed boosts for workshops or tribe size
+		return 1.0f;
+	}
+
 	public override void OnBeginAction (float secondsRemaining) {
 		m_inUSe = true;
 		m_owningTower.BeginCollectRecruits(m_currentTribe, secondsRemaining);
