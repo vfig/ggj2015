@@ -14,7 +14,7 @@ public class BaseTowerSegment : TowerSegment {
 	}
 
 	public override float OnGetActionWorkRate() {
-		// No speed boosts for workshops or tribe size
+		// No speed boosts for laboratories or tribe size
 		return 1.0f;
 	}
 
