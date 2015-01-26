@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 613b15c16a8f8b5409283083f5dcdc41
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - m_selector: {instanceID: 0}
+  - m_prefabSelector: {instanceID: 0}
+  - selectionClip: {fileID: 8300000, guid: 861baf8023f024099acae604123dfcfc, type: 3}
+  - startBuildingClip: {fileID: 8300000, guid: d651ac76e32ac4b2f887bafc8ee8959a, type: 3}
+  - demolitionClip: {fileID: 8300000, guid: 4c1c8b8e361cc49bbb710bde30007e4a, type: 3}
+  - m_baseTowerSegmentPrefab: {instanceID: 0}
+  - m_emptyTowerSegmentPrefab: {instanceID: 0}
+  - m_constructionTowerSegmentPrefab: {instanceID: 0}
+  - m_bedchambersTowerSegmentPrefab: {instanceID: 0}
+  - m_cannonTowerSegmentPrefab: {instanceID: 0}
+  - m_ballistaTowerSegmentPrefab: {instanceID: 0}
+  - m_wizardtowerTowerSegmentPrefab: {instanceID: 0}
+  - m_laboratoryTowerSegmentPrefab: {instanceID: 0}
+  - m_murderholesTowerSegmentPrefab: {instanceID: 0}
+  - m_tribeXSignPrefab: {instanceID: 0}
+  - m_tribeYSignPrefab: {instanceID: 0}
+  - m_tribeASignPrefab: {instanceID: 0}
+  - m_tribeBSignPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
