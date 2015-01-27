@@ -78,6 +78,7 @@ public abstract class TowerSegment : MonoBehaviour
 			}
 			
 			if (m_completion == 1.0f) {
+				this.m_actionActive = false;
 				foreach (ITowerSegmentCallback notify in m_listenerList) {
 					notify.OnCompleteAction(this);
 				}
@@ -98,6 +99,9 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 
 	void OnDestroy() {
+		if (m_actionActive) {
+			CancelAction();
+		}
 		if(m_tribeSign) {
 			Destroy (m_tribeSign.gameObject);
 		}
@@ -127,6 +131,7 @@ public abstract class TowerSegment : MonoBehaviour
 	}
 	
 	public void CancelAction() {
+		this.m_actionActive = false;
 		this.OnCancelAction ();
 		foreach (ITowerSegmentCallback listener in m_listenerList) {
 			listener.OnCancelAction(this);
