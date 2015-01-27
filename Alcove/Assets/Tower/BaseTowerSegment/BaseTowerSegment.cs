@@ -34,4 +34,8 @@ public class BaseTowerSegment : TowerSegment {
 	public override bool ShowsWorkingArea() {
 		return false;
 	}
+
+	public override bool CanBeStolen() {
+		return false;
+	}
 }
