@@ -223,4 +223,8 @@ public abstract class TowerSegment : MonoBehaviour
 	public virtual bool IsFinalSegment() {
 		return false;
 	}
+
+	public virtual bool CanBeStolen() {
+		return true;
+	}
 }

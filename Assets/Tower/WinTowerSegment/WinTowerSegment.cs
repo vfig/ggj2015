@@ -26,4 +26,8 @@ public class WinTowerSegment : TowerSegment {
 	public override bool IsFinalSegment() {
 		return true;
 	}
+
+	public override bool CanBeStolen() {
+		return false;
+	}
 }
