@@ -121,9 +121,6 @@ public class Tower : MonoBehaviour, ITowerSegmentCallback {
 			return;
 		}
 		TowerSegment segment = segments[segmentIndex];
-		if (!segment.IsComplete()) {
-			segment.CancelAction();
-		}
 		AudioSource.PlayClipAtPoint(demolitionClip, Vector3.zero);
 		Destroy(segment.gameObject);
 		segments.RemoveAt(segmentIndex);
