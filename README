@@ -1,0 +1,21 @@
+Tower Turmoil
+=============
+
+A Global Game Jam 2015 entry by Gordon Brown, Shaun Campbell, Aaron Dron, and Andy Durdin.
+
+Overview
+--------
+
+“What do we do now?” is the constant cry of my workers. Such a lazy bunch. They can’t even build me a tower taller than my arch-rival’s without me constantly telling them what to do next! Recruit four types of worker and race to build a powerful offensive tower. Win by having a large enough workforce to build your battlements and raise your flag!!
+
+Requirements
+------------
+
+Requires Unity 4.6.1
+
+Build for 1920x1080 screen resolution and two xbox 360 controllers. Using these controllers on Microsoft Windows requires the official Microsoft drivers. Using the controllers on newer versions of OS X may require this unofficial driver: https://github.com/d235j/360Controller/releases
+
+License
+-------
+
+See LICENSE.
