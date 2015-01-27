@@ -42,7 +42,7 @@ public class GameConstants {
 	public const int CANNONS_TOWER_SEGMENT_TRIBE_COST = 9;
 	
 	public const float LABORATORY_TOWER_SEGMENT_BUILD_TIME = 60.0f;
-	public const float LABORATORY_TOWER_SEGMENT_ACTION_TIME = 50.0f;
+	public const float LABORATORY_TOWER_SEGMENT_ACTION_TIME = 1.0f;
 	public const int LABORATORY_TOWER_SEGMENT_TRIBE_COST = 6;
 
 	public const float WIZARDTOWER_TOWER_SEGMENT_BUILD_TIME = 60.0f;
